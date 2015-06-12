@@ -16,7 +16,7 @@ use AGmakonts\STL\ValueObjectInterface;
 /**
  * Interface FactRelationInterface
  *
- * @package Famillio\Domain\Family\ValueObject\Biography\Fact\Relation
+ * @package Famillio\Domain\Famillio\ValueObject\Biography\Fact\Relation
  */
 interface FactRelationInterface extends ValueObjectInterface
 {

@@ -23,7 +23,7 @@ use Famillio\Domain\Family\ValueObject\Name\GivenName;
 /**
  * Class Birth
  *
- * @package Famillio\Domain\Family\ValueObject\Biography\Fact\LifeEvent
+ * @package Famillio\Domain\Famillio\ValueObject\Biography\Fact\LifeEvent
  */
 class Birth extends AbstractFact implements LifespanBoundaryFactInterface,
     GivenNameChangeFactInterface,

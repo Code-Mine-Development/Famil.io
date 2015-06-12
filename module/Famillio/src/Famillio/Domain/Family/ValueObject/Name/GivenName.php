@@ -14,7 +14,7 @@ use Famillio\Domain\Family\ValueObject\Name\Exception\InvalidAdditionalGivenName
 /**
  * Class GivenName
  *
- * @package Famillio\Domain\Family\ValueObject\Name
+ * @package Famillio\Domain\Famillio\ValueObject\Name
  */
 class GivenName extends AbstractCompoundName
 {

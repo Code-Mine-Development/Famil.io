@@ -12,7 +12,7 @@ use AGmakonts\DddBricks\Entity\EntityInterface;
 /**
  * Interface PersonInterface
  *
- * @package Famillio\Domain\Family
+ * @package Famillio\Domain\Famillio
  */
 interface PersonInterface extends EntityInterface
 {

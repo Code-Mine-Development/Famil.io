@@ -19,7 +19,7 @@ use Famillio\Domain\Family\ValueObject\Biography\Fact\Identifier;
 /**
  * Class AbstractFact
  *
- * @package Famillio\Domain\Family\ValueObject\Biography\Fact
+ * @package Famillio\Domain\Famillio\ValueObject\Biography\Fact
  */
 abstract class AbstractFact implements EntityInterface, FactInterface
 {

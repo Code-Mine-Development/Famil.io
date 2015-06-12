@@ -12,7 +12,7 @@ use Famillio\Domain\Family\Biography\Fact\AbstractFact;
 /**
  * Class AbstractFactException
  *
- * @package Famillio\Domain\Family\Biography\Fact\Exception
+ * @package Famillio\Domain\Famillio\Biography\Fact\Exception
  */
 abstract class AbstractFactException extends \DomainException
 {

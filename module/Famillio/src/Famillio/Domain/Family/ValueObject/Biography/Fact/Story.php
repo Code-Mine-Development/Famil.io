@@ -16,7 +16,7 @@ use Famillio\Domain\Family\ValueObject\Gender;
 /**
  * Class Story
  *
- * @package Famillio\Domain\Family\ValueObject\Biography\Fact
+ * @package Famillio\Domain\Famillio\ValueObject\Biography\Fact
  */
 class Story extends AbstractValueObject
 {
@@ -38,7 +38,7 @@ class Story extends AbstractValueObject
      * @param \Famillio\Domain\Family\ValueObject\Gender|NULL          $genderTarget
      * @param \Famillio\Domain\Family\ValueObject\Biography\Fact\Story $previous
      *
-     * @internal param \Famillio\Domain\Family\ValueObject\Biography\Fact\Story|NULL $original
+     * @internal param \Famillio\Domain\Famillio\ValueObject\Biography\Fact\Story|NULL $original
      */
     static public function get(String $past,
                                String $present,

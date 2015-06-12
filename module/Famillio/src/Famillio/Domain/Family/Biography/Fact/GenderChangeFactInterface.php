@@ -14,7 +14,7 @@ use Famillio\Domain\Family\ValueObject\Gender;
 /**
  * Interface GenderChangeFactInterface
  *
- * @package Famillio\Domain\Family\Biography\Fact
+ * @package Famillio\Domain\Famillio\Biography\Fact
  */
 interface GenderChangeFactInterface
 {

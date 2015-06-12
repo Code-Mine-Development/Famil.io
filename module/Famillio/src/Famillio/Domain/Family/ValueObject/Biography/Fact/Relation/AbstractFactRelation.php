@@ -14,7 +14,7 @@ use AGmakonts\Stl\ValueObjectInterface;
 /**
  * Class AbstractFactRelation
  *
- * @package Famillio\Domain\Family\ValueObject\Biography\Fact\Relation
+ * @package Famillio\Domain\Famillio\ValueObject\Biography\Fact\Relation
  */
 abstract class AbstractFactRelation implements ValueObjectInterface, FactRelationInterface
 {

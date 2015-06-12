@@ -14,7 +14,7 @@ use AGmakonts\STL\AbstractValueObject;
 /**
  * Class RelatedFact
  *
- * @package Famillio\Domain\Family\ValueObject\Biography\Fact
+ * @package Famillio\Domain\Famillio\ValueObject\Biography\Fact
  */
 class RelatedFact extends AbstractValueObject
 {

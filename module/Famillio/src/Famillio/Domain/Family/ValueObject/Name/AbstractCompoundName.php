@@ -15,7 +15,7 @@ use AGmakonts\STL\String\String;
 /**
  * Class AbstractCompoundName
  *
- * @package Famillio\Domain\Family\ValueObject\Name
+ * @package Famillio\Domain\Famillio\ValueObject\Name
  */
 abstract class AbstractCompoundName extends AbstractValueObject
 {

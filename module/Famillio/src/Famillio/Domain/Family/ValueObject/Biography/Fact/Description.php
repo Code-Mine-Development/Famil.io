@@ -15,7 +15,7 @@ use Famillio\Domain\Family\ValueObject\Biography\Fact\Exception\InvalidDescripti
 /**
  * Class Description
  *
- * @package Famillio\Domain\Family\ValueObject\Biography\Fact
+ * @package Famillio\Domain\Famillio\ValueObject\Biography\Fact
  */
 class Description extends AbstractValueObject
 {

@@ -26,7 +26,7 @@ use Zend\Validator\ValidatorChain;
 /**
  * Class Name
  *
- * @package Famillio\Domain\Family\ValueObject\Name
+ * @package Famillio\Domain\Famillio\ValueObject\Name
  */
 class Name extends AbstractValueObject
 {

@@ -15,7 +15,7 @@ use Famillio\Domain\Family\ValueObject\Name\Exception\InvalidMultipleFamilyNameE
 /**
  * Class FamilyName
  *
- * @package Famillio\Domain\Family\ValueObject\Name
+ * @package Famillio\Domain\Famillio\ValueObject\Name
  */
 class FamilyName extends AbstractCompoundName
 {

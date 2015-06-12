@@ -14,7 +14,7 @@ use AGmakonts\STL\Structure\AbstractEnum;
 /**
  * Class Gender
  *
- * @package Famillio\Domain\Family\ValueObject
+ * @package Famillio\Domain\Famillio\ValueObject
  */
 class Gender extends AbstractEnum
 {

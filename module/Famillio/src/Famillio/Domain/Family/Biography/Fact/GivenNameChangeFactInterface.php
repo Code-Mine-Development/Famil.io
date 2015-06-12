@@ -13,7 +13,7 @@ use Famillio\Domain\Family\ValueObject\Name\GivenName;
 /**
  * Interface GivenNameChangeFactInterface
  *
- * @package Famillio\Domain\Family\Biography\Fact
+ * @package Famillio\Domain\Famillio\Biography\Fact
  */
 interface GivenNameChangeFactInterface
 {

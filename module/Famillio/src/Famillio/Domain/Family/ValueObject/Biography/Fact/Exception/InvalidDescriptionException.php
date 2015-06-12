@@ -14,7 +14,7 @@ use Famillio\Domain\Family\ValueObject\Biography\Fact\AbstractFact;
 /**
  * Class InvalidDescriptionException
  *
- * @package Famillio\Domain\Family\ValueObject\Biography\Fact\Exception
+ * @package Famillio\Domain\Famillio\ValueObject\Biography\Fact\Exception
  */
 class InvalidDescriptionException extends \DomainException
 {

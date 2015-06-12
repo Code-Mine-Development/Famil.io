@@ -13,7 +13,7 @@ use AGmakonts\STL\String\String;
 /**
  * Class CauseEffect
  *
- * @package Famillio\Domain\Family\ValueObject\Biography\Fact\Relation
+ * @package Famillio\Domain\Famillio\ValueObject\Biography\Fact\Relation
  */
 class CauseEffect extends AbstractFactRelation
 {

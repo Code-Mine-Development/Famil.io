@@ -17,7 +17,7 @@ use Famillio\Domain\Family\ValueObject\Biography\Fact\Story;
 /**
  * Interface FactInterface
  *
- * @package Famillio\Domain\Family\Biography\Fact
+ * @package Famillio\Domain\Famillio\Biography\Fact
  */
 interface FactInterface
 {

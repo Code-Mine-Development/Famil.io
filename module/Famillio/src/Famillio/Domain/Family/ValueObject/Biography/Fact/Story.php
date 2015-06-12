@@ -11,6 +11,7 @@ namespace Famillio\Domain\Family\ValueObject\Biography\Fact;
 
 use AGmakonts\STL\AbstractValueObject;
 use AGmakonts\STL\String\String;
+use Famillio\Domain\Family\ValueObject\Biography\Fact\Exception\CorruptedTokensException;
 use Famillio\Domain\Family\ValueObject\Biography\Fact\Exception\InvalidTokenException;
 use Famillio\Domain\Family\ValueObject\Gender;
 use Zend\Validator\Regex;
@@ -136,15 +137,41 @@ class Story extends AbstractValueObject
     {
         list($past, $present, $future, $data, $gender, $original) = $value;
 
+        if(FALSE === $this->areTokensValid($data)) {
+            throw new CorruptedTokensException();
+        }
+
         $this->past     = $past;
         $this->present  = $present;
         $this->future   = $future;
+
+
+
         $this->gender   = $gender;
         $this->data     = $data;
         $this->previous = $original;
     }
 
-    private function isDataValid(array $data)
+
+    private function areStringsCompatibleWithData(array $data, String $past, String $present, String $future)
+    {
+        $tokens = array_keys($data);
+
+        $stringValidationArray = [
+            $past,
+            $present,
+            $future,
+        ];
+
+        
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return bool
+     */
+    private function areTokensValid(array $data)
     {
         $validatorChain = new ValidatorChain();
 
@@ -152,14 +179,11 @@ class Story extends AbstractValueObject
 
         foreach($data as $token => $value) {
             if(FALSE === $validatorChain->isValid($token)) {
-                throw new InvalidTokenException($token);
+                return FALSE;
             }
         }
-    }
 
-    private function listTokens(array $data)
-    {
-
+        return TRUE;
     }
 
     /**

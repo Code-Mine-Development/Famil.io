@@ -137,14 +137,17 @@ class Story extends AbstractValueObject
     {
         list($past, $present, $future, $data, $gender, $original) = $value;
 
-        if(FALSE === $this->areTokensValid($data)) {
+        if (FALSE === $this->areTokensValid($data)) {
             throw new CorruptedTokensException();
         }
 
-        $this->past     = $past;
-        $this->present  = $present;
-        $this->future   = $future;
+        if(FALSE === $this->areStringsCompatibleWithData($data, $past, $present, $future)) {
 
+        }
+
+        $this->past    = $past;
+        $this->present = $present;
+        $this->future  = $future;
 
 
         $this->gender   = $gender;
@@ -152,10 +155,17 @@ class Story extends AbstractValueObject
         $this->previous = $original;
     }
 
-
+    /**
+     * @param array                        $data
+     * @param \AGmakonts\STL\String\String $past
+     * @param \AGmakonts\STL\String\String $present
+     * @param \AGmakonts\STL\String\String $future
+     *
+     * @return bool
+     */
     private function areStringsCompatibleWithData(array $data, String $past, String $present, String $future)
     {
-        $tokens = array_keys($data);
+        $tokens[] = array_keys($data);
 
         $stringValidationArray = [
             $past,
@@ -163,7 +173,40 @@ class Story extends AbstractValueObject
             $future,
         ];
 
-        
+
+        foreach ($stringValidationArray as $string) {
+            $tokens[] = $this->extractTokens($string);
+        }
+
+        $lastCheckedToken = NULL;
+        foreach ($tokens as $token) {
+            if(NULL === $lastCheckedToken) {
+                $lastCheckedToken = $token;
+                continue;
+            }
+
+            if($lastCheckedToken !== $token) {
+                return FALSE;
+            }
+        }
+
+        return TRUE;
+
+    }
+
+    
+
+    /**
+     * @param \AGmakonts\STL\String\String $string
+     *
+     * @return array
+     */
+    private function extractTokens(String $string) : array
+    {
+        $extractedTokens = [];
+        preg_match_all('/\{[A-Z]+\}/', $string->value(), $extractedTokens);
+
+        return $extractedTokens;
     }
 
     /**
@@ -177,8 +220,8 @@ class Story extends AbstractValueObject
 
         $validatorChain->attach(new Regex('/^\{[A-Z]+\}$/'));
 
-        foreach($data as $token => $value) {
-            if(FALSE === $validatorChain->isValid($token)) {
+        foreach ($data as $token => $value) {
+            if (FALSE === $validatorChain->isValid($token)) {
                 return FALSE;
             }
         }

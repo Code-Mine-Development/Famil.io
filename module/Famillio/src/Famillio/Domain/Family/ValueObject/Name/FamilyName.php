@@ -8,7 +8,7 @@
 
 namespace Famillio\Domain\Family\ValueObject\Name;
 
-use AGmakonts\STL\String\String;
+use AGmakonts\STL\String\Text;
 use Famillio\Domain\Family\ValueObject\Name\Exception\EmptyFamilyNameException;
 use Famillio\Domain\Family\ValueObject\Name\Exception\InvalidMultipleFamilyNameElementException;
 
@@ -27,11 +27,11 @@ class FamilyName extends AbstractCompoundName
 
     /**
      * @param array                             $names
-     * @param \AGmakonts\STL\String\String|NULL $glue
+     * @param \AGmakonts\STL\String\Text|NULL $glue
      *
      * @return mixed
      */
-    static public function get(array $names, String $glue = NULL) : FamilyName
+    static public function get(array $names, Text $glue = NULL) : FamilyName
     {
         return self::getInstanceForValue([$names, $glue]);
     }
@@ -52,7 +52,7 @@ class FamilyName extends AbstractCompoundName
         }
 
         if(NULL === $glue) {
-            $glue = String::get(self::DEFAULT_GLUE);
+            $glue = Text::get(self::DEFAULT_GLUE);
         }
 
         $this->names = $names;
@@ -68,9 +68,9 @@ class FamilyName extends AbstractCompoundName
     }
 
     /**
-     * @return \AGmakonts\STL\String\String
+     * @return \AGmakonts\STL\String\Text
      */
-    public function name() : String
+    public function name() : Text
     {
         if(1 === count($this->names)) {
 
@@ -84,14 +84,14 @@ class FamilyName extends AbstractCompoundName
                 $scalarNames[] = $name->name()->value();
             }
 
-            return String::get(implode($this->glue()->value(), $scalarNames));
+            return Text::get(implode($this->glue()->value(), $scalarNames));
         }
     }
 
     /**
-     * @return \AGmakonts\STL\String\String
+     * @return \AGmakonts\STL\String\Text
      */
-    public function glue() : String
+    public function glue() : Text
     {
         return $this->glue;
     }

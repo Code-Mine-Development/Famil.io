@@ -10,9 +10,8 @@ namespace Famillio\Domain\Family\ValueObject\Biography\Fact;
 
 
 use AGmakonts\STL\AbstractValueObject;
-use AGmakonts\STL\String\String;
+use AGmakonts\STL\String\Text;
 use Famillio\Domain\Family\ValueObject\Biography\Fact\Exception\CorruptedTokensException;
-use Famillio\Domain\Family\ValueObject\Biography\Fact\Exception\InvalidTokenException;
 use Famillio\Domain\Family\ValueObject\Gender;
 use Zend\Validator\Regex;
 use Zend\Validator\ValidatorChain;
@@ -25,37 +24,60 @@ use Zend\Validator\ValidatorChain;
 class Story extends AbstractValueObject
 {
 
+    /**
+     * @var \AGmakonts\STL\String\Text
+     */
     private $present;
 
+    /**
+     * @var \AGmakonts\STL\String\Text
+     */
     private $past;
 
+    /**
+     * @var \AGmakonts\STL\String\Text
+     */
     private $future;
 
+    /**
+     * @var \Famillio\Domain\Family\ValueObject\Biography\Fact\Story
+     */
     private $previous;
 
+    /**
+     * @var \Famillio\Domain\Family\ValueObject\Gender|
+     */
     private $gender;
 
+    /**
+     * @var array
+     */
     private $data;
 
 
     /**
-     * @param \AGmakonts\STL\String\String                                  $past
-     * @param \AGmakonts\STL\String\String                                  $present
-     * @param \AGmakonts\STL\String\String                                  $future
+     * @param \AGmakonts\STL\String\Text                                    $past
+     * @param \AGmakonts\STL\String\Text                                    $present
+     * @param \AGmakonts\STL\String\Text                                    $future
      * @param array                                                         $data
      * @param \Famillio\Domain\Family\ValueObject\Gender|NULL               $genderTarget
      * @param \Famillio\Domain\Family\ValueObject\Biography\Fact\Story|NULL $previous
      *
      * @return \Famillio\Domain\Family\ValueObject\Biography\Fact\Story
      */
-    static public function get(String $past,
-                               String $present,
-                               String $future,
+    static public function get(Text $past,
+                               Text $present,
+                               Text $future,
                                array $data,
                                Gender $genderTarget = NULL,
                                Story $previous = NULL) : Story
     {
-        $original = self::extractedOriginal($previous);
+
+        if (NULL !== $previous) {
+            $original = self::extractedOriginal($previous);
+        } else {
+            $original = NULL;
+        }
 
         return self::getInstanceForValue([
                                              $past,
@@ -72,11 +94,9 @@ class Story extends AbstractValueObject
      *
      * @return \Famillio\Domain\Family\ValueObject\Biography\Fact\Story
      */
-    static private function extractedOriginal(Story $story = NULL) : Story
+    static private function extractedOriginal(Story $story) : Story
     {
-        $original = NULL;
-
-        if (NULL !== $story && NULL !== $story->previousVersion()) {
+        if (NULL !== $story->previousVersion()) {
             $original = self::extractedOriginal($story->previousVersion());
         } else {
             $original = $story;
@@ -88,25 +108,25 @@ class Story extends AbstractValueObject
 
 
     /**
-     * @return \AGmakonts\STL\String\String
+     * @return \AGmakonts\STL\String\Text
      */
-    public function rawPresent() : String
+    public function rawPresent() : Text
     {
         return $this->present;
     }
 
     /**
-     * @return \AGmakonts\STL\String\String
+     * @return \AGmakonts\STL\String\Text
      */
-    public function rawPast() : String
+    public function rawPast() : Text
     {
         return $this->past;
     }
 
     /**
-     * @return \AGmakonts\STL\String\String
+     * @return \AGmakonts\STL\String\Text
      */
-    public function rawFuture() : String
+    public function rawFuture() : Text
     {
         return $this->future;
     }
@@ -141,7 +161,7 @@ class Story extends AbstractValueObject
             throw new CorruptedTokensException();
         }
 
-        if(FALSE === $this->areStringsCompatibleWithData($data, $past, $present, $future)) {
+        if (FALSE === $this->areStringsCompatibleWithData($data, $past, $present, $future)) {
 
         }
 
@@ -156,14 +176,14 @@ class Story extends AbstractValueObject
     }
 
     /**
-     * @param array                        $data
-     * @param \AGmakonts\STL\String\String $past
-     * @param \AGmakonts\STL\String\String $present
-     * @param \AGmakonts\STL\String\String $future
+     * @param array                      $data
+     * @param \AGmakonts\STL\String\Text $past
+     * @param \AGmakonts\STL\String\Text $present
+     * @param \AGmakonts\STL\String\Text $future
      *
      * @return bool
      */
-    private function areStringsCompatibleWithData(array $data, String $past, String $present, String $future)
+    private function areStringsCompatibleWithData(array $data, Text $past, Text $present, Text $future)
     {
         $tokens[] = array_keys($data);
 
@@ -180,12 +200,12 @@ class Story extends AbstractValueObject
 
         $lastCheckedToken = NULL;
         foreach ($tokens as $token) {
-            if(NULL === $lastCheckedToken) {
+            if (NULL === $lastCheckedToken) {
                 $lastCheckedToken = $token;
                 continue;
             }
 
-            if($lastCheckedToken !== $token) {
+            if ($lastCheckedToken !== $token) {
                 return FALSE;
             }
         }
@@ -194,14 +214,19 @@ class Story extends AbstractValueObject
 
     }
 
-    
+
+    private function tokenDiferences(array $tokenLists)
+    {
+
+    }
+
 
     /**
-     * @param \AGmakonts\STL\String\String $string
+     * @param \AGmakonts\STL\String\Text $string
      *
      * @return array
      */
-    private function extractTokens(String $string) : array
+    private function extractTokens(Text $string) : array
     {
         $extractedTokens = [];
         preg_match_all('/\{[A-Z]+\}/', $string->value(), $extractedTokens);

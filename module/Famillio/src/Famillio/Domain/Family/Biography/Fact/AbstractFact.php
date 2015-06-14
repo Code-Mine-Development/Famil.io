@@ -10,7 +10,7 @@ namespace Famillio\Domain\Family\Biography\Fact;
 use AGmakonts\DddBricks\Entity\EntityInterface;
 use AGmakonts\STL\DateTime\DateTime;
 use AGmakonts\STL\Number\Integer;
-use AGmakonts\STL\String\String;
+use AGmakonts\STL\String\Text;
 use Famillio\Domain\Family\Biography\Fact\Exception\FactIdentifierAlreadySetException;
 use Famillio\Domain\Family\ValueObject\Biography\Fact\Description;
 use Famillio\Domain\Family\Biography\Fact\Exception\DateInFutureException;
@@ -167,7 +167,7 @@ abstract class AbstractFact implements EntityInterface, FactInterface
     /**
      * @return mixed
      */
-    abstract public function type() : String;
+    abstract public function type() : Text;
 
 
 }

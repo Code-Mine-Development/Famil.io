@@ -10,7 +10,7 @@ namespace Famillio\Domain\Family\ValueObject\Name;
 
 
 use AGmakonts\STL\AbstractValueObject;
-use AGmakonts\STL\String\String;
+use AGmakonts\STL\String\Text;
 
 /**
  * Class AbstractCompoundName
@@ -40,5 +40,5 @@ abstract class AbstractCompoundName extends AbstractValueObject
     /**
      * @return String
      */
-    abstract public function name() : String;
+    abstract public function name() : Text;
 }

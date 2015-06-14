@@ -1,21 +1,20 @@
 <?php
 namespace Famillio;
 
-class Module
+use Zend\ModuleManager\Feature\ConfigProviderInterface;
+
+/**
+ * Class Module
+ *
+ * @package Famillio
+ */
+class Module implements ConfigProviderInterface
 {
+    /**
+     * @return mixed
+     */
     public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';
-    }
-
-    public function getAutoloaderConfig()
-    {
-        return array(
-            'Zend\Loader\StandardAutoloader' => array(
-                'namespaces' => array(
-                    __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
-                ),
-            ),
-        );
     }
 }

@@ -11,6 +11,11 @@ namespace Famillio\Domain\Family\ValueObject\Biography\Fact;
 
 use AGmakonts\STL\AbstractValueObject;
 
+/**
+ * Class Identifier
+ *
+ * @package Famillio\Domain\Family\ValueObject\Biography\Fact
+ */
 class Identifier extends AbstractValueObject
 {
     private $identifier;

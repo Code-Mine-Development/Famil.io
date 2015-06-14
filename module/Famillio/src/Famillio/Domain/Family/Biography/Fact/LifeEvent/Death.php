@@ -9,18 +9,19 @@
 namespace Famillio\Domain\Family\Biography\Fact\LifeEvent;
 
 
-use AGmakonts\STL\String\String;
+use AGmakonts\STL\String\Text;
 use Famillio\Domain\Family\Biography\Fact\AbstractFact;
 use Famillio\Domain\Family\Biography\Fact\LifespanBoundaryFactInterface;
+use Famillio\Domain\Family\ValueObject\Biography\Fact\LifespanBoundaryType;
 
 class Death extends AbstractFact implements LifespanBoundaryFactInterface
 {
     /**
      * @return mixed
      */
-    public function type() : String
+    public function type() : Text
     {
-        return String::get('Death');
+        return Text::get('Death');
     }
 
     /**

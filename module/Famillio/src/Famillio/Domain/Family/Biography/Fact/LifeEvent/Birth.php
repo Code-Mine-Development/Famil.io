@@ -8,7 +8,7 @@
 namespace Famillio\Domain\Family\Biography\Fact\LifeEvent;
 
 
-use AGmakonts\STL\String\String;
+use AGmakonts\STL\String\Text;
 use Famillio\Domain\Family\Biography\Fact\AbstractFact;
 use Famillio\Domain\Family\Biography\Fact\FamilyNameChangeFactInterface;
 use Famillio\Domain\Family\Biography\Fact\GenderChangeFactInterface;
@@ -41,11 +41,11 @@ class Birth extends AbstractFact implements LifespanBoundaryFactInterface,
     private $gender;
 
     /**
-     * @return \AGmakonts\STL\String\String
+     * @return \AGmakonts\STL\String\Text
      */
-    public function type() : String
+    public function type() : Text
     {
-        return String::get('Birth');
+        return Text::get('Birth');
     }
 
     /**

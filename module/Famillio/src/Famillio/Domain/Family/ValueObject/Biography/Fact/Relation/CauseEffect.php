@@ -8,7 +8,7 @@
 
 namespace Famillio\Domain\Family\ValueObject\Biography\Fact\Relation;
 
-use AGmakonts\STL\String\String;
+use AGmakonts\STL\String\Text;
 
 /**
  * Class CauseEffect
@@ -18,26 +18,26 @@ use AGmakonts\STL\String\String;
 class CauseEffect extends AbstractFactRelation
 {
     /**
-     * @return \AGmakonts\STL\String\String
+     * @return \AGmakonts\STL\String\Text
      */
-    public function name() : String
+    public function name() : Text
     {
-        return String::get('Cause and effect');
+        return Text::get('Cause and effect');
+    }
+
+    /**
+     * @return \AGmakonts\STL\String\Text
+     */
+    public function incoming() : Text
+    {
+        return Text::get('Cause');
     }
 
     /**
      * @return \AGmakonts\STL\String\String
      */
-    public function incoming() : String
+    public function outgoing() : Text
     {
-        return String::get('Cause');
-    }
-
-    /**
-     * @return \AGmakonts\STL\String\String
-     */
-    public function outgoing() : String
-    {
-        return String::get('Effect');
+        return Text::get('Effect');
     }
 }

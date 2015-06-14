@@ -19,29 +19,31 @@
     "config": {
         "process-timeout": 5000
     },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.1-dev",
-            "dev-develop": "1.2-dev"
-        }
-    },
     "require": {
         "php": ">=5.3.23",
-        "zendframework/zendframework": "~2.4",
+        "zendframework/zendframework": "~2.5",
         "zfcampus/zf-apigility": "~1.0",
         "zfcampus/zf-apigility-documentation": ">=1.0.5,<2.0.0",
-        "agmakonts/ddd-bricks" : "dev-master"
+        "agmakonts/ddd-bricks" : "2.*",
+        "zfr/zfr-cors" : "~1.2"
     },
     "require-dev": {
         "zendframework/zftool": "dev-master",
         "zendframework/zend-developer-tools": "dev-master",
         "zfcampus/zf-apigility-admin": ">=1.1.2,<2.0.0",
         "zfcampus/zf-deploy": "~1.0",
-        "zfcampus/zf-development-mode": "~2.0"
+        "zfcampus/zf-development-mode": "~2.0",
+        "phpunit/phpunit" : "4.8.x-dev",
+        "mybuilder/phpunit-accelerator":      "1.1.*"
     },
-    "suggest": {
-        "zfcampus/zf-apigility-doctrine": "zfcampus/zf-apigility-doctrine ~1.0 to create Doctrine-Connected REST services",
-        "zfcampus/zf-http-cache": "zfcampus/zf-http-cache ~1.0 to add HTTP caching to your API",
-        "zfr/zfr-cors": "zfr/zfr-cors ~1.2 to add CORS support to your API"
+    "autoload": {
+        "psr-4":{
+            "Famillio\\" : ["module/Famillio/src/Famillio"]
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Famillio\\" : ["module/Famillio/tests/Famillio"]
+        }
     }
 }

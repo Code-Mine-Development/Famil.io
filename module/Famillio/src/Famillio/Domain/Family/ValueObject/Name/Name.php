@@ -10,7 +10,7 @@ namespace Famillio\Domain\Family\ValueObject\Name;
 
 
 use AGmakonts\STL\AbstractValueObject;
-use AGmakonts\STL\String\String;
+use AGmakonts\STL\String\Text;
 use Famillio\Domain\Family\ValueObject\Name\Exception\InvalidNameException;
 use Zend\Filter\Callback;
 use Zend\Filter\FilterChain;
@@ -35,21 +35,21 @@ class Name extends AbstractValueObject
     private $name;
 
     /**
-     * @param \AGmakonts\STL\String\String $name
+     * @param \AGmakonts\STL\String\Text $name
      *
      * @return mixed
      */
-    static public function get(String $name) : Name
+    static public function get(Text $name) : Name
     {
         return self::getInstanceForValue([self::filterName($name)]);
     }
 
     /**
-     * @param \AGmakonts\STL\String\String $name
+     * @param \AGmakonts\STL\String\Text $name
      *
-     * @return \AGmakonts\STL\String\String
+     * @return \AGmakonts\STL\String\Text
      */
-    static private function filterName(String $name) : String
+    static private function filterName(Text $name) : Text
     {
         $nameValue = $name->value();
 
@@ -65,10 +65,13 @@ class Name extends AbstractValueObject
 
         $filteredValue = $filterChain->filter($nameValue);
 
-        return String::get($filteredValue);
+        return Text::get($filteredValue);
     }
 
-    public function name() : String
+    /**
+     * @return \AGmakonts\STL\String\Text
+     */
+    public function name() : Text
     {
         return $this->name;
     }
@@ -79,7 +82,7 @@ class Name extends AbstractValueObject
      */
     protected function __construct(array $value)
     {
-        /** @var \AGmakonts\STL\String\String $name */
+        /** @var \AGmakonts\STL\String\Text $name */
         $name = $value[0];
 
         $nameValue = $name->value();

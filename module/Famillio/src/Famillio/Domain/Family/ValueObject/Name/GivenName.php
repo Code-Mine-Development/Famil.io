@@ -8,7 +8,7 @@
 
 namespace Famillio\Domain\Family\ValueObject\Name;
 
-use AGmakonts\STL\String\String;
+use AGmakonts\STL\String\Text;
 use Famillio\Domain\Family\ValueObject\Name\Exception\InvalidAdditionalGivenNameException;
 
 /**
@@ -86,9 +86,9 @@ class GivenName extends AbstractCompoundName
     }
 
     /**
-     * @return \AGmakonts\STL\String\String
+     * @return \AGmakonts\STL\String\Text
      */
-    public function name() : String
+    public function name() : Text
     {
         $fullGivenName = $this->first()->name();
 

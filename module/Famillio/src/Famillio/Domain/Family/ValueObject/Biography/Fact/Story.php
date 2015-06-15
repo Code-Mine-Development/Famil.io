@@ -299,7 +299,6 @@ class Story extends AbstractValueObject
             $future,
         ];
 
-
         foreach ($stringValidationArray as $string) {
             $usedTokens[] = $this->extractTokens($string);
         }

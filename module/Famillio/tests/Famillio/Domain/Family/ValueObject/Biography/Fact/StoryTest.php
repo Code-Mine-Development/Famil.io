@@ -42,16 +42,23 @@ class StoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers ::extractedOriginal
+     * @dataProvider leveledStoryProvider
+     *
+     * @param \Famillio\Domain\Family\ValueObject\Biography\Fact\Story $test
+     * @param \Famillio\Domain\Family\ValueObject\Biography\Fact\Story $expected
      */
-    public function testExtractedOriginal()
+    public function testExtractedOriginal(Story $test, Story $expected)
     {
+        $reflection = new \ReflectionClass(Story::class);
         $story = $this->simpleStory('test 1');
 
-        $reflection = new \ReflectionClass(Story::class);
 
         $method = $reflection->getMethod('extractedOriginal');
         $method->setAccessible(TRUE);
 
+        $result = $method->invoke($story, $test);
+
+        $this->assertSame($expected, $result);
 
     }
 
@@ -68,6 +75,10 @@ class StoryTest extends \PHPUnit_Framework_TestCase
             [
                 $this->simpleStory('test 3', $this->simpleStory('test 4')),
                 $this->simpleStory('test 4')
+            ],
+            [
+                $this->simpleStory('test 5', $this->simpleStory('test 6', $this->simpleStory('test 7'))),
+                $this->simpleStory('test 7')
             ]
         ];
     }

@@ -13,6 +13,7 @@ use AGmakonts\STL\AbstractValueObject;
 use AGmakonts\STL\String\Text;
 use AGmakonts\STL\Structure\KeyValuePair;
 use Famillio\Domain\Family\ValueObject\Biography\Fact\Exception\CorruptedTokensException;
+use Famillio\Domain\Family\ValueObject\Biography\Fact\Exception\PreviousVersionNotSetException;
 use Famillio\Domain\Family\ValueObject\Gender;
 use Zend\Validator\Regex;
 use Zend\Validator\ValidatorChain;
@@ -97,14 +98,13 @@ class Story extends AbstractValueObject
      */
     static private function extractedOriginal(Story $story) : Story
     {
-        if (NULL !== $story->previousVersion()) {
-            $original = self::extractedOriginal($story->previousVersion());
-        } else {
-            $original = $story;
+        try {
+            $previous = $story->previousVersion();
+        } catch (PreviousVersionNotSetException $exception) {
+            return $story;
         }
 
-        return $original;
-
+        return self::extractedOriginal($previous);
     }
 
 
@@ -147,8 +147,14 @@ class Story extends AbstractValueObject
      */
     public function previousVersion() : Story
     {
+        if(NULL === $this->previous) {
+            throw new PreviousVersionNotSetException($this);
+        }
+
         return $this->previous;
     }
+
+
 
     /**
      * @param array $value
@@ -269,6 +275,7 @@ class Story extends AbstractValueObject
      */
     public function value()
     {
+        return 'story';
     }
 
     /**

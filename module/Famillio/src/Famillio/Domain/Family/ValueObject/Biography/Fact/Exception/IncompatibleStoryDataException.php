@@ -15,9 +15,14 @@ namespace Famillio\Domain\Family\ValueObject\Biography\Fact\Exception;
  */
 class IncompatibleStoryDataException extends InvalidArgumentException
 {
-    public function __construct()
-    {
+    const MESSAGE_FORMAT = 'Provided string use one or more tokens that are not present in provided data. Missing tokens: %s';
 
+    /**
+     * @param array $differences
+     */
+    public function __construct(array $differences)
+    {
+        $this->message = sprintf(self::MESSAGE_FORMAT, implode(', ', $differences));
     }
 
 }

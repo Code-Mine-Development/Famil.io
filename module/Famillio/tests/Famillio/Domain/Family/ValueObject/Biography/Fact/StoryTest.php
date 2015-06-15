@@ -7,8 +7,10 @@
  */
 
 namespace Famillio\Domain\Family\ValueObject\Biography\Fact;
+
 use AGmakonts\STL\String\Text;
 use AGmakonts\STL\Structure\KeyValuePair;
+use Famillio\Domain\Family\ValueObject\Biography\Fact\Exception\IncompatibleStoryDataException;
 use Famillio\Domain\Family\ValueObject\Biography\Fact\Providers\LeveledStoryProvider;
 use PHPUnit_Framework_MockObject_MockObject;
 
@@ -50,7 +52,7 @@ class StoryTest extends \PHPUnit_Framework_TestCase
     public function testExtractedOriginal(Story $test, Story $expected)
     {
         $reflection = new \ReflectionClass(Story::class);
-        $story = $this->simpleStory('test 1');
+        $story      = $this->simpleStory('test 1');
 
 
         $method = $reflection->getMethod('extractedOriginal');
@@ -63,6 +65,63 @@ class StoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers ::tokenDifferences
+     * @covers ::mergeTokens
+     * @covers ::validateTokenUsage
+     *
+     * @dataProvider storyTokenDifferenceProvider
+     */
+    public function testTokenDifferencesHandling(Text $past, Text $present, Text $future, array $data, $valid)
+    {
+        if(FALSE === $valid) {
+            $this->setExpectedException(IncompatibleStoryDataException::class);
+        }
+
+        $story = Story::get($past, $present, $future, $data);
+    }
+
+    /**
+     * @return array
+     */
+    public function storyTokenDifferenceProvider() : array
+    {
+        return [
+            [
+
+                Text::get(' - Was born at {DATE} in {LOCATION}'),
+                Text::get(' - Is borning at {DATE} in {LOCATION}'),
+                Text::get(' - Will be born in {LOCATION} at {DATE}'),
+                [
+                    KeyValuePair::get(Text::get('{LOCATION}'), Text::get('Gliwice')),
+                    KeyValuePair::get(Text::get('{DATE}'), Text::get('24-03-03')),
+                ],
+                TRUE,
+            ],
+            [
+
+                Text::get(' - Was born at {DATE} in {LOCATION}'),
+                Text::get(' - Is borning at {DATE} in {LOCATION}'),
+                Text::get(' - Will be born in {LOCATION} at {DATE}'),
+                [
+                    KeyValuePair::get(Text::get('{DATE}'), Text::get('24-03-03')),
+                ],
+                FALSE,
+            ],
+            [
+                Text::get(' - Was born at {DATE} in {LOCATION}'),
+                Text::get(' - Is borning in {LOCATION}'),
+                Text::get(' - Will be born in {LOCATION}'),
+                [
+                    KeyValuePair::get(Text::get('{LOCATION}'), Text::get('Gliwice')),
+                    KeyValuePair::get(Text::get('{DATE}'), Text::get('24-03-03')),
+                ],
+                TRUE,
+            ],
+
+        ];
+    }
+
+    /**
      * @return array
      */
     public function leveledStoryProvider() : array
@@ -70,20 +129,18 @@ class StoryTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 $this->simpleStory('test 2'),
-                $this->simpleStory('test 2')
+                $this->simpleStory('test 2'),
             ],
             [
                 $this->simpleStory('test 3', $this->simpleStory('test 4')),
-                $this->simpleStory('test 4')
+                $this->simpleStory('test 4'),
             ],
             [
                 $this->simpleStory('test 5', $this->simpleStory('test 6', $this->simpleStory('test 7'))),
-                $this->simpleStory('test 7')
-            ]
+                $this->simpleStory('test 7'),
+            ],
         ];
     }
-
-
 
 
 }

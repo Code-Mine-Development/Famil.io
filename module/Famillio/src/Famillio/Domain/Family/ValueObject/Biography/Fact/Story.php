@@ -13,6 +13,7 @@ use AGmakonts\STL\AbstractValueObject;
 use AGmakonts\STL\String\Text;
 use AGmakonts\STL\Structure\KeyValuePair;
 use Famillio\Domain\Family\ValueObject\Biography\Fact\Exception\CorruptedTokensException;
+use Famillio\Domain\Family\ValueObject\Biography\Fact\Exception\IncompatibleStoryDataException;
 use Famillio\Domain\Family\ValueObject\Biography\Fact\Exception\PreviousVersionNotSetException;
 use Famillio\Domain\Family\ValueObject\Gender;
 use Zend\Validator\Regex;
@@ -147,13 +148,12 @@ class Story extends AbstractValueObject
      */
     public function previousVersion() : Story
     {
-        if(NULL === $this->previous) {
+        if (NULL === $this->previous) {
             throw new PreviousVersionNotSetException($this);
         }
 
         return $this->previous;
     }
-
 
 
     /**
@@ -164,13 +164,7 @@ class Story extends AbstractValueObject
     {
         list($past, $present, $future, $data, $gender, $original) = $value;
 
-        if (FALSE === $this->areTokensValid($data)) {
-            throw new CorruptedTokensException();
-        }
-
-        if (FALSE === $this->areStringsCompatibleWithData($data, $past, $present, $future)) {
-
-        }
+        $this->validateTokenUsage($data, $past, $present, $future);
 
         $this->past    = $past;
         $this->present = $present;
@@ -183,53 +177,47 @@ class Story extends AbstractValueObject
     }
 
     /**
-     * @param array                      $data
-     * @param \AGmakonts\STL\String\Text $past
-     * @param \AGmakonts\STL\String\Text $present
-     * @param \AGmakonts\STL\String\Text $future
+     * @param array $dataTokens
+     * @param array $tokenLists
      *
-     * @return bool
+     * @return array
      */
-    private function areStringsCompatibleWithData(array $data, Text $past, Text $present, Text $future)
+    private function tokenDifferences(array $dataTokens, array $tokenLists) : array
     {
-        $tokens = [];
+        $tokens      = [];
+        $differences = [];
 
         /** @var \AGmakonts\STL\Structure\KeyValuePair $keyValuePair */
-        foreach ($data as $keyValuePair) {
-            $tokens[0][] = $keyValuePair->key();
+        foreach ($dataTokens as $keyValuePair) {
+            $tokens[] = $keyValuePair->key()->value();
         }
 
-        $stringValidationArray = [
-            $past,
-            $present,
-            $future,
-        ];
+        $usedTokens = $this->mergeTokens($tokenLists);
 
-
-        foreach ($stringValidationArray as $string) {
-            $tokens[] = $this->extractTokens($string);
-        }
-
-        $lastCheckedToken = NULL;
-        foreach ($tokens as $token) {
-            if (NULL === $lastCheckedToken) {
-                $lastCheckedToken = $token;
-                continue;
-            }
-
-            if ($lastCheckedToken !== $token) {
-                return FALSE;
+        foreach ($usedTokens as $token) {
+            if (FALSE === in_array($token, $tokens)) {
+                $differences[] = $token;
             }
         }
 
-        return TRUE;
-
+        return $differences;
     }
 
-
-    private function tokenDiferences(array $tokenLists)
+    /**
+     * @param array $tokenLists
+     *
+     * @return array
+     */
+    private function mergeTokens(array $tokenLists) : array
     {
 
+        $usedTokens = [];
+
+        foreach ($tokenLists as $tokens) {
+            $usedTokens = array_merge($usedTokens, $tokens);
+        }
+
+        return array_unique($usedTokens);
     }
 
 
@@ -243,7 +231,7 @@ class Story extends AbstractValueObject
         $extractedTokens = [];
         preg_match_all('/\{[A-Z]+\}/', $string->value(), $extractedTokens);
 
-        return $extractedTokens;
+        return $extractedTokens[0];
     }
 
     /**
@@ -259,7 +247,7 @@ class Story extends AbstractValueObject
 
         /** @var \AGmakonts\STL\Structure\KeyValuePair $value */
         foreach ($data as $value) {
-            if(FALSE === ($value instanceof KeyValuePair)) {
+            if (FALSE === ($value instanceof KeyValuePair)) {
                 return FALSE;
             }
             if (FALSE === $validatorChain->isValid($value->key()->value())) {
@@ -292,4 +280,34 @@ class Story extends AbstractValueObject
     {
     }
 
+    /**
+     * @param array                      $data
+     * @param \AGmakonts\STL\String\Text $past
+     * @param \AGmakonts\STL\String\Text $present
+     * @param \AGmakonts\STL\String\Text $future
+     */
+    private function validateTokenUsage(array $data, Text $past, Text $present, Text $future)
+    {
+        if (FALSE === $this->areTokensValid($data)) {
+            throw new CorruptedTokensException();
+        }
+
+        $usedTokens            = [];
+        $stringValidationArray = [
+            $past,
+            $present,
+            $future,
+        ];
+
+
+        foreach ($stringValidationArray as $string) {
+            $usedTokens[] = $this->extractTokens($string);
+        }
+
+        $differences = $this->tokenDifferences($data, $usedTokens);
+
+        if (FALSE === empty($differences)) {
+            throw new IncompatibleStoryDataException($differences);
+        }
+    }
 }

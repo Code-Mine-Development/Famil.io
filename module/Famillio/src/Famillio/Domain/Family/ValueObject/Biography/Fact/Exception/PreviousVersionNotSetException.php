@@ -17,6 +17,8 @@ class PreviousVersionNotSetException extends BadMethodCallException
 
     /**
      * PreviousVersionNotSetException constructor.
+     *
+     * @param \Famillio\Domain\Family\ValueObject\Biography\Fact\Story $story
      */
     public function __construct(Story $story)
     {

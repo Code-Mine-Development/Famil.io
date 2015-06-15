@@ -8,6 +8,8 @@
 
 namespace Famillio\Domain\Family\ValueObject\Biography\Fact;
 use AGmakonts\STL\String\Text;
+use AGmakonts\STL\Structure\KeyValuePair;
+use Famillio\Domain\Family\ValueObject\Biography\Fact\Providers\LeveledStoryProvider;
 use PHPUnit_Framework_MockObject_MockObject;
 
 /**
@@ -18,37 +20,18 @@ use PHPUnit_Framework_MockObject_MockObject;
  */
 class StoryTest extends \PHPUnit_Framework_TestCase
 {
-
-    private function textMock($string) : PHPUnit_Framework_MockObject_MockObject
-    {
-        $mockBuilder = $this->getMockBuilder(Text::class);
-        $mockBuilder->disableProxyingToOriginalMethods()
-                    ->disableOriginalConstructor()
-                    ->disableOriginalClone();
-
-        $mock = $mockBuilder->getMock();
-        $mock->expects($this->any())->method('value')->willReturn($string);
-
-        return $mock;
-    }
-
-    private function keyValuePairMock($key, $val) : PHPUnit_Framework_MockObject_MockObject
-    {
-
-    }
-
     /**
      * @return \Famillio\Domain\Family\ValueObject\Biography\Fact\Story
      */
-    private function simpleStory(Story $previous = NULL) : Story
+    private function simpleStory($name, Story $previous = NULL) : Story
     {
         $story = Story::get(
-            $this->textMock('Was born at {DATE} in {LOACATION}'),
-            $this->textMock('Is borning at {DATE} in {LOCATION}'),
-            $this->textMock('Will be born in {LOCATION} at {DATE}'),
+            Text::get($name . ' - Was born at {DATE} in {LOCATION}'),
+            Text::get($name . ' - Is borning at {DATE} in {LOCATION}'),
+            Text::get($name . ' - Will be born in {LOCATION} at {DATE}'),
             [
-                '{DATE}'     => '29-02-02',
-                '{LOCATION}' => 'Gliwice'
+                KeyValuePair::get(Text::get('{LOCATION}'), Text::get($name . ' - Gliwice')),
+                KeyValuePair::get(Text::get('{DATE}'), Text::get($name . ' - 24-03-03')),
             ],
             NULL,
             $previous
@@ -60,10 +43,36 @@ class StoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers ::extractedOriginal
      */
-    public function testObjectCreation()
+    public function testExtractedOriginal()
     {
-        $story = $this->simpleStory();
+        $story = $this->simpleStory('test 1');
+
+        $reflection = new \ReflectionClass(Story::class);
+
+        $method = $reflection->getMethod('extractedOriginal');
+        $method->setAccessible(TRUE);
+
+
     }
+
+    /**
+     * @return array
+     */
+    public function leveledStoryProvider() : array
+    {
+        return [
+            [
+                $this->simpleStory('test 2'),
+                $this->simpleStory('test 2')
+            ],
+            [
+                $this->simpleStory('test 3', $this->simpleStory('test 4')),
+                $this->simpleStory('test 4')
+            ]
+        ];
+    }
+
+
 
 
 }

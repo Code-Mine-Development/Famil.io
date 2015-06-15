@@ -11,6 +11,7 @@ namespace Famillio\Domain\Family\ValueObject\Biography\Fact;
 
 use AGmakonts\STL\AbstractValueObject;
 use AGmakonts\STL\String\Text;
+use AGmakonts\STL\Structure\KeyValuePair;
 use Famillio\Domain\Family\ValueObject\Biography\Fact\Exception\CorruptedTokensException;
 use Famillio\Domain\Family\ValueObject\Gender;
 use Zend\Validator\Regex;
@@ -185,7 +186,12 @@ class Story extends AbstractValueObject
      */
     private function areStringsCompatibleWithData(array $data, Text $past, Text $present, Text $future)
     {
-        $tokens[] = array_keys($data);
+        $tokens = [];
+
+        /** @var \AGmakonts\STL\Structure\KeyValuePair $keyValuePair */
+        foreach ($data as $keyValuePair) {
+            $tokens[0][] = $keyValuePair->key();
+        }
 
         $stringValidationArray = [
             $past,
@@ -245,8 +251,12 @@ class Story extends AbstractValueObject
 
         $validatorChain->attach(new Regex('/^\{[A-Z]+\}$/'));
 
-        foreach ($data as $token => $value) {
-            if (FALSE === $validatorChain->isValid($token)) {
+        /** @var \AGmakonts\STL\Structure\KeyValuePair $value */
+        foreach ($data as $value) {
+            if(FALSE === ($value instanceof KeyValuePair)) {
+                return FALSE;
+            }
+            if (FALSE === $validatorChain->isValid($value->key()->value())) {
                 return FALSE;
             }
         }

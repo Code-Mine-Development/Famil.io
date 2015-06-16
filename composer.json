@@ -1,7 +1,7 @@
 {
-    "name": "zfcampus/zf-apigility-skeleton",
+    "name": "agmakonts/famillio",
     "description": "Skeleton Application for Apigility",
-    "type": "library",
+    "type": "project",
     "license": "BSD-3-Clause",
     "keywords": [
         "api",
@@ -9,13 +9,20 @@
         "framework",
         "zf2"
     ],
-    "homepage": "http://apigility.org/",
+    "homepage": "http://grabek.io.org/",
     "support": {
-        "email": "apigility-users@zend.com",
-        "irc": "irc://irc.freenode.net/apigility",
-        "source": "https://github.com/zfcampus/zf-apigility-skeleton",
-        "issues": "https://github.com/zfcampus/zf-apigility-skeleton/issues"
+        "email": "adam@grabek.io",
+        "source": "https://gitlab.com/Famill.io/Famill.io",
+        "issues": "https://gitlab.com/Famill.io/Famill.io/issues"
     },
+    "authors": [
+        {
+            "name": "Adam Grabek",
+            "email": "adam@grabek.io",
+            "homepage": "http://grabek.io",
+            "role": "developer"
+        }
+    ],
     "config": {
         "process-timeout": 5000
     },

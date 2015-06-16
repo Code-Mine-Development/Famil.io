@@ -22,6 +22,12 @@ use Zend\Validator\ValidatorChain;
 /**
  * Class Story
  *
+ * Story objects can be use to describe single event in three tenses with support for placeholders.
+ * Each Story contains past, present and future versions of event description. Those values are stored in raw form
+ * witch allows for modification to patterns (such as language translation, adding additional forms etc).
+ *
+ * Each Store that was created based on other story holds link to original Story that we have started with.
+ *
  * @package Famillio\Domain\Family\ValueObject\Biography\Fact
  */
 class Story extends AbstractValueObject
@@ -48,7 +54,7 @@ class Story extends AbstractValueObject
     private $previous;
 
     /**
-     * @var \Famillio\Domain\Family\ValueObject\Gender|
+     * @var \Famillio\Domain\Family\ValueObject\Gender|NULL
      */
     private $gender;
 
@@ -120,6 +126,14 @@ class Story extends AbstractValueObject
     /**
      * @return \AGmakonts\STL\String\Text
      */
+    public function present() : Text
+    {
+        return $this->replacePlaceholders($this->rawPresent(), $this->data());
+    }
+
+    /**
+     * @return \AGmakonts\STL\String\Text
+     */
     public function rawPast() : Text
     {
         return $this->past;
@@ -128,9 +142,56 @@ class Story extends AbstractValueObject
     /**
      * @return \AGmakonts\STL\String\Text
      */
+    public function past() : Text
+    {
+        return $this->replacePlaceholders($this->rawPast(), $this->data());
+    }
+
+    /**
+     * @return \AGmakonts\STL\String\Text
+     */
     public function rawFuture() : Text
     {
         return $this->future;
+    }
+
+    /**
+     * @return \AGmakonts\STL\String\Text
+     */
+    public function future() : Text
+    {
+        return $this->replacePlaceholders($this->rawFuture(), $this->data());
+    }
+
+    /**
+     * @return array
+     */
+    public function data() : array
+    {
+        return $this->data;
+    }
+
+    /**
+     * @param \AGmakonts\STL\String\Text $string
+     * @param array                      $data
+     *
+     * @return \AGmakonts\STL\String\Text
+     */
+    private function replacePlaceholders(Text $string, array $data) : Text
+    {
+        $stringValue = $string->value();
+
+        /** @var \AGmakonts\STL\Structure\KeyValuePair $keyValuePair */
+        foreach ($data as $keyValuePair) {
+            $stringValue = str_replace(
+                $keyValuePair->key()->value(),
+                $keyValuePair->pairValue()->value(),
+                $stringValue
+            );
+        }
+
+        return Text::get($stringValue);
+
     }
 
     /**

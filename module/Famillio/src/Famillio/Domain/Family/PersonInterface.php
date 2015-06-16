@@ -8,13 +8,14 @@
 namespace Famillio\Domain\Family;
 
 use AGmakonts\DddBricks\Entity\EntityInterface;
+use Famillio\Domain\Family\Collection\FactDataAccessInterface;
 
 /**
  * Interface PersonInterface
  *
  * @package Famillio\Domain\Family
  */
-interface PersonInterface extends EntityInterface
+interface PersonInterface extends EntityInterface, FactDataAccessInterface
 {
     public function name();
 

@@ -76,6 +76,10 @@ class StoryTest extends \PHPUnit_Framework_TestCase
         }
 
         $story = Story::get($past, $present, $future, $data);
+
+        if(TRUE === $valid) {
+            $this->assertInstanceOf(Story::class, $story);
+        }
     }
 
     /**

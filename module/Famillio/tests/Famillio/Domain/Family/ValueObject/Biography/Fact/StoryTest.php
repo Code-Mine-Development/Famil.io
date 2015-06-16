@@ -11,8 +11,6 @@ namespace Famillio\Domain\Family\ValueObject\Biography\Fact;
 use AGmakonts\STL\String\Text;
 use AGmakonts\STL\Structure\KeyValuePair;
 use Famillio\Domain\Family\ValueObject\Biography\Fact\Exception\IncompatibleStoryDataException;
-use Famillio\Domain\Family\ValueObject\Biography\Fact\Providers\LeveledStoryProvider;
-use PHPUnit_Framework_MockObject_MockObject;
 
 /**
  * Class StoryTest

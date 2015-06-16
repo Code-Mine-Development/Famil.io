@@ -25,7 +25,6 @@ class Biography implements BiographyInterface
     public function __construct()
     {
         $this->facts = new \SplPriorityQueue();
-
     }
 
 

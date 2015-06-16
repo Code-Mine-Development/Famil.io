@@ -9,6 +9,7 @@ namespace Famillio\Domain\Family\Collection;
 
 use AGmakonts\STL\Number\Integer;
 use Famillio\Domain\Family\Biography\Fact\FactInterface;
+use Famillio\Domain\Family\Collection\Exception\DuplicatedFactAdditionAttemptException;
 use Famillio\Domain\Family\ValueObject\Biography\Specification;
 use Famillio\Domain\Family\ValueObject\Gender;
 use Famillio\Domain\Family\ValueObject\Name\FamilyName;
@@ -28,7 +29,7 @@ class Biography implements BiographyInterface
      */
     public function __construct()
     {
-        $this->facts = new \SplPriorityQueue();
+        $this->facts = new \SplDoublyLinkedList();
     }
 
     /**
@@ -37,7 +38,28 @@ class Biography implements BiographyInterface
      */
     public function addFact(FactInterface $fact)
     {
-        $this->facts->insert($fact, $fact->date()->getTimestamp()->value());
+        $scalarDateIndex = $fact->date()->getTimestamp()->value();
+
+        if(FALSE === $this->facts()->offsetExists($scalarDateIndex)) {
+            $dateContainer = new \SplObjectStorage();
+            $this->facts()->add($scalarDateIndex, $dateContainer);
+        } else {
+            $dateContainer = $this->facts()->offsetGet($scalarDateIndex);
+        }
+
+        if(TRUE === $dateContainer->contains($fact->identity())) {
+            throw new DuplicatedFactAdditionAttemptException($fact);
+        }
+
+        $dateContainer->attach($fact->identity(), $fact);
+    }
+
+    /**
+     * @return \SplDoublyLinkedList
+     */
+    private function facts()
+    {
+        return $this->facts;
     }
 
     /**
@@ -46,7 +68,7 @@ class Biography implements BiographyInterface
      */
     public function removeFact(FactInterface $fact)
     {
-        // TODO: Implement removeFact() method.
+
     }
 
     /**

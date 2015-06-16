@@ -10,7 +10,8 @@ namespace Famillio\Domain\Family\Biography\Fact;
 
 
 use AGmakonts\STL\DateTime\DateTime;
-use AGmakonts\STL\String\String;
+use AGmakonts\DddBricks\Entity\EntityInterface;
+use AGmakonts\STL\String\Text;
 use Famillio\Domain\Family\ValueObject\Biography\Fact\Description;
 use Famillio\Domain\Family\ValueObject\Biography\Fact\Story;
 
@@ -19,7 +20,7 @@ use Famillio\Domain\Family\ValueObject\Biography\Fact\Story;
  *
  * @package Famillio\Domain\Family\Biography\Fact
  */
-interface FactInterface
+interface FactInterface extends EntityInterface
 {
     /**
      * @return DateTime
@@ -30,11 +31,6 @@ interface FactInterface
      * @return \Famillio\Domain\Family\ValueObject\Biography\Fact\Description
      */
     public function description() : Description;
-
-    /**
-     * @param \AGmakonts\STL\DateTime\DateTime $date
-     */
-    public function changeDate(DateTime $date);
 
     /**
      * @param \Famillio\Domain\Family\ValueObject\Biography\Fact\Description $description
@@ -53,4 +49,9 @@ interface FactInterface
      * @return \Famillio\Domain\Family\ValueObject\Biography\Fact\Story
      */
     public function story() : Story;
+
+    /**
+     * @return \AGmakonts\STL\String\Text
+     */
+    public function type() : Text;
 }

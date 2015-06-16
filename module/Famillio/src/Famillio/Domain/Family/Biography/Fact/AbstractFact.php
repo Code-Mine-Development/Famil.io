@@ -11,6 +11,8 @@ use AGmakonts\DddBricks\Entity\EntityInterface;
 use AGmakonts\STL\DateTime\DateTime;
 use AGmakonts\STL\Number\Integer;
 use AGmakonts\STL\String\Text;
+use Famillio\Domain\Family\Biography\Fact\Exception\DateAlreadySetException;
+use Famillio\Domain\Family\Biography\Fact\Exception\DateNotSetYetException;
 use Famillio\Domain\Family\Biography\Fact\Exception\FactIdentifierAlreadySetException;
 use Famillio\Domain\Family\ValueObject\Biography\Fact\Description;
 use Famillio\Domain\Family\Biography\Fact\Exception\DateInFutureException;
@@ -21,7 +23,7 @@ use Famillio\Domain\Family\ValueObject\Biography\Fact\Identifier;
  *
  * @package Famillio\Domain\Family\ValueObject\Biography\Fact
  */
-abstract class AbstractFact implements EntityInterface, FactInterface
+abstract class AbstractFact implements FactInterface
 {
     /**
      * @var \AGmakonts\STL\DateTime\DateTime
@@ -69,11 +71,15 @@ abstract class AbstractFact implements EntityInterface, FactInterface
     /**
      * @param \AGmakonts\STL\DateTime\DateTime $date
      */
-    protected function setDate(DateTime $date)
+    final protected function setDate(DateTime $date)
     {
         if(TRUE === $date->isFurtherThan(DateTime::get()) &&
            FALSE === $date->isToday()) {
             throw new DateInFutureException($date);
+        }
+
+        if(NULL === $this->date) {
+            throw new DateAlreadySetException($this, $date);
         }
 
         $this->date = $date;
@@ -104,6 +110,10 @@ abstract class AbstractFact implements EntityInterface, FactInterface
      */
     public function date() : DateTime
     {
+        if(NULL === $this->date) {
+            throw new DateNotSetYetException($this);
+        }
+
         return $this->date;
     }
 
@@ -113,14 +123,6 @@ abstract class AbstractFact implements EntityInterface, FactInterface
     public function description() : Description
     {
         return $this->description;
-    }
-
-    /**
-     * @param \AGmakonts\STL\DateTime\DateTime $date
-     */
-    public function changeDate(DateTime $date)
-    {
-        $this->setDate($date);
     }
 
     /**
@@ -173,10 +175,6 @@ abstract class AbstractFact implements EntityInterface, FactInterface
 
 
 
-    /**
-     * @return mixed
-     */
-    abstract public function type() : Text;
 
 
 }

@@ -19,3 +19,9 @@ Coverage reports will be available when xDebug will be provided for PHP 7
 
 * PHP 7
 * Mysql Database
+
+## Project setup
+
+1. Clone the project using git
+2. Run composer install
+3. Run vagrant up

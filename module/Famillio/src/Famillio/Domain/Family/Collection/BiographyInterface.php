@@ -20,14 +20,12 @@ interface BiographyInterface extends \Iterator, \Countable, FactDataAccessInterf
     /**
      * @param \Famillio\Domain\Family\Biography\Fact\FactInterface $fact
      *
-     * @return mixed
      */
     public function addFact(FactInterface $fact);
 
     /**
      * @param \Famillio\Domain\Family\Biography\Fact\FactInterface $fact
      *
-     * @return mixed
      */
     public function removeFact(FactInterface $fact);
 

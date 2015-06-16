@@ -42,16 +42,25 @@ abstract class AbstractFact implements EntityInterface, FactInterface
 
     private $relatedFacts;
 
-    private function location()
+    /**
+     * @return mixed
+     */
+    public function location()
     {
         return $this->location;
     }
 
+    /**
+     * @param $location
+     */
     protected function setLocation($location)
     {
         $this->location = $location;
     }
 
+    /**
+     * @param $location
+     */
     public function changeLocation($location)
     {
         $this->setLocation($location);

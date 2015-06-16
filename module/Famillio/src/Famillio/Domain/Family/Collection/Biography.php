@@ -7,8 +7,12 @@
 
 namespace Famillio\Domain\Family\Collection;
 
+use AGmakonts\STL\Number\Integer;
 use Famillio\Domain\Family\Biography\Fact\FactInterface;
 use Famillio\Domain\Family\ValueObject\Biography\Specification;
+use Famillio\Domain\Family\ValueObject\Gender;
+use Famillio\Domain\Family\ValueObject\Name\FamilyName;
+use Famillio\Domain\Family\ValueObject\Name\GivenName;
 
 /**
  * Class Biography
@@ -27,21 +31,18 @@ class Biography implements BiographyInterface
         $this->facts = new \SplPriorityQueue();
     }
 
-
     /**
      * @param \Famillio\Domain\Family\Biography\Fact\FactInterface $fact
      *
-     * @return mixed
      */
     public function addFact(FactInterface $fact)
     {
-        // TODO: Implement addFact() method.
+        $this->facts->insert($fact, $fact->date()->getTimestamp()->value());
     }
 
     /**
      * @param \Famillio\Domain\Family\Biography\Fact\FactInterface $fact
      *
-     * @return mixed
      */
     public function removeFact(FactInterface $fact)
     {

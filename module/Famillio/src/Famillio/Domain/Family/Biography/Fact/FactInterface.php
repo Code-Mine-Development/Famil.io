@@ -50,7 +50,7 @@ interface FactInterface
     public function nextAnniversary() : DateTime;
 
     /**
-     * @return mixed
+     * @return \Famillio\Domain\Family\ValueObject\Biography\Fact\Story
      */
     public function story() : Story;
 }

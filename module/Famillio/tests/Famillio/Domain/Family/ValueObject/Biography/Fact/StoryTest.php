@@ -10,6 +10,7 @@ namespace Famillio\Domain\Family\ValueObject\Biography\Fact;
 
 use AGmakonts\STL\String\Text;
 use AGmakonts\STL\Structure\KeyValuePair;
+use Famillio\Domain\Family\ValueObject\Biography\Fact\Exception\CorruptedTokensException;
 use Famillio\Domain\Family\ValueObject\Biography\Fact\Exception\IncompatibleStoryDataException;
 
 /**
@@ -59,6 +60,8 @@ class StoryTest extends \PHPUnit_Framework_TestCase
         $result = $method->invoke($story, $test);
 
         $this->assertSame($expected, $result);
+        $this->assertEquals($expected, $result);
+        $this->assertInstanceOf(Story::class, $result);
 
     }
 
@@ -68,6 +71,12 @@ class StoryTest extends \PHPUnit_Framework_TestCase
      * @covers ::validateTokenUsage
      *
      * @dataProvider storyTokenDifferenceProvider
+     *
+     * @param \AGmakonts\STL\String\Text $past
+     * @param \AGmakonts\STL\String\Text $present
+     * @param \AGmakonts\STL\String\Text $future
+     * @param array                      $data
+     * @param                            $valid
      */
     public function testTokenDifferencesHandling(Text $past, Text $present, Text $future, array $data, $valid)
     {
@@ -80,6 +89,71 @@ class StoryTest extends \PHPUnit_Framework_TestCase
         if(TRUE === $valid) {
             $this->assertInstanceOf(Story::class, $story);
         }
+    }
+
+    /**
+     * @covers ::validateTokenUsage
+     * @covers ::areTokensValid
+     * @dataProvider tokenValidationTestProvider
+     *
+     * @param \AGmakonts\STL\Structure\KeyValuePair $pair
+     * @param bool                                  $valid
+     */
+    public function testTokenValidation(KeyValuePair $pair, $valid)
+    {
+        $string = Text::get('Test data');
+
+        if(FALSE === $valid) {
+            $this->setExpectedException(CorruptedTokensException::class);
+
+        }
+
+        $story = Story::get(
+            $string,
+            $string,
+            $string,
+            [
+                $pair
+            ]
+        );
+
+        if(TRUE === $valid) {
+            $this->assertInstanceOf(Story::class, $story);
+        }
+
+
+    }
+
+    /**
+     * @return array
+     */
+    public function tokenValidationTestProvider() : array
+    {
+        $tokens = [
+            ['{TOKEN', FALSE],
+            ['TOKEN}', FALSE],
+            ['TOKEN' , FALSE],
+            ['12232', FALSE],
+            ['{}', FALSE],
+            ['{token}', FALSE],
+            ['{TOKEn{', FALSE],
+            ['{TOKEn}', FALSE],
+            ['{TOKEN122}', FALSE],
+            ['{TOKEN}', TRUE],
+            ['{TOKEN TOKEN}', FALSE]
+
+        ];
+
+        $keyValuePairs = [];
+
+        foreach ($tokens as $token) {
+            $keyValuePairs[] = [
+                KeyValuePair::get(Text::get($token[0]), Text::get('Data')),
+                $token[1]
+            ];
+        }
+
+        return $keyValuePairs;
     }
 
     /**

@@ -27,12 +27,12 @@
         "process-timeout": 5000
     },
     "require": {
-        "php": ">=5.3.23",
+        "php": ">=7.0.0-dev",
         "zendframework/zendframework": "~2.5",
         "zfcampus/zf-apigility": "~1.0",
         "zfcampus/zf-apigility-documentation": ">=1.0.5,<2.0.0",
-        "agmakonts/ddd-bricks" : "2.*",
-        "zfr/zfr-cors" : "~1.2"
+        "agmakonts/ddd-bricks": "2.*",
+        "zfr/zfr-cors": "~1.2"
     },
     "require-dev": {
         "zendframework/zftool": "dev-master",
@@ -40,17 +40,22 @@
         "zfcampus/zf-apigility-admin": ">=1.1.2,<2.0.0",
         "zfcampus/zf-deploy": "~1.0",
         "zfcampus/zf-development-mode": "~2.0",
-        "phpunit/phpunit" : "4.8.x-dev",
-        "mybuilder/phpunit-accelerator":      "1.1.*"
+        "phpunit/phpunit": "4.8.x-dev",
+        "mybuilder/phpunit-accelerator": "1.1.*",
+        "phpdocumentor/phpdocumentor": "2.*"
     },
     "autoload": {
-        "psr-4":{
-            "Famillio\\" : ["module/Famillio/src/Famillio"]
+        "psr-4": {
+            "Famillio\\": [
+                "module/Famillio/src/Famillio"
+            ]
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Famillio\\" : ["module/Famillio/tests/Famillio"]
+            "Famillio\\": [
+                "module/Famillio/tests/Famillio"
+            ]
         }
     }
 }

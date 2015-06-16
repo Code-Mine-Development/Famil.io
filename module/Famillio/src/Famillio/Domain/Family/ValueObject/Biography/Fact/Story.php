@@ -324,7 +324,7 @@ class Story extends AbstractValueObject
      */
     public function value()
     {
-        return 'story';
+        return $this->rawPresent()->value();
     }
 
     /**
@@ -332,6 +332,7 @@ class Story extends AbstractValueObject
      */
     public function __toString()
     {
+        return $this->present()->value();
     }
 
     /**
@@ -339,6 +340,14 @@ class Story extends AbstractValueObject
      */
     public function extractedValue()
     {
+        return self::extractValue([
+                                      $this->past,
+                                      $this->present,
+                                      $this->future,
+                                      $this->data,
+                                      $this->gender,
+                                      $this->previous,
+                                  ]);
     }
 
     /**

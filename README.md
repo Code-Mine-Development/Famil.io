@@ -15,3 +15,7 @@ Application allows for creation of family trees with detailed biographies for al
 
 Coverage reports will be available when xDebug will be provided for PHP 7
 
+## Requirements
+
+* PHP 7
+* Mysql Database

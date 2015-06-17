@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "17562e5a941963d8acb4ada5f3c6108a",
+    "hash": "606a993b55af7724b7960b946e8ec434",
     "packages": [
         {
             "name": "agmakonts/ddd-bricks",
@@ -685,12 +685,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "19215e9a6cf90f46179aa7332dd9df05900cb78b"
+                "reference": "5a42e452a167580dde530a6a5a8932b63d26c323"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/19215e9a6cf90f46179aa7332dd9df05900cb78b",
-                "reference": "19215e9a6cf90f46179aa7332dd9df05900cb78b",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/5a42e452a167580dde530a6a5a8932b63d26c323",
+                "reference": "5a42e452a167580dde530a6a5a8932b63d26c323",
                 "shasum": ""
             },
             "require": {
@@ -749,7 +749,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-06-15 07:51:22"
+            "time": "2015-06-16 16:11:28"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -808,20 +808,23 @@
         },
         {
             "name": "ramsey/uuid",
-            "version": "2.8.0",
+            "version": "2.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ramsey/uuid.git",
-                "reference": "cca98c652cac412c9c2f109c69e5532f313435fc"
+                "reference": "c1d7d8f0ac860fceaadadbda7154e8b5d2f9789e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ramsey/uuid/zipball/cca98c652cac412c9c2f109c69e5532f313435fc",
-                "reference": "cca98c652cac412c9c2f109c69e5532f313435fc",
+                "url": "https://api.github.com/repos/ramsey/uuid/zipball/c1d7d8f0ac860fceaadadbda7154e8b5d2f9789e",
+                "reference": "c1d7d8f0ac860fceaadadbda7154e8b5d2f9789e",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
+            },
+            "replace": {
+                "rhumsaa/uuid": "self.version"
             },
             "require-dev": {
                 "doctrine/dbal": ">=2.3",
@@ -839,11 +842,6 @@
                 "bin/uuid"
             ],
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.8.x-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Rhumsaa\\Uuid\\": "src/"
@@ -870,7 +868,7 @@
                 "identifier",
                 "uuid"
             ],
-            "time": "2014-11-09 18:42:56"
+            "time": "2015-06-16 15:12:41"
         },
         {
             "name": "rwoverdijk/assetmanager",
@@ -4009,20 +4007,20 @@
         },
         {
             "name": "zendframework/zend-view",
-            "version": "2.5.1",
+            "version": "2.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-view.git",
-                "reference": "d74c7c90df6372154cdc10c2aecf7f4c0175ad73"
+                "reference": "b3d31e7ba6d0c13a76afe5c8d914a8ff08616b0d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-view/zipball/d74c7c90df6372154cdc10c2aecf7f4c0175ad73",
-                "reference": "d74c7c90df6372154cdc10c2aecf7f4c0175ad73",
+                "url": "https://api.github.com/repos/zendframework/zend-view/zipball/b3d31e7ba6d0c13a76afe5c8d914a8ff08616b0d",
+                "reference": "b3d31e7ba6d0c13a76afe5c8d914a8ff08616b0d",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.23",
+                "php": ">=5.5",
                 "zendframework/zend-eventmanager": "~2.5",
                 "zendframework/zend-loader": "~2.5",
                 "zendframework/zend-stdlib": "~2.5"
@@ -4088,7 +4086,7 @@
                 "view",
                 "zf2"
             ],
-            "time": "2015-06-03 15:32:03"
+            "time": "2015-06-16 15:32:26"
         },
         {
             "name": "zendframework/zend-xmlrpc",
@@ -7614,8 +7612,6 @@
     },
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": {
-        "php": ">=5.3.23"
-    },
+    "platform": [],
     "platform-dev": []
 }

@@ -4,7 +4,16 @@
  * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
  */
 
+use Application\Check\Environment\Is64bit;
+use Application\Check\Environment\IsUnix;
+
 return array(
+    'diagnostics' => array(
+        'application' => array(
+            'Verify that this system is 64bit' => Is64bit::class,
+            'Verify that this system is not Windows' => IsUnix::class
+        )
+    ),
     'router' => array(
         'routes' => array(
             'home' => array(

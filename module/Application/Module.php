@@ -8,7 +8,6 @@ namespace Application;
 
 use Application\Check\Environment\Is64bit;
 use Application\Check\Environment\IsUnix;
-use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
@@ -38,6 +37,9 @@ class Module implements ConfigProviderInterface
         return include __DIR__ . '/config/module.config.php';
     }
 
+    /**
+     * @return array
+     */
     public function getDiagnostics()
     {
         return [

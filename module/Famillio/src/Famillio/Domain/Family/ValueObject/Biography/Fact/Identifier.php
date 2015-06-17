@@ -11,6 +11,7 @@ namespace Famillio\Domain\Family\ValueObject\Biography\Fact;
 
 use AGmakonts\STL\AbstractValueObject;
 use AGmakonts\STL\DateTime\DateTime;
+use AGmakonts\STL\String\Text;
 
 /**
  * Class Identifier
@@ -21,11 +22,24 @@ class Identifier extends AbstractValueObject
 {
     private $identifier;
 
+    private $date;
 
-    static public function get(DateTime $date)
+
+    static public function get(Text $identifier) : Identifier
     {
 
     }
+
+    static public function generate(DateTime $dateTime) : Identifier
+    {
+
+    }
+
+    public function date() : DateTime
+    {
+        return $this->date;
+    }
+
     /**
      * @param array $value
      *

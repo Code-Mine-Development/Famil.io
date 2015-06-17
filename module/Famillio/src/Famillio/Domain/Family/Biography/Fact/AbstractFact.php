@@ -2,7 +2,7 @@
 /**
  * Date:   11/06/15
  * Time:   14:52
- * 
+ *
  */
 
 namespace Famillio\Domain\Family\Biography\Fact;
@@ -70,14 +70,15 @@ abstract class AbstractFact implements FactInterface
     /**
      * @param \AGmakonts\STL\DateTime\DateTime $date
      */
-    final protected function setDate(DateTime $date)
+    final private function setDate(DateTime $date)
     {
-        if(TRUE === $date->isFurtherThan(DateTime::get()) &&
-           FALSE === $date->isToday()) {
+        if (TRUE === $date->isFurtherThan(DateTime::get()) &&
+            FALSE === $date->isToday()
+        ) {
             throw new DateInFutureException($date);
         }
 
-        if(NULL === $this->date) {
+        if (NULL === $this->date) {
             throw new DateAlreadySetException($this, $date);
         }
 
@@ -95,12 +96,13 @@ abstract class AbstractFact implements FactInterface
     /**
      * @param \Famillio\Domain\Family\ValueObject\Biography\Fact\Identifier $identifier
      */
-    protected function setIdentity(Identifier $identifier)
+    final protected function setIdentity(Identifier $identifier)
     {
-        if(NULL !== $this->identity) {
+        if (NULL !== $this->identity) {
             throw new FactIdentifierAlreadySetException($this);
         }
 
+        $this->setDate($identifier->date());
         $this->identity = $identifier;
     }
 
@@ -109,7 +111,7 @@ abstract class AbstractFact implements FactInterface
      */
     public function date() : DateTime
     {
-        if(NULL === $this->date) {
+        if (NULL === $this->date) {
             throw new DateNotSetYetException($this);
         }
 
@@ -161,19 +163,16 @@ abstract class AbstractFact implements FactInterface
     public function nextAnniversary() : DateTime
     {
         $nativeDate = new \DateTime($this->date()->getTimestamp()->value());
-        $now = new \DateTime();
+        $now        = new \DateTime();
 
         $interval = new \DateInterval('P1Y');
 
-        while($nativeDate->getTimestamp() < $now->getTimestamp()) {
+        while ($nativeDate->getTimestamp() < $now->getTimestamp()) {
             $nativeDate = $nativeDate->add($interval);
         }
 
         return DateTime::get(Integer::get($nativeDate->getTimestamp()));
     }
-
-
-
 
 
 }

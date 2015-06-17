@@ -4,8 +4,18 @@
  * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
  */
 
-return array(
+use Application\Check\Environment\Is64bit;
+use Application\Check\Environment\IsUnix;
+use Application\Check\FileSystem\IsCacheWritable;
 
+return array(
+    'diagnostics' => array(
+        'application' => array(
+            'Verify that this system is 64bit' => Is64bit::class,
+            'Verify that this system is not Windows' => IsUnix::class,
+            'Verify that cache is writable' => IsCacheWritable::class
+        )
+    ),
     'router' => array(
         'routes' => array(
             'home' => array(

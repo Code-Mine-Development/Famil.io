@@ -300,7 +300,7 @@ class Story extends AbstractValueObject
      *
      * @return bool
      */
-    private function areTokensValid(array $data)
+    private function areTokensValid(array $data) : bool
     {
         $validatorChain = new ValidatorChain();
 
@@ -322,7 +322,7 @@ class Story extends AbstractValueObject
     /**
      * @return mixed
      */
-    public function value()
+    public function value() : string
     {
         return $this->rawPresent()->value();
     }
@@ -330,7 +330,7 @@ class Story extends AbstractValueObject
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString() : string
     {
         return $this->present()->value();
     }
@@ -338,7 +338,7 @@ class Story extends AbstractValueObject
     /**
      * @return string
      */
-    public function extractedValue()
+    public function extractedValue() : string
     {
         return self::extractValue([
                                       $this->past,
@@ -356,7 +356,7 @@ class Story extends AbstractValueObject
      * @param \AGmakonts\STL\String\Text $present
      * @param \AGmakonts\STL\String\Text $future
      */
-    private function validateTokenUsage(array $data, Text $past, Text $present, Text $future)
+    private function validateTokenUsage(array $data, Text $past, Text $present, Text $future) : bool
     {
         if (FALSE === $this->areTokensValid($data)) {
             throw new CorruptedTokensException();

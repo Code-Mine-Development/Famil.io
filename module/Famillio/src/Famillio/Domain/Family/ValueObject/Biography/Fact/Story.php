@@ -356,7 +356,7 @@ class Story extends AbstractValueObject
      * @param \AGmakonts\STL\String\Text $present
      * @param \AGmakonts\STL\String\Text $future
      */
-    private function validateTokenUsage(array $data, Text $past, Text $present, Text $future) : bool
+    private function validateTokenUsage(array $data, Text $past, Text $present, Text $future)
     {
         if (FALSE === $this->areTokensValid($data)) {
             throw new CorruptedTokensException();

@@ -6,9 +6,6 @@
 
 namespace Application;
 
-use Application\Check\Environment\Is64bit;
-use Application\Check\Environment\IsUnix;
-use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
@@ -36,13 +33,5 @@ class Module implements ConfigProviderInterface
     public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';
-    }
-
-    public function getDiagnostics()
-    {
-        return [
-            new Is64bit(),
-            new IsUnix(),
-        ];
     }
 }

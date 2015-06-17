@@ -10,6 +10,7 @@ namespace Famillio\Domain\Family\ValueObject\Biography\Fact;
 
 
 use AGmakonts\STL\AbstractValueObject;
+use AGmakonts\STL\DateTime\DateTime;
 
 /**
  * Class Identifier
@@ -19,6 +20,12 @@ use AGmakonts\STL\AbstractValueObject;
 class Identifier extends AbstractValueObject
 {
     private $identifier;
+
+
+    static public function get(DateTime $date)
+    {
+
+    }
     /**
      * @param array $value
      *

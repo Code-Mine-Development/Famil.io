@@ -10,7 +10,6 @@ namespace Famillio\Domain\Family\Biography\Fact;
 use AGmakonts\DddBricks\Entity\EntityInterface;
 use AGmakonts\STL\DateTime\DateTime;
 use AGmakonts\STL\Number\Integer;
-use AGmakonts\STL\String\Text;
 use Famillio\Domain\Family\Biography\Fact\Exception\DateAlreadySetException;
 use Famillio\Domain\Family\Biography\Fact\Exception\DateNotSetYetException;
 use Famillio\Domain\Family\Biography\Fact\Exception\FactIdentifierAlreadySetException;

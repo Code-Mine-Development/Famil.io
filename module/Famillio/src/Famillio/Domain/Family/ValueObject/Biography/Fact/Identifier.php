@@ -30,6 +30,9 @@ class Identifier extends AbstractValueObject
 
     }
 
+    /**
+     * @param \AGmakonts\STL\DateTime\DateTime $dateTime
+     */
     static public function generate(DateTime $dateTime) : Identifier
     {
 

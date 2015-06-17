@@ -18,7 +18,7 @@ use Zend\Mvc\MvcEvent;
  *
  * @package Application
  */
-class Module implements ConfigProviderInterface, AutoloaderProviderInterface
+class Module implements ConfigProviderInterface
 {
     /**
      * @param \Zend\Mvc\MvcEvent $e
@@ -44,19 +44,5 @@ class Module implements ConfigProviderInterface, AutoloaderProviderInterface
             new Is64bit(),
             new IsUnix(),
         ];
-    }
-
-    /**
-     * @return array
-     */
-    public function getAutoloaderConfig()
-    {
-        return array(
-            'Zend\Loader\StandardAutoloader' => array(
-                'namespaces' => array(
-                    __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
-                ),
-            ),
-        );
     }
 }

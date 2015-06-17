@@ -27,7 +27,6 @@
         "process-timeout": 5000
     },
     "require": {
-        "php": ">=7.0.0-dev",
         "zendframework/zendframework": "~2.5",
         "zfcampus/zf-apigility": "~1.0",
         "zfcampus/zf-apigility-documentation": ">=1.0.5,<2.0.0",
@@ -48,6 +47,9 @@
         "psr-4": {
             "Famillio\\": [
                 "module/Famillio/src/Famillio"
+            ],
+            "Application\\" : [
+                "module/Application/src/Application"
             ]
         }
     },

@@ -284,6 +284,9 @@ class Biography implements BiographyInterface
 
         /*
          * Create new Biography that will be returned after merge process
+         *
+         * References after cloning are still references so instances of Fact
+         * entities and ValueObjects stored in them won't be copied.
          */
         $newBiography = clone $this;
 
@@ -380,7 +383,7 @@ class Biography implements BiographyInterface
      */
     public function current()
     {
-        // TODO: Implement current() method.
+        return $this->facts()->current();
     }
 
     /**
@@ -392,7 +395,7 @@ class Biography implements BiographyInterface
      */
     public function next()
     {
-        // TODO: Implement next() method.
+        $this->facts()->next();
     }
 
     /**
@@ -404,7 +407,7 @@ class Biography implements BiographyInterface
      */
     public function key()
     {
-        // TODO: Implement key() method.
+        return $this->facts()->key();
     }
 
     /**
@@ -417,7 +420,7 @@ class Biography implements BiographyInterface
      */
     public function valid()
     {
-        // TODO: Implement valid() method.
+        return $this->facts()->valid();
     }
 
     /**
@@ -429,7 +432,7 @@ class Biography implements BiographyInterface
      */
     public function rewind()
     {
-        // TODO: Implement rewind() method.
+        $this->facts()->rewind();
     }
 
     /**
@@ -486,5 +489,4 @@ class Biography implements BiographyInterface
     {
         // TODO: Implement count() method.
     }
-
 }

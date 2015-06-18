@@ -25,17 +25,25 @@ use Zend\XmlRpc\Value\DateTime;
  */
 class Biography implements BiographyInterface
 {
+    /**
+     * @var \SplPriorityQueue
+     */
     private $factsTimeline;
 
+    /**
+     * @var \SplObjectStorage
+     */
     private $factIdentifiers;
+
 
     /**
      * Biography constructor.
      */
     public function __construct()
     {
-        $this->factsTimeline   = new \SplDoublyLinkedList();
+        $this->factsTimeline   = new \SplPriorityQueue();
         $this->factIdentifiers = new \SplObjectStorage();
+
     }
 
     /**
@@ -48,29 +56,8 @@ class Biography implements BiographyInterface
             throw new DuplicatedFactAdditionAttemptException($fact);
         }
 
-        $dateContainer = $this->factContainerByIdentifier($fact->identity());
-
-        $dateContainer->attach($fact->identity(), $fact);
+        $this->facts()->insert($fact, $fact->date()->getTimestamp()->value());
         $this->factIdentifiers()->attach($fact->identity());
-    }
-
-    /**
-     * @param \Famillio\Domain\Family\ValueObject\Biography\Fact\Identifier $identifier
-     *
-     * @return \SplObjectStorage
-     */
-    private function factContainerByIdentifier(Identifier $identifier) : \SplObjectStorage
-    {
-        $scalarDateIndex = $identifier->date()->getTimestamp()->value();
-
-        if (FALSE === $this->facts()->offsetExists($scalarDateIndex)) {
-            $dateContainer = new \SplObjectStorage();
-            $this->facts()->add($scalarDateIndex, $dateContainer);
-        } else {
-            $dateContainer = $this->facts()->offsetGet($scalarDateIndex);
-        }
-
-        return $dateContainer;
     }
 
     /**
@@ -81,27 +68,43 @@ class Biography implements BiographyInterface
         return $this->factIdentifiers;
     }
 
+
+
     /**
-     * @return \SplDoublyLinkedList
+     * @return \SplPriorityQueue
      */
-    private function facts() : \SplDoublyLinkedList
+    private function facts() : \SplPriorityQueue
     {
         return $this->factsTimeline;
     }
 
     /**
-     * @param \Famillio\Domain\Family\ValueObject\Biography\Fact\Identifier $fact
+     * @param \Famillio\Domain\Family\ValueObject\Biography\Fact\Identifier $identifier
+     *
      */
-    public function removeFact(Identifier $fact)
+    public function removeFact(Identifier $identifier)
     {
-        if (FALSE === $this->factIdentifiers()->contains($fact)) {
-            throw new UnknownFactRemovalAttemptException($fact);
+        if (FALSE === $this->factIdentifiers()->contains($identifier)) {
+            throw new UnknownFactRemovalAttemptException($identifier);
         }
 
-        $dateContainer = $this->factContainerByIdentifier($fact);
+        $newFactTimeline = new \SplPriorityQueue();
 
-        $dateContainer->detach($fact);
-        $this->factIdentifiers()->detach($fact);
+        foreach ($this->facts() as $fact) {
+            /** @var \Famillio\Domain\Family\Biography\Fact\FactInterface $factObject */
+            $factObject = $fact['data'];
+            $factDate   = $fact['priority'];
+
+            if($factObject->identity() === $identifier) {
+                continue;
+            }
+
+            $newFactTimeline->insert($factObject, $factDate);
+
+        }
+
+        $this->factsTimeline = $newFactTimeline;
+        $this->facts()->rewind();
     }
 
     /**

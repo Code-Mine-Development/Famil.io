@@ -31,7 +31,8 @@
         "zfcampus/zf-apigility": "~1.0",
         "zfcampus/zf-apigility-documentation": ">=1.0.5,<2.0.0",
         "agmakonts/ddd-bricks": "2.*",
-        "zfr/zfr-cors": "~1.2"
+        "zfr/zfr-cors": "~1.2",
+        "ramsey/uuid": "2.8.*"
     },
     "require-dev": {
         "zendframework/zftool": "dev-master",

@@ -2,7 +2,7 @@
 /**
  * Date:   11/06/15
  * Time:   14:50
- * 
+ *
  */
 
 namespace Famillio\Domain\Family\Collection;
@@ -22,14 +22,17 @@ use Famillio\Domain\Family\ValueObject\Name\GivenName;
  */
 class Biography implements BiographyInterface
 {
-    private $facts;
+    private $factsTimeline;
+
+    private $factIdentifiers;
 
     /**
      * Biography constructor.
      */
     public function __construct()
     {
-        $this->facts = new \SplDoublyLinkedList();
+        $this->factsTimeline   = new \SplDoublyLinkedList();
+        $this->factIdentifiers = new \SplObjectStorage();
     }
 
     /**
@@ -38,28 +41,39 @@ class Biography implements BiographyInterface
      */
     public function addFact(FactInterface $fact)
     {
+        if (TRUE === $this->factIdentifiers()->contains($fact->identity())) {
+            throw new DuplicatedFactAdditionAttemptException($fact);
+        }
+
+        
         $scalarDateIndex = $fact->date()->getTimestamp()->value();
 
-        if(FALSE === $this->facts()->offsetExists($scalarDateIndex)) {
+        if (FALSE === $this->facts()->offsetExists($scalarDateIndex)) {
             $dateContainer = new \SplObjectStorage();
             $this->facts()->add($scalarDateIndex, $dateContainer);
         } else {
             $dateContainer = $this->facts()->offsetGet($scalarDateIndex);
         }
 
-        if(TRUE === $dateContainer->contains($fact->identity())) {
-            throw new DuplicatedFactAdditionAttemptException($fact);
-        }
 
         $dateContainer->attach($fact->identity(), $fact);
+        $this->factIdentifiers()->attach($fact->identity());
+    }
+
+    /**
+     * @return \SplObjectStorage
+     */
+    private function factIdentifiers() : \SplObjectStorage
+    {
+        return $this->factIdentifiers;
     }
 
     /**
      * @return \SplDoublyLinkedList
      */
-    private function facts()
+    private function facts() : \SplDoublyLinkedList
     {
-        return $this->facts;
+        return $this->factsTimeline;
     }
 
     /**

@@ -54,4 +54,11 @@ interface FactInterface extends EntityInterface
      * @return \AGmakonts\STL\String\Text
      */
     public function type() : Text;
+
+    /**
+     * @param \AGmakonts\STL\DateTime\DateTime $dateTime
+     *
+     * @return \Famillio\Domain\Family\Biography\Fact\FactInterface
+     */
+    public function changedDate(DateTime $dateTime) : FactInterface;
 }

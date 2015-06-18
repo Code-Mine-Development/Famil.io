@@ -11,6 +11,7 @@ use AGmakonts\STL\Number\Integer;
 use Famillio\Domain\Family\Biography\Fact\FactInterface;
 use Famillio\Domain\Family\Collection\Exception\DateMismatchException;
 use Famillio\Domain\Family\Collection\Exception\DuplicatedFactAdditionAttemptException;
+use Famillio\Domain\Family\Collection\Exception\ModificationPreconditionException;
 use Famillio\Domain\Family\Collection\Exception\UnknownFactRemovalAttemptException;
 use Famillio\Domain\Family\Collection\Preconditions\Biography\Replacement\Remove;
 use Famillio\Domain\Family\Collection\Preconditions\Biography\Replacement\Replacement;
@@ -19,22 +20,35 @@ use Famillio\Domain\Family\ValueObject\Biography\Specification;
 use Famillio\Domain\Family\ValueObject\Gender;
 use Famillio\Domain\Family\ValueObject\Name\FamilyName;
 use Famillio\Domain\Family\ValueObject\Name\GivenName;
-use Zend\Stdlib\SplPriorityQueue;
-use Zend\XmlRpc\Value\DateTime;
 
 /**
  * Class Biography
+ *
+ * Biography is specialized collection class that can store Facts.
+ * All elements of the collection are stored in queue in order of
+ * the Fact occurrence, not addition to the Collection.
+ *
+ * Biographies can be merged together or filtered. Both of those operations
+ * will yeld new Collection object.
+ *
+ * Biographies can be iterated and counted.
  *
  * @package Famillio\Domain\Family\Collection
  */
 class Biography implements BiographyInterface
 {
     /**
+     * Priority queue that holds all Facts. Timestamo of the Fact occurrence is used as
+     * priority to determine order of elements.
+     *
      * @var \SplPriorityQueue
      */
     private $factsTimeline;
 
     /**
+     * Helper collection of Fact Identifiers used for fast lookup of existing
+     * Facts.
+     *
      * @var \SplObjectStorage
      */
     private $factIdentifiers;
@@ -51,15 +65,26 @@ class Biography implements BiographyInterface
     }
 
     /**
+     * Adds a fact to the collection. If Fact is already present exception will be thrown.
+     * Determination if fact already exists or not is done by comparing provided Fact's Identifier
+     * with Identifiers already known.
+     *
      * @param \Famillio\Domain\Family\Biography\Fact\FactInterface $fact
      *
+     * @throws \Famillio\Domain\Family\Collection\Exception\DuplicatedFactAdditionAttemptException
      */
     public function addFact(FactInterface $fact)
     {
+        /*
+         * Throw exception on duplication.
+         */
         if (TRUE === $this->factIdentifiers()->contains($fact->identity())) {
             throw new DuplicatedFactAdditionAttemptException($fact);
         }
 
+        /*
+         * Add fact to ordered queue and to fast lookup helper collection.
+         */
         $this->facts()->insert($fact, $fact->date()->getTimestamp()->value());
         $this->factIdentifiers()->attach($fact->identity(), $fact);
     }
@@ -82,24 +107,46 @@ class Biography implements BiographyInterface
     }
 
     /**
-     * @param \Famillio\Domain\Family\ValueObject\Biography\Fact\Identifier $identifier
+     * Will remove Fact that has provided Identifier form collection.
+     * If provided Identifier is unknown to the collection PreconditionException will be
+     * thrown. Exception will hold information about failure cause.
      *
+     * @param \Famillio\Domain\Family\ValueObject\Biography\Fact\Identifier $identifier
      */
     public function removeFact(Identifier $identifier)
     {
+        /*
+         * Use internal method to modify the collection
+         */
         $this->changeFactInTimeline($identifier);
+
+        /*
+         * Update lookup collection to reflect new state
+         */
+        $this->factIdentifiers()->detach($identifier);
     }
 
     /**
+     * Will replace Fact that has provided $identifier with provided Fact object.
+     * If collection doesn't have Fact that can be identified by provided Identifier
+     * or new Fact has different date or type from previous one PreconditionException will
+     * be thrown. Exception will hold details about the failure.
+     *
      * @param \Famillio\Domain\Family\ValueObject\Biography\Fact\Identifier $identifier
      * @param \Famillio\Domain\Family\Biography\Fact\FactInterface          $factInterface \
      */
     public function replaceFact(Identifier $identifier, FactInterface $factInterface)
     {
-        if ($identifier->date() !== $factInterface->date()) {
-            throw new DateMismatchException($identifier, $factInterface->identity());
-        }
+        /*
+         * Use internal method to alter collection
+         */
+        $this->changeFactInTimeline($identifier, $factInterface);
 
+        /*
+         * Update lookup collection
+         */
+        $this->factIdentifiers()->detach($identifier);
+        $this->factIdentifiers()->attach($factInterface->identity());
 
     }
 
@@ -109,32 +156,95 @@ class Biography implements BiographyInterface
      */
     private function changeFactInTimeline(Identifier $identifier, FactInterface $replaceWith = NULL)
     {
+        /*
+         * If provided identifier is unknown throw exception
+         */
         if (FALSE === $this->factIdentifiers()->contains($identifier)) {
             throw new UnknownFactRemovalAttemptException($identifier);
         }
 
+        /*
+         * Counter of failed precondition checks. After the process this should have value
+         * of queue elements at the beginning -1
+         */
+        $failedPreconditionCount = 0;
+
+        /*
+         * Setup new, empty priority queue that will replace current one after the process is
+         * done. Step is needed because there is no way of altering existing queue due to nature of
+         * this data structure.
+         */
         $newFactTimeline = new \SplPriorityQueue();
+
+        /*
+         * To reconstruct the queue we need original priorities
+         */
         $this->facts()->setExtractFlags(\SplPriorityQueue::EXTR_BOTH);
 
         foreach ($this->facts() as $fact) {
+
+            /*
+             * Extract data from queue element
+             */
             /** @var \Famillio\Domain\Family\Biography\Fact\FactInterface $factObject */
             $factObject = $fact['data'];
             $factDate   = $fact['priority'];
 
+            /*
+             * Setup preconditions that will be used to determine whether remove Fact or
+             * replace it with provided one.
+             */
             $removePrecondition  = new Remove($factObject, $replaceWith, $identifier);
             $replacePrecondition = new Replacement($factObject, $replaceWith, $identifier);
 
+            /*
+             * Test preconditions.
+             */
             if (TRUE === $removePrecondition->isMeet()) {
+
+                /*
+                 * Skip elements that should be removed
+                 */
                 continue;
-            }
 
-            if (TRUE === $replacePrecondition->isMeet()) {
+            } elseif (TRUE === $replacePrecondition->isMeet()) {
+
+                /*
+                 * Overwrite variable that holds current Fact with new one
+                 */
                 $factObject = $replaceWith;
+
+            } else {
+
+                /*
+                 * Record fact that all preconditions failed
+                 */
+                $failedPreconditionCount++;
+
             }
 
+            /*
+             * Insert element to new queue. $factObject variable will hold
+             * old Fact if no preconditions were met or new Fact object if it
+             * was overwritten
+             */
             $newFactTimeline->insert($factObject, $factDate);
         }
 
+        /*
+         * Check if *EXACTLY* one precondition was meet during entire process.
+         *
+         * If the number of failed preconditions is smaller then number of all
+         * facts -1 (minus one) or those are the same it means that something
+         * went wrong. In that case exception will be thrown.
+         */
+        if($failedPreconditionCount !== $this->facts()->count() -1) {
+            throw new ModificationPreconditionException();
+        }
+
+        /*
+         * Replace queues and rewind new one just to be sure that everything is ok.
+         */
         $this->factsTimeline = $newFactTimeline;
         $this->facts()->rewind();
     }

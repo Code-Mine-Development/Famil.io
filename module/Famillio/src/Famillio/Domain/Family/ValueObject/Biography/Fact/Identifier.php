@@ -145,27 +145,27 @@ class Identifier extends AbstractValueObject
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function value()
+    public function value() : string
     {
-        // TODO: Implement value() method.
+        return $this->identifier()->value();
     }
 
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString() : string
     {
-        // TODO: Implement __toString() method.
+        return $this->value();
     }
 
     /**
      * @return string
      */
-    public function extractedValue()
+    public function extractedValue() : string
     {
-        // TODO: Implement extractedValue() method.
+        return self::extractValue([$this->identifier]);
     }
 
 }

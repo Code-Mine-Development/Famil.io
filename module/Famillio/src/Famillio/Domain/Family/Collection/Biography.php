@@ -10,10 +10,13 @@ namespace Famillio\Domain\Family\Collection;
 use AGmakonts\STL\Number\Integer;
 use Famillio\Domain\Family\Biography\Fact\FactInterface;
 use Famillio\Domain\Family\Collection\Exception\DuplicatedFactAdditionAttemptException;
+use Famillio\Domain\Family\Collection\Exception\UnknownFactRemovalAttemptException;
+use Famillio\Domain\Family\ValueObject\Biography\Fact\Identifier;
 use Famillio\Domain\Family\ValueObject\Biography\Specification;
 use Famillio\Domain\Family\ValueObject\Gender;
 use Famillio\Domain\Family\ValueObject\Name\FamilyName;
 use Famillio\Domain\Family\ValueObject\Name\GivenName;
+use Zend\XmlRpc\Value\DateTime;
 
 /**
  * Class Biography
@@ -45,8 +48,20 @@ class Biography implements BiographyInterface
             throw new DuplicatedFactAdditionAttemptException($fact);
         }
 
-        
-        $scalarDateIndex = $fact->date()->getTimestamp()->value();
+        $dateContainer = $this->factContainerByIdentifier($fact->identity());
+
+        $dateContainer->attach($fact->identity(), $fact);
+        $this->factIdentifiers()->attach($fact->identity());
+    }
+
+    /**
+     * @param \Famillio\Domain\Family\ValueObject\Biography\Fact\Identifier $identifier
+     *
+     * @return \SplObjectStorage
+     */
+    private function factContainerByIdentifier(Identifier $identifier) : \SplObjectStorage
+    {
+        $scalarDateIndex = $identifier->date()->getTimestamp()->value();
 
         if (FALSE === $this->facts()->offsetExists($scalarDateIndex)) {
             $dateContainer = new \SplObjectStorage();
@@ -55,9 +70,7 @@ class Biography implements BiographyInterface
             $dateContainer = $this->facts()->offsetGet($scalarDateIndex);
         }
 
-
-        $dateContainer->attach($fact->identity(), $fact);
-        $this->factIdentifiers()->attach($fact->identity());
+        return $dateContainer;
     }
 
     /**
@@ -77,12 +90,18 @@ class Biography implements BiographyInterface
     }
 
     /**
-     * @param \Famillio\Domain\Family\Biography\Fact\FactInterface $fact
-     *
+     * @param \Famillio\Domain\Family\ValueObject\Biography\Fact\Identifier $fact
      */
-    public function removeFact(FactInterface $fact)
+    public function removeFact(Identifier $fact)
     {
+        if (FALSE === $this->factIdentifiers()->contains($fact)) {
+            throw new UnknownFactRemovalAttemptException($fact);
+        }
 
+        $dateContainer = $this->factContainerByIdentifier($fact);
+
+        $dateContainer->detach($fact);
+        $this->factIdentifiers()->detach($fact);
     }
 
     /**

@@ -8,6 +8,7 @@
 namespace Famillio\Domain\Family\Collection;
 
 use Famillio\Domain\Family\Biography\Fact\FactInterface;
+use Famillio\Domain\Family\ValueObject\Biography\Fact\Identifier;
 use Famillio\Domain\Family\ValueObject\Biography\Specification;
 
 /**
@@ -24,10 +25,11 @@ interface BiographyInterface extends \Iterator, \Countable, FactDataAccessInterf
     public function addFact(FactInterface $fact);
 
     /**
-     * @param \Famillio\Domain\Family\Biography\Fact\FactInterface $fact
+     * @param \Famillio\Domain\Family\ValueObject\Biography\Fact\Identifier $fact
      *
+     * @return void
      */
-    public function removeFact(FactInterface $fact);
+    public function removeFact(Identifier $fact);
 
     /**
      * @param \Famillio\Domain\Family\Collection\BiographyInterface $biography
@@ -57,6 +59,4 @@ interface BiographyInterface extends \Iterator, \Countable, FactDataAccessInterf
      * @return mixed
      */
     public function lastFact() : FactInterface;
-
-
 }

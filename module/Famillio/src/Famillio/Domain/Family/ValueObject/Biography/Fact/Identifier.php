@@ -14,7 +14,6 @@ use AGmakonts\STL\DateTime\DateTime;
 use AGmakonts\STL\Number\Integer;
 use AGmakonts\STL\String\Text;
 use Rhumsaa\Uuid\Uuid;
-use Zend\Paginator\Adapter\ArrayAdapter;
 
 /**
  * Class Identifier

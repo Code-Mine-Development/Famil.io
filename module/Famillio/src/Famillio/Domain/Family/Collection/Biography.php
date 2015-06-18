@@ -487,6 +487,6 @@ class Biography implements BiographyInterface
      */
     public function count()
     {
-        // TODO: Implement count() method.
+        return $this->facts()->count();
     }
 }

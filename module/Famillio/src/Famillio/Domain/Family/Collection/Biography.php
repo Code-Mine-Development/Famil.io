@@ -9,6 +9,7 @@ namespace Famillio\Domain\Family\Collection;
 
 use AGmakonts\STL\Number\Integer;
 use Famillio\Domain\Family\Biography\Fact\FactInterface;
+use Famillio\Domain\Family\Collection\Biography\MergeMode;
 use Famillio\Domain\Family\Collection\Exception\DuplicatedFactAdditionAttemptException;
 use Famillio\Domain\Family\Collection\Exception\ModificationPreconditionException;
 use Famillio\Domain\Family\Collection\Exception\UnknownFactRemovalAttemptException;
@@ -37,7 +38,7 @@ use Famillio\Domain\Family\ValueObject\Name\GivenName;
 class Biography implements BiographyInterface
 {
     /**
-     * Priority queue that holds all Facts. Timestamo of the Fact occurrence is used as
+     * Priority queue that holds all Facts. Timestamp of the Fact occurrence is used as
      * priority to determine order of elements.
      *
      * @var \SplPriorityQueue
@@ -150,6 +151,8 @@ class Biography implements BiographyInterface
     }
 
     /**
+     * Modifies the collection by removing or replacing Fact.
+     *
      * @param \Famillio\Domain\Family\ValueObject\Biography\Fact\Identifier $identifier
      * @param \Famillio\Domain\Family\Biography\Fact\FactInterface|NULL     $replaceWith
      *
@@ -257,17 +260,85 @@ class Biography implements BiographyInterface
     }
 
     /**
-     * @param \Famillio\Domain\Family\Collection\BiographyInterface $biography
+     * Returns new Biography object that contains Facts from both (current and
+     * passed as an argument) Biographies.
      *
-     * @return mixed
+     * Two processed biographies can have duplicated Facts. When duplicate is found
+     * $mergeMode argument will be used to determine way of handling it. By default
+     * duplicated Fact from original collection will be kept.
+     *
+     *
+     * @param \Famillio\Domain\Family\Collection\BiographyInterface       $biography
+     * @param \Famillio\Domain\Family\Collection\Biography\MergeMode|NULL $mergeMode
+     *
+     * @return \Famillio\Domain\Family\Collection\BiographyInterface
      */
-    public function merged(BiographyInterface $biography) : BiographyInterface
+    public function merged(BiographyInterface $biography, MergeMode $mergeMode = NULL) : BiographyInterface
     {
-        // TODO: Implement merged() method.
+        /*
+         * Fallback to default MergeMode if none was provided
+         */
+        if(NULL === $mergeMode) {
+            $mergeMode = MergeMode::get(MergeMode::KEEP_ORIGINAL);
+        }
+
+        /*
+         * Create new Biography that will be returned after merge process
+         */
+        $newBiography = clone $this;
+
+        /*
+         * Iterate over all Facts from new collection that will be merged and try to
+         * add Facts from it into cloned Biography that represents original collection.
+         */
+        /** @var \Famillio\Domain\Family\Biography\Fact\FactInterface $fact */
+        foreach ($biography as $fact) {
+
+            try {
+
+                $newBiography->addFact($fact);
+            } catch (DuplicatedFactAdditionAttemptException $exception) {
+
+                /*
+                 * When duplication exception is thrown duplicate handling logic comes into play.
+                 */
+                switch ($mergeMode) {
+
+                    case MergeMode::get(MergeMode::KEEP_NEW) :
+                        /*
+                         * If merge mode is set to keeping new Fact replaceFact method is used
+                         * to overwrite old one. This step is needed because duplicates are determined
+                         * by identifier and there is slight possibility that two instances of the Fact
+                         * entity will have different values.
+                         */
+                        $newBiography->replaceFact($fact->identity(), $fact);
+                        break;
+                    case MergeMode::get(MergeMode::ABORT) :
+                        /*
+                         * If merge mode is set to abort the procedure, caught exception is rethrown.
+                         */
+                        throw $exception;
+                        break;
+                    case MergeMode::get(MergeMode::KEEP_ORIGINAL) :
+                        /*
+                         * For merge mode that keeps original no more logic is needed, operation is not
+                         * interrupted and new Fact is discarded.
+                         */
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+
+        return $newBiography;
+
     }
 
+
     /**
-     * @return mixed
+     * @return \SplObjectStorage
      */
     public function timeline() : \SplObjectStorage
     {

@@ -9,13 +9,17 @@ namespace Famillio\Domain\Family\Collection;
 
 use AGmakonts\STL\Number\Integer;
 use Famillio\Domain\Family\Biography\Fact\FactInterface;
+use Famillio\Domain\Family\Collection\Exception\DateMismatchException;
 use Famillio\Domain\Family\Collection\Exception\DuplicatedFactAdditionAttemptException;
 use Famillio\Domain\Family\Collection\Exception\UnknownFactRemovalAttemptException;
+use Famillio\Domain\Family\Collection\Preconditions\Biography\Replacement\Remove;
+use Famillio\Domain\Family\Collection\Preconditions\Biography\Replacement\Replacement;
 use Famillio\Domain\Family\ValueObject\Biography\Fact\Identifier;
 use Famillio\Domain\Family\ValueObject\Biography\Specification;
 use Famillio\Domain\Family\ValueObject\Gender;
 use Famillio\Domain\Family\ValueObject\Name\FamilyName;
 use Famillio\Domain\Family\ValueObject\Name\GivenName;
+use Zend\Stdlib\SplPriorityQueue;
 use Zend\XmlRpc\Value\DateTime;
 
 /**
@@ -57,7 +61,7 @@ class Biography implements BiographyInterface
         }
 
         $this->facts()->insert($fact, $fact->date()->getTimestamp()->value());
-        $this->factIdentifiers()->attach($fact->identity());
+        $this->factIdentifiers()->attach($fact->identity(), $fact);
     }
 
     /**
@@ -67,7 +71,6 @@ class Biography implements BiographyInterface
     {
         return $this->factIdentifiers;
     }
-
 
 
     /**
@@ -84,23 +87,52 @@ class Biography implements BiographyInterface
      */
     public function removeFact(Identifier $identifier)
     {
+        $this->changeFactInTimeline($identifier);
+    }
+
+    /**
+     * @param \Famillio\Domain\Family\ValueObject\Biography\Fact\Identifier $identifier
+     * @param \Famillio\Domain\Family\Biography\Fact\FactInterface          $factInterface \
+     */
+    public function replaceFact(Identifier $identifier, FactInterface $factInterface)
+    {
+        if ($identifier->date() !== $factInterface->date()) {
+            throw new DateMismatchException($identifier, $factInterface->identity());
+        }
+
+
+    }
+
+    /**
+     * @param \Famillio\Domain\Family\ValueObject\Biography\Fact\Identifier $identifier
+     * @param \Famillio\Domain\Family\Biography\Fact\FactInterface|NULL     $replaceWith
+     */
+    private function changeFactInTimeline(Identifier $identifier, FactInterface $replaceWith = NULL)
+    {
         if (FALSE === $this->factIdentifiers()->contains($identifier)) {
             throw new UnknownFactRemovalAttemptException($identifier);
         }
 
         $newFactTimeline = new \SplPriorityQueue();
+        $this->facts()->setExtractFlags(\SplPriorityQueue::EXTR_BOTH);
 
         foreach ($this->facts() as $fact) {
             /** @var \Famillio\Domain\Family\Biography\Fact\FactInterface $factObject */
             $factObject = $fact['data'];
             $factDate   = $fact['priority'];
 
-            if($factObject->identity() === $identifier) {
+            $removePrecondition  = new Remove($factObject, $replaceWith, $identifier);
+            $replacePrecondition = new Replacement($factObject, $replaceWith, $identifier);
+
+            if (TRUE === $removePrecondition->isMeet()) {
                 continue;
             }
 
-            $newFactTimeline->insert($factObject, $factDate);
+            if (TRUE === $replacePrecondition->isMeet()) {
+                $factObject = $replaceWith;
+            }
 
+            $newFactTimeline->insert($factObject, $factDate);
         }
 
         $this->factsTimeline = $newFactTimeline;

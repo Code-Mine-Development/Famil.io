@@ -9,7 +9,6 @@
 namespace Famillio\Domain\Family\Collection\Preconditions\Biography\Replacement;
 
 
-
 /**
  * Class Remove
  *
@@ -23,12 +22,22 @@ class Remove extends AbstractReplacementPrecondition
      */
     public function isMeet() : bool
     {
-        $oldFactNotNull = (NULL !== $this->oldFact());
+        $areBaseConditionsMeet = $this->areBaseConditionsMeet();
+        $isNewFactNull         = (NULL === $this->newFact());
+
+        return ($areBaseConditionsMeet && $isNewFactNull);
+    }
+
+    /**
+     * @return bool
+     */
+    protected function areBaseConditionsMeet() : bool
+    {
+        $oldFactNotNull    = (NULL !== $this->oldFact());
         $identifierNotNull = (NULL !== $this->identifier());
 
-        $datesMatch = ($this->oldFact()->date() === $this->identifier()->date());
+        $datesMatch       = ($this->oldFact()->date() === $this->identifier()->date());
         $identifiersMatch = ($this->oldFact()->identity() === $this->identifier());
-
 
         return ($oldFactNotNull && $identifierNotNull && $datesMatch && $identifiersMatch);
     }

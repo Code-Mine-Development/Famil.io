@@ -20,7 +20,7 @@ class Replacement extends Remove
      */
     public function isMeet() : bool
     {
-        $removalPreconditionMeet = parent::isMeet();
+        $removalPreconditionMeet = $this->areBaseConditionsMeet();
 
         $newFactNotNull = (NULL !== $this->newFact());
         $datesMatch = ($this->newFact()->date() === $this->oldFact()->date());

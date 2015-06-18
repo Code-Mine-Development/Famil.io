@@ -8,6 +8,7 @@
 namespace Famillio\Domain\Family\Collection;
 
 use Famillio\Domain\Family\Biography\Fact\FactInterface;
+use Famillio\Domain\Family\Collection\Biography\DataExtractor\DataExtractorInterface;
 use Famillio\Domain\Family\Collection\Biography\MergeMode;
 use Famillio\Domain\Family\ValueObject\Biography\Fact\Identifier;
 use Famillio\Domain\Family\ValueObject\Biography\Specification;
@@ -17,7 +18,7 @@ use Famillio\Domain\Family\ValueObject\Biography\Specification;
  *
  * @package Famillio\Domain\Family\Collection
  */
-interface BiographyInterface extends \Iterator, \Countable, FactDataAccessInterface
+interface BiographyInterface extends \Iterator, \Countable
 {
     /**
      * @param \Famillio\Domain\Family\Biography\Fact\FactInterface $fact
@@ -68,4 +69,15 @@ interface BiographyInterface extends \Iterator, \Countable, FactDataAccessInterf
      * @return mixed
      */
     public function lastFact() : FactInterface;
+
+    /**
+     * Extract data from Facts stored in Biography. Data Extractor object that will be used as argument
+     * will be returned after satisfaction.
+     *
+     *
+     * @param \Famillio\Domain\Family\Collection\Biography\DataExtractor\DataExtractorInterface $dataExtractorInterface
+     *
+     * @return \Famillio\Domain\Family\Collection\Biography\DataExtractor\DataExtractorInterface
+     */
+    public function extractData(DataExtractorInterface $dataExtractorInterface) : DataExtractorInterface;
 }

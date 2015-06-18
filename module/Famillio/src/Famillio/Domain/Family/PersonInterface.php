@@ -15,7 +15,7 @@ use Famillio\Domain\Family\Collection\FactDataAccessInterface;
  *
  * @package Famillio\Domain\Family
  */
-interface PersonInterface extends EntityInterface, FactDataAccessInterface
+interface PersonInterface extends EntityInterface
 {
     public function name();
 

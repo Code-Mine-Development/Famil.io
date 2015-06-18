@@ -7,8 +7,8 @@
 
 namespace Famillio\Domain\Family\Collection;
 
-use AGmakonts\STL\Number\Integer;
 use Famillio\Domain\Family\Biography\Fact\FactInterface;
+use Famillio\Domain\Family\Collection\Biography\DataExtractor\DataExtractorInterface;
 use Famillio\Domain\Family\Collection\Biography\MergeMode;
 use Famillio\Domain\Family\Collection\Exception\DuplicatedFactAdditionAttemptException;
 use Famillio\Domain\Family\Collection\Exception\ModificationPreconditionException;
@@ -17,9 +17,7 @@ use Famillio\Domain\Family\Collection\Preconditions\Biography\Replacement\Remove
 use Famillio\Domain\Family\Collection\Preconditions\Biography\Replacement\Replacement;
 use Famillio\Domain\Family\ValueObject\Biography\Fact\Identifier;
 use Famillio\Domain\Family\ValueObject\Biography\Specification;
-use Famillio\Domain\Family\ValueObject\Gender;
-use Famillio\Domain\Family\ValueObject\Name\FamilyName;
-use Famillio\Domain\Family\ValueObject\Name\GivenName;
+
 
 /**
  * Class Biography
@@ -53,6 +51,11 @@ class Biography implements BiographyInterface
      */
     private $factIdentifiers;
 
+    /**
+     * @var \SplPriorityQueue
+     */
+    private $iterator;
+
 
     /**
      * Biography constructor.
@@ -61,6 +64,7 @@ class Biography implements BiographyInterface
     {
         $this->factsTimeline   = new \SplPriorityQueue();
         $this->factIdentifiers = new \SplObjectStorage();
+        $this->iterator        = new \SplPriorityQueue();
 
     }
 
@@ -104,6 +108,14 @@ class Biography implements BiographyInterface
     private function facts() : \SplPriorityQueue
     {
         return $this->factsTimeline;
+    }
+
+    /**
+     * @return \SplPriorityQueue
+     */
+    private function factsIterator() : \SplPriorityQueue
+    {
+        return clone $this->facts();
     }
 
     /**
@@ -278,7 +290,7 @@ class Biography implements BiographyInterface
         /*
          * Fallback to default MergeMode if none was provided
          */
-        if(NULL === $mergeMode) {
+        if (NULL === $mergeMode) {
             $mergeMode = MergeMode::get(MergeMode::KEEP_ORIGINAL);
         }
 
@@ -375,7 +387,23 @@ class Biography implements BiographyInterface
     }
 
     /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
+     *
+     */
+    public function prepareIterator()
+    {
+        $this->iterator = $this->factsIterator();
+    }
+
+    /**
+     * @return \SplPriorityQueue
+     */
+    private function iterator()
+    {
+        return $this->iterator;
+    }
+
+
+    /**
      * Return the current element
      *
      * @link http://php.net/manual/en/iterator.current.php
@@ -383,11 +411,14 @@ class Biography implements BiographyInterface
      */
     public function current()
     {
-        return $this->facts()->current();
+        if(TRUE === $this->iterator()->isEmpty()) {
+            $this->prepareIterator();
+        }
+
+        return $this->iterator()->current();
     }
 
     /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
      * Move forward to next element
      *
      * @link http://php.net/manual/en/iterator.next.php
@@ -395,11 +426,14 @@ class Biography implements BiographyInterface
      */
     public function next()
     {
-        $this->facts()->next();
+        if(TRUE === $this->iterator()->isEmpty()) {
+            $this->prepareIterator();
+        }
+
+        $this->iterator()->next();
     }
 
     /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
      * Return the key of the current element
      *
      * @link http://php.net/manual/en/iterator.key.php
@@ -407,11 +441,14 @@ class Biography implements BiographyInterface
      */
     public function key()
     {
-        return $this->facts()->key();
+        if(TRUE === $this->iterator()->isEmpty()) {
+            $this->prepareIterator();
+        }
+
+        return $this->iterator()->key();
     }
 
     /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
      * Checks if current position is valid
      *
      * @link http://php.net/manual/en/iterator.valid.php
@@ -420,11 +457,14 @@ class Biography implements BiographyInterface
      */
     public function valid()
     {
-        return $this->facts()->valid();
+        if(TRUE === $this->iterator()->isEmpty()) {
+            $this->prepareIterator();
+        }
+
+        return $this->iterator()->valid();
     }
 
     /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
      * Rewind the Iterator to the first element
      *
      * @link http://php.net/manual/en/iterator.rewind.php
@@ -432,61 +472,49 @@ class Biography implements BiographyInterface
      */
     public function rewind()
     {
-        $this->facts()->rewind();
+        if(TRUE === $this->iterator()->isEmpty()) {
+            $this->prepareIterator();
+        }
+
+        $this->iterator()->rewind();
     }
 
-    /**
-     * @return mixed
-     */
-    public function currentAge() : Integer
-    {
-        // TODO: Implement currentAge() method.
-    }
 
     /**
-     * @return mixed
-     */
-    public function currentGivenName() : GivenName
-    {
-        // TODO: Implement currentGivenName() method.
-    }
-
-    /**
-     * @return mixed
-     */
-    public function currentFamilyName() : FamilyName
-    {
-        // TODO: Implement currentFamilyName() method.
-    }
-
-    /**
-     * @return mixed
-     */
-    public function currentGender() : Gender
-    {
-        // TODO: Implement currentGender() method.
-    }
-
-    /**
-     * @return mixed
-     */
-    public function currentResidence() : Address
-    {
-        // TODO: Implement currentResidence() method.
-    }
-
-    /**
-     * (PHP 5 &gt;= 5.1.0)<br/>
-     * Count elements of an object
+     * Count of the Facts in the Biography
      *
      * @link http://php.net/manual/en/countable.count.php
-     * @return int The custom count as an integer.
-     *       </p>
-     *       <p>
-     *       The return value is cast to an integer.
+     * @return int
      */
     public function count()
     {
         return $this->facts()->count();
     }
+
+    /**
+     * Extract data from Facts stored in Biography. Data Extractor object that will be used as argument
+     * will be returned after satisfaction.
+     *
+     * @param \Famillio\Domain\Family\Collection\Biography\DataExtractor\DataExtractorInterface $dataExtractorInterface
+     *
+     * @return \Famillio\Domain\Family\Collection\Biography\DataExtractor\DataExtractorInterface
+     */
+    public function extractData(DataExtractorInterface $dataExtractorInterface) : DataExtractorInterface
+    {
+        $facts = $this->factsIterator();
+
+        /** @var \Famillio\Domain\Family\Biography\Fact\FactInterface $fact */
+        foreach ($facts as $fact) {
+
+            $dataExtractorInterface->registerFact($fact);
+
+            if (TRUE === $dataExtractorInterface->isSatisfied()) {
+                break;
+            }
+        }
+
+        return $dataExtractorInterface;
+    }
+
+
 }

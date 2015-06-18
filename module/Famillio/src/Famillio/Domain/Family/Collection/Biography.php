@@ -9,7 +9,6 @@ namespace Famillio\Domain\Family\Collection;
 
 use AGmakonts\STL\Number\Integer;
 use Famillio\Domain\Family\Biography\Fact\FactInterface;
-use Famillio\Domain\Family\Collection\Exception\DateMismatchException;
 use Famillio\Domain\Family\Collection\Exception\DuplicatedFactAdditionAttemptException;
 use Famillio\Domain\Family\Collection\Exception\ModificationPreconditionException;
 use Famillio\Domain\Family\Collection\Exception\UnknownFactRemovalAttemptException;
@@ -153,6 +152,9 @@ class Biography implements BiographyInterface
     /**
      * @param \Famillio\Domain\Family\ValueObject\Biography\Fact\Identifier $identifier
      * @param \Famillio\Domain\Family\Biography\Fact\FactInterface|NULL     $replaceWith
+     *
+     * @throws UnknownFactRemovalAttemptException
+     * @throws ModificationPreconditionException
      */
     private function changeFactInTimeline(Identifier $identifier, FactInterface $replaceWith = NULL)
     {
@@ -181,6 +183,11 @@ class Biography implements BiographyInterface
          */
         $this->facts()->setExtractFlags(\SplPriorityQueue::EXTR_BOTH);
 
+
+        /*
+         * Iterate over all Facts in the queue to find the one that should be
+         * removed or replaced.
+         */
         foreach ($this->facts() as $fact) {
 
             /*
@@ -238,7 +245,7 @@ class Biography implements BiographyInterface
          * facts -1 (minus one) or those are the same it means that something
          * went wrong. In that case exception will be thrown.
          */
-        if($failedPreconditionCount !== $this->facts()->count() -1) {
+        if ($failedPreconditionCount !== $this->facts()->count() - 1) {
             throw new ModificationPreconditionException();
         }
 

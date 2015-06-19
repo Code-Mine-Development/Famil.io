@@ -16,7 +16,7 @@ use Famillio\Domain\Family\Collection\BiographyInterface;
  *
  * @package Famillio\Domain\Family\Collection\Biography\Filter
  */
-interface ContextAwareSpecificationInterface extends SpecificationInterface
+interface ContextAwareSpecificationInterface
 {
     /**
      * Allows to specify collection instance that will be used as a context in witch

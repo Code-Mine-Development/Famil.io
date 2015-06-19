@@ -6,9 +6,10 @@
     "keywords": [
         "api",
         "apigility",
-        "framework",
+        "famillio",
         "zf2"
     ],
+    "minimum-stability": "stable",
     "homepage": "http://grabek.io.org/",
     "support": {
         "email": "adam@grabek.io",
@@ -24,13 +25,21 @@
         }
     ],
     "config": {
-        "process-timeout": 5000
+        "process-timeout": 5000,
+        "preferred-install": "dist",
+        "discard-changes": true
     },
     "require": {
         "zendframework/zendframework": "~2.5",
         "zfcampus/zf-apigility": "~1.0",
         "zfcampus/zf-apigility-documentation": ">=1.0.5,<2.0.0",
         "agmakonts/ddd-bricks": "2.*",
+        "zendframework/zend-i18n-resources": "2.5.*",
+        "ocramius/proxy-manager": "1.0.*",
+        "moontoast/math": "1.1.*",
+        "sensiolabs/security-checker": "2.0.*",
+        "ircmaxell/random-lib": "1.1.*",
+        "aist/aist-git-tools": "0.*",
         "zfr/zfr-cors": "~1.2",
         "ramsey/uuid": "2.8.*"
     },

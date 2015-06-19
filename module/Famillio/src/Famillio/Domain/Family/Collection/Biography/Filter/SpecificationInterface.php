@@ -45,4 +45,9 @@ interface SpecificationInterface
      * @return bool
      */
     public function canBeAttachedTo(SpecificationInterface $specificationInterface) : bool;
+
+    /**
+     * @return \Famillio\Domain\Family\Collection\Biography\Filter\SpecificationInterface
+     */
+    public function child() : SpecificationInterface;
 }

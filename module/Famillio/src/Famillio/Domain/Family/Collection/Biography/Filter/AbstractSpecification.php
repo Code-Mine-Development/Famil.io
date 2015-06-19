@@ -53,7 +53,7 @@ abstract class AbstractSpecification implements SpecificationInterface
     /**
      * @return \Famillio\Domain\Family\Collection\Biography\Filter\SpecificationInterface
      */
-    protected function child() : SpecificationInterface
+    public function child() : SpecificationInterface
     {
         /*
          * If no child is specified throw exception (cannot return NULL)

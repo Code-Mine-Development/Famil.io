@@ -9,9 +9,9 @@ namespace Famillio\Domain\Family\Collection;
 
 use Famillio\Domain\Family\Biography\Fact\FactInterface;
 use Famillio\Domain\Family\Collection\Biography\DataExtractor\DataExtractorInterface;
+use Famillio\Domain\Family\Collection\Biography\Filter\SpecificationInterface;
 use Famillio\Domain\Family\Collection\Biography\MergeMode;
 use Famillio\Domain\Family\ValueObject\Biography\Fact\Identifier;
-use Famillio\Domain\Family\ValueObject\Biography\Specification;
 
 /**
  * Interface BiographyInterface
@@ -54,11 +54,14 @@ interface BiographyInterface extends \Iterator, \Countable
     public function timeline() : \SplObjectStorage;
 
     /**
-     * @param \Famillio\Domain\Family\ValueObject\Biography\Specification $specification
+     * Return new Biography collection without elements that don't comply to provided
+     * specification. Method will return empty collection if no Facts were accepted by specification.
      *
-     * @return mixed
+     * @param \Famillio\Domain\Family\Collection\Biography\Filter\SpecificationInterface $specification
+     *
+     * @return \Famillio\Domain\Family\Collection\BiographyInterface
      */
-    public function filtered(Specification $specification) : BiographyInterface;
+    public function filtered(SpecificationInterface $specification) : BiographyInterface;
 
     /**
      * @return mixed

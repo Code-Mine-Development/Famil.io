@@ -9,6 +9,7 @@ namespace Famillio\Domain\Family\Collection;
 
 use Famillio\Domain\Family\Biography\Fact\FactInterface;
 use Famillio\Domain\Family\Collection\Biography\DataExtractor\DataExtractorInterface;
+use Famillio\Domain\Family\Collection\Biography\Filter\SpecificationInterface;
 use Famillio\Domain\Family\Collection\Biography\MergeMode;
 use Famillio\Domain\Family\Collection\Exception\DuplicatedFactAdditionAttemptException;
 use Famillio\Domain\Family\Collection\Exception\EmptyCollectionException;
@@ -17,7 +18,6 @@ use Famillio\Domain\Family\Collection\Exception\UnknownFactRemovalAttemptExcepti
 use Famillio\Domain\Family\Collection\Preconditions\Biography\Replacement\Remove;
 use Famillio\Domain\Family\Collection\Preconditions\Biography\Replacement\Replacement;
 use Famillio\Domain\Family\ValueObject\Biography\Fact\Identifier;
-use Famillio\Domain\Family\ValueObject\Biography\Specification;
 
 
 /**
@@ -381,21 +381,28 @@ class Biography implements BiographyInterface
     }
 
     /**
-     * @param \Famillio\Domain\Family\ValueObject\Biography\Specification $specification
+     * Return new Biography collection without elements that don't comply to provided
+     * specification. Method will return empty collection if no Facts were accepted by specification.
      *
-     * @return mixed
+     * @param \Famillio\Domain\Family\Collection\Biography\Filter\SpecificationInterface $specification
+     *
+     * @return \Famillio\Domain\Family\Collection\BiographyInterface
      */
-    public function filtered(Specification $specification) : BiographyInterface
+    public function filtered(SpecificationInterface $specification) : BiographyInterface
     {
         // TODO: Implement filtered() method.
     }
+
 
     /**
      * @return mixed
      */
     public function firstFact() : FactInterface
     {
-        if(TRUE === $this->facts()->isEmpty()) {
+        /*
+         * In case of null, throw exception
+         */
+        if (TRUE === $this->facts()->isEmpty()) {
             throw new EmptyCollectionException(__METHOD__);
         }
 
@@ -410,6 +417,9 @@ class Biography implements BiographyInterface
      */
     public function lastFact() : FactInterface
     {
+        /*
+         * In case of null, throw exception
+         */
         if(TRUE === $this->facts()->isEmpty()) {
             throw new EmptyCollectionException(__METHOD__);
         }
@@ -445,7 +455,7 @@ class Biography implements BiographyInterface
      */
     public function current()
     {
-        if(TRUE === $this->publicIterator()->isEmpty()) {
+        if (TRUE === $this->publicIterator()->isEmpty()) {
             $this->preparePublicIterator();
         }
 
@@ -460,7 +470,7 @@ class Biography implements BiographyInterface
      */
     public function next()
     {
-        if(TRUE === $this->publicIterator()->isEmpty()) {
+        if (TRUE === $this->publicIterator()->isEmpty()) {
             $this->preparePublicIterator();
         }
 
@@ -475,7 +485,7 @@ class Biography implements BiographyInterface
      */
     public function key()
     {
-        if(TRUE === $this->publicIterator()->isEmpty()) {
+        if (TRUE === $this->publicIterator()->isEmpty()) {
             $this->preparePublicIterator();
         }
 
@@ -491,7 +501,7 @@ class Biography implements BiographyInterface
      */
     public function valid()
     {
-        if(TRUE === $this->publicIterator()->isEmpty()) {
+        if (TRUE === $this->publicIterator()->isEmpty()) {
             $this->preparePublicIterator();
         }
 
@@ -557,6 +567,4 @@ class Biography implements BiographyInterface
 
         return $dataExtractorInterface;
     }
-
-
 }

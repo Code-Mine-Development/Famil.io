@@ -41,6 +41,8 @@ interface FactInterface extends EntityInterface
     public function timeSinceFact();
 
     /**
+     * Return DateTime object with the date of next anniversary of the Fact.
+     *
      * @return \AGmakonts\STL\DateTime\DateTime
      */
     public function nextAnniversary() : DateTime;

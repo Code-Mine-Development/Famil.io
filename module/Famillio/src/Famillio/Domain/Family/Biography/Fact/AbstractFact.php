@@ -34,8 +34,6 @@ abstract class AbstractFact implements FactInterface
      */
     private $description;
 
-    private $location;
-
     /**
      * @var \Famillio\Domain\Family\ValueObject\Biography\Fact\Identifier
      */
@@ -43,29 +41,6 @@ abstract class AbstractFact implements FactInterface
 
     private $relatedFacts;
 
-    /**
-     * @return mixed
-     */
-    public function location()
-    {
-        return $this->location;
-    }
-
-    /**
-     * @param $location
-     */
-    protected function setLocation($location)
-    {
-        $this->location = $location;
-    }
-
-    /**
-     * @param $location
-     */
-    public function changeLocation($location)
-    {
-        $this->setLocation($location);
-    }
 
     /**
      * @param \AGmakonts\STL\DateTime\DateTime $date
@@ -158,6 +133,8 @@ abstract class AbstractFact implements FactInterface
     }
 
     /**
+     * Return DateTime object with the date of next anniversary of the Fact.
+     *
      * @return \AGmakonts\STL\DateTime\DateTime
      */
     public function nextAnniversary() : DateTime

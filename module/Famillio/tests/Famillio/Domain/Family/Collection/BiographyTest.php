@@ -17,7 +17,7 @@ class BiographyTest extends \PHPUnit_Framework_TestCase
 {
     public function testOrder()
     {
-
+        $b = new Biography();
 
     }
 }

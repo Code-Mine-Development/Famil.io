@@ -32,6 +32,9 @@ use Famillio\Domain\Family\ValueObject\Biography\Fact\Identifier;
  *
  * Biographies can be iterated and counted.
  *
+ * Iteration is conducted in reverse chronological order. Newest facts
+ * are returned before older ones.
+ *
  * @package Famillio\Domain\Family\Collection
  */
 class Biography implements BiographyInterface

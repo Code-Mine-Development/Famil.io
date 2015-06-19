@@ -18,6 +18,10 @@ use Famillio\Domain\Family\ValueObject\Biography\Fact\Story;
 /**
  * Interface FactInterface
  *
+ * Fact is a representation of single event in person's biography.
+ * Each fact has immutable date and identifier. Apart from that, each
+ * Fact can be extended by interfaces that add new data to it.
+ *
  * @package Famillio\Domain\Family\Biography\Fact
  */
 interface FactInterface extends EntityInterface

@@ -18,6 +18,8 @@ use Famillio\Domain\Family\Biography\Fact\FactInterface;
 interface SpecificationInterface
 {
     /**
+     * Check if provided Fact satisfies specification.
+     *
      * @param \Famillio\Domain\Family\Biography\Fact\FactInterface $factInterface
      *
      * @return bool
@@ -25,6 +27,9 @@ interface SpecificationInterface
     public function isFactAcceptable(FactInterface $factInterface) : bool;
 
     /**
+     * Attach another specification to the chain. All attached specifications will be
+     * used and Fact will be accepted only if all of them are satisfied.
+     *
      * @param \Famillio\Domain\Family\Collection\Biography\Filter\SpecificationInterface $specificationInterface
      *
      * @return void

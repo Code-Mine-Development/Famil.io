@@ -20,6 +20,10 @@ use Famillio\Domain\Family\ValueObject\Biography\Fact\Identifier;
 /**
  * Class AbstractFact
  *
+ * Fact is a representation of single event in person's biography.
+ * Each fact has immutable date and identifier. Apart from that, each
+ * Fact can be extended by interfaces that add new data to it.
+ *
  * @package Famillio\Domain\Family\ValueObject\Biography\Fact
  */
 abstract class AbstractFact implements FactInterface
@@ -82,6 +86,8 @@ abstract class AbstractFact implements FactInterface
     }
 
     /**
+     * Returns date of the Fact occurrence.
+     *
      * @return DateTime
      */
     public function date() : DateTime
@@ -94,6 +100,8 @@ abstract class AbstractFact implements FactInterface
     }
 
     /**
+     * Returns description of the Fact
+     *
      * @return \Famillio\Domain\Family\ValueObject\Biography\Fact\Description
      */
     public function description() : Description

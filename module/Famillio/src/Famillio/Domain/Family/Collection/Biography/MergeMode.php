@@ -14,11 +14,25 @@ use AGmakonts\STL\Structure\AbstractEnum;
 /**
  * Class MergeMode
  *
+ * Merge Mode enum is used to decide what should happen
+ * when duplicate is found during merge of two Biographies.
+ *
  * @package Famillio\Domain\Family\Collection\Biography
  */
 class MergeMode extends AbstractEnum
 {
+    /*
+     * Keep duplicated Fact from original Biography
+     */
     const KEEP_ORIGINAL = 0;
-    const KEEP_NEW      = 1;
-    const ABORT         = 2;
+
+    /*
+     * Replace original Fact with the one from second Biography
+     */
+    const KEEP_NEW = 1;
+
+    /*
+     * Abort operation of merging
+     */
+    const ABORT = 2;
 }

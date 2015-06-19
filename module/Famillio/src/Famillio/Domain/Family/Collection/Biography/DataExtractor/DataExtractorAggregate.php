@@ -25,7 +25,9 @@ use Famillio\Domain\Family\Biography\Fact\FactInterface;
  */
 class DataExtractorAggregate implements DataExtractorInterface
 {
-
+    /**
+     * @var \SplObjectStorage
+     */
     private $extractors;
 
     /**

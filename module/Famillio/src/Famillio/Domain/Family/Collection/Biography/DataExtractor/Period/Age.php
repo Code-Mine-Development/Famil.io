@@ -17,6 +17,9 @@ use Famillio\Domain\Family\ValueObject\Biography\Fact\LifespanBoundaryType;
 /**
  * Class Age
  *
+ * Extracts age of person described by Biography. Returned value is an
+ * Integer.
+ *
  * @package Famillio\Domain\Family\Collection\Biography\DataExtractor\Period
  */
 class Age implements DataExtractorInterface
@@ -53,9 +56,7 @@ class Age implements DataExtractorInterface
 
                 default:
                     break;
-
             }
-
         }
     }
 
@@ -64,7 +65,7 @@ class Age implements DataExtractorInterface
      */
     private function setStart(LifespanBoundaryFactInterface $boundaryFactInterface)
     {
-        if(NULL !== $this->lifespanStart) {
+        if (NULL !== $this->lifespanStart) {
 
         }
 
@@ -76,7 +77,7 @@ class Age implements DataExtractorInterface
      */
     private function setEnd(LifespanBoundaryFactInterface $boundaryFactInterface)
     {
-        if(NULL !== $this->lifespanEnd) {
+        if (NULL !== $this->lifespanEnd) {
 
         }
 

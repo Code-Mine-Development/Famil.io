@@ -9,7 +9,6 @@
 namespace Famillio\Domain\Family\Collection\Biography\Filter;
 
 use Famillio\Domain\Family\Biography\Fact\FactInterface;
-use Famillio\Domain\Family\Collection\BiographyInterface;
 
 /**
  * Interface SpecificationInterface
@@ -36,4 +35,14 @@ interface SpecificationInterface
      * @return void
      */
     public function attach(SpecificationInterface $specificationInterface);
+
+    /**
+     * Determine if specification can be attached to another. Specification provided in argument will
+     * be a specification to witch current specification is being attached.
+     *
+     * @param \Famillio\Domain\Family\Collection\Biography\Filter\SpecificationInterface $specificationInterface
+     *
+     * @return bool
+     */
+    public function canBeAttachedTo(SpecificationInterface $specificationInterface) : bool;
 }

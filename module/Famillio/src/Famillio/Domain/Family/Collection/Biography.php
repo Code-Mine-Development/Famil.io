@@ -397,7 +397,6 @@ class Biography implements BiographyInterface
          * Setup new Biography that will be filled with facts that comply with
          * passed specification.
          */
-
         $biography = new static;
 
         /*
@@ -412,7 +411,7 @@ class Biography implements BiographyInterface
              * if fact complies with specification add it to new
              * Biography object. If not move along.
              */
-            if(TRUE === $specification->isFactAcceptable($fact)) {
+            if (TRUE === $specification->isFactAcceptable($fact)) {
                 $biography->addFact($fact);
             }
         }

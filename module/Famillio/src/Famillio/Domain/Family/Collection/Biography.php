@@ -71,11 +71,15 @@ class Biography implements BiographyInterface
     public function __construct()
     {
         /*
-         * Setup all properties to initial state
+         * Setup all properties to initial state.
+         *
+         * For timeline and iterator Priority Queue is used.
+         * General store of fact identifiers for fast lookup is
+         * handled by Object Storage.
          */
         $this->factsTimeline   = new \SplPriorityQueue();
-        $this->factIdentifiers = new \SplObjectStorage();
         $this->iterator        = new \SplPriorityQueue();
+        $this->factIdentifiers = new \SplObjectStorage();
 
     }
 
@@ -395,6 +399,9 @@ class Biography implements BiographyInterface
      */
     public function firstFact() : FactInterface
     {
+        /*
+         * In case of null, throw exception
+         */
         if(TRUE === $this->facts()->isEmpty()) {
             throw new EmptyCollectionException(__METHOD__);
         }
@@ -410,6 +417,9 @@ class Biography implements BiographyInterface
      */
     public function lastFact() : FactInterface
     {
+        /*
+         * In case of null, throw exception
+         */
         if(TRUE === $this->facts()->isEmpty()) {
             throw new EmptyCollectionException(__METHOD__);
         }

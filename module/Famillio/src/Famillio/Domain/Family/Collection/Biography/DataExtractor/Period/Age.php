@@ -21,29 +21,44 @@ use Famillio\Domain\Family\ValueObject\Biography\Fact\LifespanBoundaryType;
  * Class Age
  *
  * Extracts age of person described by Biography. Returned value is an
- * Integer.
+ * Integer. To extract correct data, Extractor needs to register two Facts
+ * that are implementing LifespanBoundaryFactInterface.
+ *
+ * If it will register more than two of those or less that two exception
+ * will be thrown.
  *
  * @package Famillio\Domain\Family\Collection\Biography\DataExtractor\Period
  */
 class Age implements DataExtractorInterface
 {
     /**
+     * Fact that represents birth
+     *
      * @var \Famillio\Domain\Family\Biography\Fact\FactInterface
      */
     private $lifespanStart;
 
     /**
+     * Fact that represents death
+     *
      * @var \Famillio\Domain\Family\Biography\Fact\FactInterface
      */
     private $lifespanEnd;
 
     /**
+     * Add Fact for extraction. Internal logic of the method will decide witch Facts
+     * to use and witch ones to discard.
+     *
      * @param \Famillio\Domain\Family\Biography\Fact\FactInterface $factInterface
      *
      * @return void
      */
     public function registerFact(FactInterface $factInterface)
     {
+        /*
+         * Only Lifespan Boundary Facts are interesting
+         * Discard all the rest
+         */
         if (TRUE === ($factInterface instanceof LifespanBoundaryFactInterface)) {
 
             /** @var \Famillio\Domain\Family\Biography\Fact\LifespanBoundaryFactInterface $factInterface */
@@ -65,6 +80,8 @@ class Age implements DataExtractorInterface
 
     /**
      * @param \Famillio\Domain\Family\Biography\Fact\LifespanBoundaryFactInterface $boundaryFactInterface
+     *
+     * @throws OversatisfiedExtractorException
      */
     private function setStart(LifespanBoundaryFactInterface $boundaryFactInterface)
     {
@@ -77,6 +94,8 @@ class Age implements DataExtractorInterface
 
     /**
      * @param \Famillio\Domain\Family\Biography\Fact\LifespanBoundaryFactInterface $boundaryFactInterface
+     *
+     * @throws OversatisfiedExtractorException
      */
     private function setEnd(LifespanBoundaryFactInterface $boundaryFactInterface)
     {
@@ -88,6 +107,11 @@ class Age implements DataExtractorInterface
     }
 
     /**
+     * Return boolean value that describes if Extractor had already registered all
+     * Facts that are needed to extract data.
+     *
+     * Age extractor is satisfied when both, birth and death Facts are registered.
+     *
      * @return bool
      */
     public function isSatisfied() : bool
@@ -95,15 +119,26 @@ class Age implements DataExtractorInterface
         return (NULL !== $this->lifespanEnd && NULL !== $this->lifespanStart);
     }
 
+
     /**
      * @return \AGmakonts\STL\ValueObjectInterface
+     *
+     * @throws NotSatisfiedExtractorException
      */
     public function data() : ValueObjectInterface
     {
+        /*
+         * This extractor needs to be satisfied in order to extract data.
+         * If it's not, throw an exception
+         */
         if(FALSE === $this->isSatisfied()) {
             throw new NotSatisfiedExtractorException();
         }
 
+        /*
+         * Convert dates to native objects because STL doesnt't
+         * support date calculations at this time
+         */
         $nativeDateTimeOfStart = new \DateTime($this->lifespanStart->date()->getTimestamp()->value());
         $nativeDateTimeOfEnd   = new \DateTime($this->lifespanEnd->date()->getTimestamp()->value());
 
@@ -112,7 +147,5 @@ class Age implements DataExtractorInterface
         $age = $difference->y;
 
         return Integer::get($age);
-
     }
-
 }

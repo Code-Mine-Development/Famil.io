@@ -9,6 +9,7 @@
 namespace Famillio\Domain\Family\Collection\Biography\Filter;
 
 use Famillio\Domain\Family\Biography\Fact\FactInterface;
+use Famillio\Domain\Family\Collection\BiographyInterface;
 
 /**
  * Interface SpecificationInterface

@@ -9,6 +9,7 @@ namespace Famillio\Domain\Family\Collection;
 
 use Famillio\Domain\Family\Biography\Fact\FactInterface;
 use Famillio\Domain\Family\Collection\Biography\DataExtractor\DataExtractorInterface;
+use Famillio\Domain\Family\Collection\Biography\Filter\ContextAwareSpecificationInterface;
 use Famillio\Domain\Family\Collection\Biography\Filter\SpecificationInterface;
 use Famillio\Domain\Family\Collection\Biography\MergeMode;
 use Famillio\Domain\Family\Collection\Exception\DuplicatedFactAdditionAttemptException;
@@ -397,6 +398,13 @@ class Biography implements BiographyInterface
     public function filtered(SpecificationInterface $specification) : BiographyInterface
     {
         /*
+         * If specification requires context, give it to it
+         */
+        if($specification instanceof ContextAwareSpecificationInterface) {
+            $specification->registerContext($this);
+        }
+
+        /*
          * Setup new Biography that will be filled with facts that comply with
          * passed specification.
          */
@@ -441,7 +449,7 @@ class Biography implements BiographyInterface
 
 
     /**
-     * Return latest Fact stored in collection. Returned Fact will be the Fact witl latest date,
+     * Return latest Fact stored in collection. Returned Fact will be the Fact with latest date,
      * not the Fact that was added most recently.
      *
      * @return \Famillio\Domain\Family\Biography\Fact\FactInterface

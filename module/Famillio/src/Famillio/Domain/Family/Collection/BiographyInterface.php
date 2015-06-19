@@ -71,7 +71,7 @@ interface BiographyInterface extends \Iterator, \Countable
     public function firstFact() : FactInterface;
 
     /**
-     * Return latest Fact stored in collection. Returned Fact will be the Fact witl latest date,
+     * Return latest Fact stored in collection. Returned Fact will be the Fact with latest date,
      * not the Fact that was added most recently.
      *
      * @return \Famillio\Domain\Family\Biography\Fact\FactInterface

@@ -8,10 +8,13 @@
 
 namespace Famillio\Domain\Family\Collection\Biography\DataExtractor\Period;
 
+use AGmakonts\STL\Number\Integer;
 use AGmakonts\Stl\ValueObjectInterface;
 use Famillio\Domain\Family\Biography\Fact\FactInterface;
 use Famillio\Domain\Family\Biography\Fact\LifespanBoundaryFactInterface;
 use Famillio\Domain\Family\Collection\Biography\DataExtractor\DataExtractorInterface;
+use Famillio\Domain\Family\Collection\Biography\DataExtractor\Exception\NotSatisfiedExtractorException;
+use Famillio\Domain\Family\Collection\Biography\DataExtractor\Exception\OversatisfiedExtractorException;
 use Famillio\Domain\Family\ValueObject\Biography\Fact\LifespanBoundaryType;
 
 /**
@@ -25,12 +28,12 @@ use Famillio\Domain\Family\ValueObject\Biography\Fact\LifespanBoundaryType;
 class Age implements DataExtractorInterface
 {
     /**
-     * @var \Famillio\Domain\Family\Biography\Fact\LifespanBoundaryFactInterface
+     * @var \Famillio\Domain\Family\Biography\Fact\FactInterface
      */
     private $lifespanStart;
 
     /**
-     * @var \Famillio\Domain\Family\Biography\Fact\LifespanBoundaryFactInterface
+     * @var \Famillio\Domain\Family\Biography\Fact\FactInterface
      */
     private $lifespanEnd;
 
@@ -66,7 +69,7 @@ class Age implements DataExtractorInterface
     private function setStart(LifespanBoundaryFactInterface $boundaryFactInterface)
     {
         if (NULL !== $this->lifespanStart) {
-
+            throw new OversatisfiedExtractorException('Lifespan start date already set.');
         }
 
         $this->lifespanStart = $boundaryFactInterface;
@@ -78,7 +81,7 @@ class Age implements DataExtractorInterface
     private function setEnd(LifespanBoundaryFactInterface $boundaryFactInterface)
     {
         if (NULL !== $this->lifespanEnd) {
-
+            throw new OversatisfiedExtractorException('Lifespan end date already set.');
         }
 
         $this->lifespanEnd = $boundaryFactInterface;
@@ -97,6 +100,18 @@ class Age implements DataExtractorInterface
      */
     public function data() : ValueObjectInterface
     {
+        if(FALSE === $this->isSatisfied()) {
+            throw new NotSatisfiedExtractorException();
+        }
+
+        $nativeDateTimeOfStart = new \DateTime($this->lifespanStart->date()->getTimestamp()->value());
+        $nativeDateTimeOfEnd   = new \DateTime($this->lifespanEnd->date()->getTimestamp()->value());
+
+        $difference = $nativeDateTimeOfStart->diff($nativeDateTimeOfEnd);
+
+        $age = $difference->y;
+
+        return Integer::get($age);
 
     }
 

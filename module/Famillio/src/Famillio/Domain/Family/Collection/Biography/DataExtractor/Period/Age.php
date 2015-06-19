@@ -85,6 +85,10 @@ class Age implements DataExtractorInterface
      */
     private function setStart(LifespanBoundaryFactInterface $boundaryFactInterface)
     {
+        /*
+         * If Biography contained more than one Fact that describes birth
+         * we have a problem and exception is needed
+         */
         if (NULL !== $this->lifespanStart) {
             throw new OversatisfiedExtractorException('Lifespan start date already set.');
         }
@@ -99,6 +103,10 @@ class Age implements DataExtractorInterface
      */
     private function setEnd(LifespanBoundaryFactInterface $boundaryFactInterface)
     {
+        /*
+         * If Biography contained more than one Fact that describes death
+         * we have a problem and exception is needed
+         */
         if (NULL !== $this->lifespanEnd) {
             throw new OversatisfiedExtractorException('Lifespan end date already set.');
         }
@@ -131,7 +139,7 @@ class Age implements DataExtractorInterface
          * This extractor needs to be satisfied in order to extract data.
          * If it's not, throw an exception
          */
-        if(FALSE === $this->isSatisfied()) {
+        if (FALSE === $this->isSatisfied()) {
             throw new NotSatisfiedExtractorException();
         }
 
@@ -143,8 +151,7 @@ class Age implements DataExtractorInterface
         $nativeDateTimeOfEnd   = new \DateTime($this->lifespanEnd->date()->getTimestamp()->value());
 
         $difference = $nativeDateTimeOfStart->diff($nativeDateTimeOfEnd);
-
-        $age = $difference->y;
+        $age        = $difference->y;
 
         return Integer::get($age);
     }

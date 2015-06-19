@@ -64,21 +64,6 @@ interface BiographyInterface extends \Iterator, \Countable
     public function filtered(SpecificationInterface $specification) : BiographyInterface;
 
     /**
-     * Return the very first fact that is stored in collection.
-     *
-     * @return \Famillio\Domain\Family\Biography\Fact\FactInterface
-     */
-    public function firstFact() : FactInterface;
-
-    /**
-     * Return latest Fact stored in collection. Returned Fact will be the Fact with latest date,
-     * not the Fact that was added most recently.
-     *
-     * @return \Famillio\Domain\Family\Biography\Fact\FactInterface
-     */
-    public function lastFact() : FactInterface;
-
-    /**
      * Extract data from Facts stored in Biography. Data Extractor object that will be used as argument
      * will be returned after satisfaction.
      *

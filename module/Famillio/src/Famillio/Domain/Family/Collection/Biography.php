@@ -431,42 +431,6 @@ class Biography implements BiographyInterface
     }
 
     /**
-     * Return the very first fact that is stored in collection.
-     *
-     * @return \Famillio\Domain\Family\Biography\Fact\FactInterface
-     */
-    public function firstFact() : FactInterface
-    {
-        /*
-         * In case of null, throw exception
-         */
-        if (TRUE === $this->facts()->isEmpty()) {
-            throw new EmptyCollectionException(__METHOD__);
-        }
-
-
-    }
-
-
-    /**
-     * Return latest Fact stored in collection. Returned Fact will be the Fact with latest date,
-     * not the Fact that was added most recently.
-     *
-     * @return \Famillio\Domain\Family\Biography\Fact\FactInterface
-     */
-    public function lastFact() : FactInterface
-    {
-        /*
-         * In case of null, throw exception
-         */
-        if (TRUE === $this->facts()->isEmpty()) {
-            throw new EmptyCollectionException(__METHOD__);
-        }
-
-        return $this->facts()->top();
-    }
-
-    /**
      * Copy Fact queue in current state to allow for destructive processes that
      * are not stateless. Mainly used for methods of Iterator interface and for data extraction.
      */

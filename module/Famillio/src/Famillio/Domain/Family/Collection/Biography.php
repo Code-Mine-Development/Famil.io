@@ -370,7 +370,6 @@ class Biography implements BiographyInterface
             }
         }
 
-
         return $newBiography;
 
     }
@@ -394,12 +393,37 @@ class Biography implements BiographyInterface
      */
     public function filtered(SpecificationInterface $specification) : BiographyInterface
     {
-        // TODO: Implement filtered() method.
+        /*
+         * Setup new Biography that will be filled with facts that comply with
+         * passed specification.
+         */
+
+        $biography = new static;
+
+        /*
+         * Get copy of current queue to not destroy it with iteration
+         */
+        $facts = $this->factsIterator();
+
+        /** @var \Famillio\Domain\Family\Biography\Fact\FactInterface $fact */
+        foreach ($facts as $fact) {
+
+            /*
+             * if fact complies with specification add it to new
+             * Biography object. If not move along.
+             */
+            if(TRUE === $specification->isFactAcceptable($fact)) {
+                $biography->addFact($fact);
+            }
+        }
+
+        return $biography;
     }
 
-
     /**
-     * @return mixed
+     * Return the very first fact that is stored in collection.
+     *
+     * @return \Famillio\Domain\Family\Biography\Fact\FactInterface
      */
     public function firstFact() : FactInterface
     {
@@ -412,6 +436,7 @@ class Biography implements BiographyInterface
 
 
     }
+
 
     /**
      * Return latest Fact stored in collection. Returned Fact will be the Fact witl latest date,
@@ -547,7 +572,7 @@ class Biography implements BiographyInterface
     public function extractData(DataExtractorInterface $dataExtractorInterface) : DataExtractorInterface
     {
         /*
-         * Get cpy of all the facts to not destroy original queue by iteration
+         * Get copy of all the facts to not destroy original queue by iteration
          */
         $facts = $this->factsIterator();
 

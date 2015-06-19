@@ -11,6 +11,7 @@ use Famillio\Domain\Family\Biography\Fact\FactInterface;
 use Famillio\Domain\Family\Collection\Biography\DataExtractor\DataExtractorInterface;
 use Famillio\Domain\Family\Collection\Biography\MergeMode;
 use Famillio\Domain\Family\Collection\Exception\DuplicatedFactAdditionAttemptException;
+use Famillio\Domain\Family\Collection\Exception\EmptyCollectionException;
 use Famillio\Domain\Family\Collection\Exception\ModificationPreconditionException;
 use Famillio\Domain\Family\Collection\Exception\UnknownFactRemovalAttemptException;
 use Famillio\Domain\Family\Collection\Preconditions\Biography\Replacement\Remove;
@@ -394,22 +395,33 @@ class Biography implements BiographyInterface
      */
     public function firstFact() : FactInterface
     {
-        // TODO: Implement firstFact() method.
+        if(TRUE === $this->facts()->isEmpty()) {
+            throw new EmptyCollectionException(__METHOD__);
+        }
+
+
     }
 
     /**
-     * @return mixed
+     * Return latest Fact stored in collection. Returned Fact will be the Fact witl latest date,
+     * not the Fact that was added most recently.
+     *
+     * @return \Famillio\Domain\Family\Biography\Fact\FactInterface
      */
     public function lastFact() : FactInterface
     {
-        // TODO: Implement lastFact() method.
+        if(TRUE === $this->facts()->isEmpty()) {
+            throw new EmptyCollectionException(__METHOD__);
+        }
+
+        return $this->facts()->top();
     }
 
     /**
      * Copy Fact queue in current state to allow for destructive processes that
      * are not stateless. Mainly used for methods of Iterator interface and for data extraction.
      */
-    public function prepareIterator()
+    public function preparePublicIterator()
     {
         $this->iterator = $this->factsIterator();
     }
@@ -434,7 +446,7 @@ class Biography implements BiographyInterface
     public function current()
     {
         if(TRUE === $this->publicIterator()->isEmpty()) {
-            $this->prepareIterator();
+            $this->preparePublicIterator();
         }
 
         return $this->publicIterator()->current();
@@ -449,7 +461,7 @@ class Biography implements BiographyInterface
     public function next()
     {
         if(TRUE === $this->publicIterator()->isEmpty()) {
-            $this->prepareIterator();
+            $this->preparePublicIterator();
         }
 
         $this->publicIterator()->next();
@@ -464,7 +476,7 @@ class Biography implements BiographyInterface
     public function key()
     {
         if(TRUE === $this->publicIterator()->isEmpty()) {
-            $this->prepareIterator();
+            $this->preparePublicIterator();
         }
 
         return $this->publicIterator()->key();
@@ -480,7 +492,7 @@ class Biography implements BiographyInterface
     public function valid()
     {
         if(TRUE === $this->publicIterator()->isEmpty()) {
-            $this->prepareIterator();
+            $this->preparePublicIterator();
         }
 
         return $this->publicIterator()->valid();
@@ -494,7 +506,7 @@ class Biography implements BiographyInterface
      */
     public function rewind()
     {
-        $this->prepareIterator();
+        $this->preparePublicIterator();
         $this->publicIterator()->rewind();
     }
 

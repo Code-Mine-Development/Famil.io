@@ -8,7 +8,7 @@
 
 namespace Famillio\Domain\Family\Collection\Biography\DataExtractor\Period;
 
-use AGmakonts\DddBricks\ValueObject\ValueObjectInterface;
+use AGmakonts\Stl\ValueObjectInterface;
 use Famillio\Domain\Family\Biography\Fact\FactInterface;
 use Famillio\Domain\Family\Biography\Fact\LifespanBoundaryFactInterface;
 use Famillio\Domain\Family\Collection\Biography\DataExtractor\DataExtractorInterface;
@@ -21,9 +21,14 @@ use Famillio\Domain\Family\ValueObject\Biography\Fact\LifespanBoundaryType;
  */
 class Age implements DataExtractorInterface
 {
-
+    /**
+     * @var \Famillio\Domain\Family\Biography\Fact\LifespanBoundaryFactInterface
+     */
     private $lifespanStart;
 
+    /**
+     * @var \Famillio\Domain\Family\Biography\Fact\LifespanBoundaryFactInterface
+     */
     private $lifespanEnd;
 
     /**
@@ -66,6 +71,9 @@ class Age implements DataExtractorInterface
         $this->lifespanStart = $boundaryFactInterface;
     }
 
+    /**
+     * @param \Famillio\Domain\Family\Biography\Fact\LifespanBoundaryFactInterface $boundaryFactInterface
+     */
     private function setEnd(LifespanBoundaryFactInterface $boundaryFactInterface)
     {
         if(NULL !== $this->lifespanEnd) {

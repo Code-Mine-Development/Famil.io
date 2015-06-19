@@ -9,6 +9,7 @@
 namespace Famillio\Domain\Family\Collection\Biography\DataExtractor;
 
 
+use AGmakonts\STL\ValueObjectInterface;
 use Famillio\Domain\Family\Biography\Fact\FactInterface;
 
 /**

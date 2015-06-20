@@ -8,7 +8,6 @@
 
 namespace Famillio\Domain\Family\Collection\Biography\Filter;
 
-
 use Famillio\Domain\Family\Collection\BiographyInterface;
 
 /**

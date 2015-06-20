@@ -13,7 +13,6 @@ use Famillio\Domain\Family\Collection\Biography\Filter\ContextAwareSpecification
 use Famillio\Domain\Family\Collection\Biography\Filter\SpecificationInterface;
 use Famillio\Domain\Family\Collection\Biography\MergeMode;
 use Famillio\Domain\Family\Collection\Exception\DuplicatedFactAdditionAttemptException;
-use Famillio\Domain\Family\Collection\Exception\EmptyCollectionException;
 use Famillio\Domain\Family\Collection\Exception\ModificationPreconditionException;
 use Famillio\Domain\Family\Collection\Exception\UnknownFactRemovalAttemptException;
 use Famillio\Domain\Family\Collection\Preconditions\Biography\Replacement\Remove;

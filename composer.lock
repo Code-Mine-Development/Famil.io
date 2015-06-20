@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c0c95a1bb54eb4aa2b2fe7f30e74e9bb",
+    "hash": "8546fcbe7a661b263366a8fd9de1c89b",
     "packages": [
         {
             "name": "agmakonts/ddd-bricks",

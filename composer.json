@@ -27,7 +27,8 @@
     "config": {
         "process-timeout": 5000,
         "preferred-install": "dist",
-        "discard-changes": true
+        "discard-changes": true,
+        "autoloader-suffix": "_famillio"
     },
     "require": {
         "zendframework/zendframework": "~2.5",

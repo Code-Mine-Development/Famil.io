@@ -15,7 +15,7 @@ use Famillio\Domain\Family\Collection\Biography\MergeMode;
 use Famillio\Domain\Family\Collection\Exception\DuplicatedFactAdditionAttemptException;
 use Famillio\Domain\Family\Collection\Exception\ModificationPreconditionException;
 use Famillio\Domain\Family\Collection\Exception\UnknownFactRemovalAttemptException;
-use Famillio\Domain\Family\Collection\Preconditions\Biography\Replacement\Remove;
+use Famillio\Domain\Family\Collection\Preconditions\Biography\Replacement\Removal;
 use Famillio\Domain\Family\Collection\Preconditions\Biography\Replacement\Replacement;
 use Famillio\Domain\Family\ValueObject\Biography\Fact\Identifier;
 
@@ -243,7 +243,7 @@ class Biography implements BiographyInterface
              * Setup preconditions that will be used to determine whether remove Fact or
              * replace it with provided one.
              */
-            $removePrecondition  = new Remove($factObject, $replaceWith, $identifier);
+            $removePrecondition  = new Removal($factObject, $replaceWith, $identifier);
             $replacePrecondition = new Replacement($factObject, $replaceWith, $identifier);
 
             /*
@@ -375,15 +375,6 @@ class Biography implements BiographyInterface
 
         return $newBiography;
 
-    }
-
-
-    /**
-     * @return \SplObjectStorage
-     */
-    public function timeline() : \SplObjectStorage
-    {
-        // TODO: Implement timeline() method.
     }
 
     /**

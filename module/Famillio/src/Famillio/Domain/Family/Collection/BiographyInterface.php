@@ -49,11 +49,6 @@ interface BiographyInterface extends \Iterator, \Countable
     public function merged(BiographyInterface $biography, MergeMode $mergeMode = NULL) : BiographyInterface;
 
     /**
-     * @return mixed
-     */
-    public function timeline() : \SplObjectStorage;
-
-    /**
      * Return new Biography collection without elements that don't comply to provided
      * specification. Method will return empty collection if no Facts were accepted by specification.
      *

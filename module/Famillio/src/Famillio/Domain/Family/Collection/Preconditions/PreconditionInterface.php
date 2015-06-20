@@ -11,6 +11,9 @@ namespace Famillio\Domain\Family\Collection\Preconditions;
 /**
  * Interface PreconditionInterface
  *
+ * Preconditions are used to determine if certain
+ * conditions are meet.
+ *
  * @package Famillio\Domain\Family\Collection\Preconditions
  */
 interface PreconditionInterface

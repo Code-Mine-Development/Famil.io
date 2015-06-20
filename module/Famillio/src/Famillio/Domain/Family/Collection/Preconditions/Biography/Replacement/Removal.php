@@ -10,11 +10,11 @@ namespace Famillio\Domain\Family\Collection\Preconditions\Biography\Replacement;
 
 
 /**
- * Class Remove
+ * Class Removal
  *
  * @package Famillio\Domain\Family\Collection\Preconditions\Biography\Replacement
  */
-class Remove extends AbstractReplacementPrecondition
+class Removal extends AbstractReplacementPrecondition
 {
 
     /**

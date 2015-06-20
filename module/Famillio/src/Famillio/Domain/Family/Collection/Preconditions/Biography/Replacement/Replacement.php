@@ -13,7 +13,7 @@ namespace Famillio\Domain\Family\Collection\Preconditions\Biography\Replacement;
  *
  * @package Famillio\Domain\Family\Collection\Preconditions\Biography\Replacement
  */
-class Replacement extends Remove
+class Replacement extends Removal
 {
     /**
      * @return bool

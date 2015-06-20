@@ -14,6 +14,10 @@ use Famillio\Domain\Family\Collection\BiographyInterface;
 /**
  * Class SpecificationAggregate
  *
+ * Allows to attach multiple specifications and test them one by one.
+ * This specification will accept the Fact only when all attached
+ * Specifications will return positive results.
+ *
  * @package Famillio\Domain\Family\Collection\Biography\Filter
  */
 class SpecificationAggregate implements SpecificationInterface, ContextAwareSpecificationInterface

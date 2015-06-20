@@ -62,7 +62,7 @@ class FamilyName implements DataExtractorInterface
     }
 
     /**
-     * @return \AGmakonts\STL\ValueObjectInterface
+     * @return \Famillio\Domain\Family\ValueObject\Name\FamilyName
      */
     public function data() : ValueObjectInterface
     {

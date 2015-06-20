@@ -9,9 +9,9 @@
 namespace Famillio\Domain\Family\Collection\Biography\DataExtractor\Name;
 
 
+use AGmakonts\STL\ValueObjectInterface;
 use Famillio\Domain\Family\Biography\Fact\FactInterface;
 use Famillio\Domain\Family\Biography\Fact\GivenNameChangeFactInterface;
-use Famillio\Domain\Family\Collection\Biography\DataExtractor\DataExtractorInterface;
 
 /**
  * Class GivenName
@@ -29,5 +29,14 @@ class GivenName extends FamilyName
             $this->setName($factInterface->givenName());
         }
     }
+
+    /**
+     * @return \Famillio\Domain\Family\ValueObject\Name\GivenName
+     */
+    public function data() : ValueObjectInterface
+    {
+        return parent::data();
+    }
+
 
 }

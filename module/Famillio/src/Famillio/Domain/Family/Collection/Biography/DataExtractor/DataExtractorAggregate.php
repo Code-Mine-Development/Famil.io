@@ -11,6 +11,7 @@ namespace Famillio\Domain\Family\Collection\Biography\DataExtractor;
 
 use AGmakonts\STL\ValueObjectInterface;
 use Famillio\Domain\Family\Biography\Fact\FactInterface;
+use Famillio\Domain\Family\Collection\Biography\DataExtractor\Exception\NotAExtractorInterface;
 
 /**
  * Class DataExtractorAggregate
@@ -39,9 +40,14 @@ class DataExtractorAggregate implements DataExtractorInterface
     {
         $this->extractors = new \SplObjectStorage();
 
+        /*
+         * Iterate over all elements of provided array
+         * and check if all of them are proper data extractors
+         */
         foreach ($extractors as $extractor) {
-            if(FALSE === ($extractor instanceof DataExtractorInterface)) {
 
+            if(FALSE === ($extractor instanceof DataExtractorInterface)) {
+                throw new NotAExtractorInterface($extractor);
             }
 
             $this->registerExtractor($extractor);
@@ -75,10 +81,17 @@ class DataExtractorAggregate implements DataExtractorInterface
      */
     public function isSatisfied() : bool
     {
-        $satisfied = FALSE;
+        $satisfied = [];
 
+        /*
+         * Iterate over all extractors and check if those are
+         * satisfied
+         */
         /** @var \Famillio\Domain\Family\Collection\Biography\DataExtractor\DataExtractorInterface $extractor */
         foreach ($this->extractors() as $extractor) {
+            /*
+             * Record extractor result
+             */
             $satisfied[] = $extractor->isSatisfied();
         }
 

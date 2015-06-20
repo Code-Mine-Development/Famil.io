@@ -97,7 +97,7 @@ class FullName implements DataExtractorInterface
         /** @var \Famillio\Domain\Family\ValueObject\Name\GivenName $givenName */
         $givenName = $this->givenNameExtractor()->data();
 
-        return $givenName->name()->concat($familyName, Text::get(' '));
+        return $givenName->name()->concat($familyName->name(), Text::get(' '));
 
 
     }

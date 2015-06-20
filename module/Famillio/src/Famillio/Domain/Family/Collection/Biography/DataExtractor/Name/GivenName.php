@@ -8,8 +8,6 @@
 
 namespace Famillio\Domain\Family\Collection\Biography\DataExtractor\Name;
 
-
-use AGmakonts\STL\ValueObjectInterface;
 use Famillio\Domain\Family\Biography\Fact\FactInterface;
 use Famillio\Domain\Family\Biography\Fact\GivenNameChangeFactInterface;
 
@@ -29,14 +27,4 @@ class GivenName extends FamilyName
             $this->setName($factInterface->givenName());
         }
     }
-
-    /**
-     * @return \Famillio\Domain\Family\ValueObject\Name\GivenName
-     */
-    public function data() : ValueObjectInterface
-    {
-        return parent::data();
-    }
-
-
 }

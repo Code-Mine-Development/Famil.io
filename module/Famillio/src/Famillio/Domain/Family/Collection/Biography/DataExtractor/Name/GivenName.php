@@ -10,6 +10,7 @@ namespace Famillio\Domain\Family\Collection\Biography\DataExtractor\Name;
 
 
 use Famillio\Domain\Family\Biography\Fact\FactInterface;
+use Famillio\Domain\Family\Biography\Fact\GivenNameChangeFactInterface;
 use Famillio\Domain\Family\Collection\Biography\DataExtractor\DataExtractorInterface;
 
 /**
@@ -17,38 +18,16 @@ use Famillio\Domain\Family\Collection\Biography\DataExtractor\DataExtractorInter
  *
  * @package Famillio\Domain\Family\Collection\Biography\DataExtractor\Name
  */
-class GivenName implements DataExtractorInterface
+class GivenName extends FamilyName
 {
     /**
-     * Add Fact for extraction. Internal logic of the method will decide witch Facts
-     * to use and witch ones to discard.
-     *
      * @param \Famillio\Domain\Family\Biography\Fact\FactInterface $factInterface
-     *
-     * @return void
      */
     public function registerFact(FactInterface $factInterface)
     {
-        // TODO: Implement registerFact() method.
-    }
-
-    /**
-     * Return boolean value that describes if Extractor had already registered all
-     * Facts that are needed to extract data.
-     *
-     * @return bool
-     */
-    public function isSatisfied() : bool
-    {
-        // TODO: Implement isSatisfied() method.
-    }
-
-    /**
-     * @return \AGmakonts\STL\ValueObjectInterface
-     */
-    public function data() : ValueObjectInterface
-    {
-        // TODO: Implement data() method.
+        if($factInterface instanceof GivenNameChangeFactInterface) {
+            $this->setName($factInterface->givenName());
+        }
     }
 
 }

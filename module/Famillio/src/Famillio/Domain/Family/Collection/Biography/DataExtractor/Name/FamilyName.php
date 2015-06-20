@@ -9,8 +9,11 @@
 namespace Famillio\Domain\Family\Collection\Biography\DataExtractor\Name;
 
 
+use AGmakonts\STL\ValueObjectInterface;
 use Famillio\Domain\Family\Biography\Fact\FactInterface;
+use Famillio\Domain\Family\Biography\Fact\FamilyNameChangeFactInterface;
 use Famillio\Domain\Family\Collection\Biography\DataExtractor\DataExtractorInterface;
+use Famillio\Domain\Family\Collection\Biography\DataExtractor\Exception\NotSatisfiedExtractorException;
 
 /**
  * Class FamilyName
@@ -19,6 +22,11 @@ use Famillio\Domain\Family\Collection\Biography\DataExtractor\DataExtractorInter
  */
 class FamilyName implements DataExtractorInterface
 {
+    /**
+     * @var \Famillio\Domain\Family\ValueObject\Name\FamilyName
+     */
+    private $name;
+
     /**
      * Add Fact for extraction. Internal logic of the method will decide witch Facts
      * to use and witch ones to discard.
@@ -29,7 +37,17 @@ class FamilyName implements DataExtractorInterface
      */
     public function registerFact(FactInterface $factInterface)
     {
-        // TODO: Implement registerFact() method.
+        if($factInterface instanceof FamilyNameChangeFactInterface) {
+            $this->setName($factInterface->familyName());
+        }
+    }
+
+    /**
+     * @param \AGmakonts\STL\ValueObjectInterface $name
+     */
+    protected function setName(ValueObjectInterface $name)
+    {
+        $this->name = $name;
     }
 
     /**
@@ -40,7 +58,7 @@ class FamilyName implements DataExtractorInterface
      */
     public function isSatisfied() : bool
     {
-        // TODO: Implement isSatisfied() method.
+        return (NULL !== $this->name);
     }
 
     /**
@@ -48,7 +66,11 @@ class FamilyName implements DataExtractorInterface
      */
     public function data() : ValueObjectInterface
     {
-        // TODO: Implement data() method.
+        if(NULL === $this->name) {
+            throw new NotSatisfiedExtractorException();
+        }
+
+        return $this->name;
     }
 
 }

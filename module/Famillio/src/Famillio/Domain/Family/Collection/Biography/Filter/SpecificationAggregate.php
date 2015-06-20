@@ -55,6 +55,7 @@ class SpecificationAggregate implements SpecificationInterface, ContextAwareSpec
         /*
          * Check if results array doens't contain any falses
          */
+
         return (FALSE === in_array(FALSE, $results));
 
     }

@@ -392,7 +392,7 @@ class Biography implements BiographyInterface
         /*
          * If specification requires context, give it to it
          */
-        if($specification instanceof ContextAwareSpecificationInterface) {
+        if ($specification instanceof ContextAwareSpecificationInterface) {
             $specification->registerContext($this);
         }
 

@@ -86,9 +86,11 @@ class Birth extends AbstractFact implements LifespanBoundaryFactInterface,
     }
 
     /**
+     * @param \Famillio\Domain\Family\ValueObject\Biography\Fact\Story $customStory
+     *
      * @return \Famillio\Domain\Family\ValueObject\Biography\Fact\Story
      */
-    public function story() : Story
+    public function story(Story $customStory = NULL) : Story
     {
         $past    = Text::get('was born at {DATE} in {LOCATION} ({PLACE})');
         $present = Text::get('is borning in {LOCATION} ({PLACE})');

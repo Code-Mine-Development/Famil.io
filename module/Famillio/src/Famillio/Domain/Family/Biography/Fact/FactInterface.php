@@ -52,9 +52,11 @@ interface FactInterface extends EntityInterface
     public function nextAnniversary() : DateTime;
 
     /**
+     * @param \Famillio\Domain\Family\ValueObject\Biography\Fact\Story $customStory
+     *
      * @return \Famillio\Domain\Family\ValueObject\Biography\Fact\Story
      */
-    public function story() : Story;
+    public function story(Story $customStory = NULL) : Story;
 
     /**
      * @return \AGmakonts\STL\String\Text

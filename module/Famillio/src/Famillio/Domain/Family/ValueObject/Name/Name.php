@@ -31,6 +31,7 @@ use Zend\Validator\ValidatorChain;
 class Name extends AbstractValueObject
 {
     const MINIMUM_LENGTH = 2;
+    const MAXIMUM_LENGTH = 50;
 
     private $name;
 
@@ -59,7 +60,7 @@ class Name extends AbstractValueObject
         $filterChain->attach(new StripTags());
         $filterChain->attach(new StringTrim());
         $filterChain->attach(new StringToLower());
-        $filterChain->attach(new Callback(function($value){
+        $filterChain->attach(new Callback(function ($value) {
             return ucwords($value);
         }));
 
@@ -90,10 +91,13 @@ class Name extends AbstractValueObject
         $validatorChain = new ValidatorChain();
 
         $validatorChain->attach(new AlphaValidator(TRUE));
-        $validatorChain->attach(new StringLength(['min' => self::MINIMUM_LENGTH]));
+        $validatorChain->attach(new StringLength([
+                                                     'min' => self::MINIMUM_LENGTH,
+                                                     'max' => self::MAXIMUM_LENGTH
+                                                 ]));
         $validatorChain->attach(new NotEmpty());
 
-        if(FALSE === $validatorChain->isValid($nameValue)) {
+        if (FALSE === $validatorChain->isValid($nameValue)) {
             throw new InvalidNameException($name, $validatorChain->getMessages());
         }
 

@@ -172,6 +172,21 @@ class Story extends AbstractValueObject
     }
 
     /**
+     * @param array $data
+     *
+     * @return \Famillio\Domain\Family\ValueObject\Biography\Fact\Story
+     */
+    public function swappedData(array $data) : Story
+    {
+        return self::get($this->rawPast(),
+                         $this->rawPresent(),
+                         $this->rawFuture(),
+                         $data,
+                         $this->gender,
+                         $this->previous);
+    }
+
+    /**
      * @param \AGmakonts\STL\String\Text $string
      * @param array                      $data
      *

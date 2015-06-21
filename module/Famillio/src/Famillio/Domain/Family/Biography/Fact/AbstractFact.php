@@ -10,6 +10,7 @@ namespace Famillio\Domain\Family\Biography\Fact;
 use AGmakonts\DddBricks\Entity\EntityInterface;
 use AGmakonts\STL\DateTime\DateTime;
 use AGmakonts\STL\Number\Integer;
+use Famillio\Domain\Family\Biography\Fact\Exception\CreationTimeChangeAttemptException;
 use Famillio\Domain\Family\Biography\Fact\Exception\DateAlreadySetException;
 use Famillio\Domain\Family\Biography\Fact\Exception\DateNotSetYetException;
 use Famillio\Domain\Family\Biography\Fact\Exception\FactIdentifierAlreadySetException;
@@ -90,17 +91,30 @@ abstract class AbstractFact implements FactInterface
     }
 
     /**
-     * @param \AGmakonts\STL\DateTime\DateTime $dateTime
+     *
      */
-    protected function setCreationTime(DateTime $dateTime)
+    protected function registerUpdate()
     {
-        $this->creationTime = $dateTime;
+        $this->updateDate = DateTime::get();
+    }
+
+    /**
+     *
+     */
+    protected function setCreationTime()
+    {
+        if(NULL !== $this->creationTime) {
+            throw new CreationTimeChangeAttemptException($this);
+        }
+
+        $this->creationTime = DateTime::get();
+        $this->registerUpdate();
     }
 
     /**
      * @return \AGmakonts\STL\DateTime\DateTime
      */
-    public function creationTime()
+    public function creationTime() : DateTime
     {
         return $this->creationTime;
     }
@@ -129,6 +143,7 @@ abstract class AbstractFact implements FactInterface
     protected function setDescription(Description $description)
     {
         $this->description = $description;
+        $this->registerUpdate();
     }
 
     /**

@@ -8,17 +8,21 @@
 
 namespace Famillio\Domain\Family\Biography\Fact\Exception;
 
+use Famillio\Domain\Family\Biography\Fact\FactInterface;
 
-use Famillio\Domain\Family\Biography\Fact\AbstractFact;
-
+/**
+ * Class FactIdentifierAlreadySetException
+ *
+ * @package Famillio\Domain\Family\Biography\Fact\Exception
+ */
 class FactIdentifierAlreadySetException extends AbstractFactException
 {
     const MESSAGE_FORMAT = 'Fact %s already have identifier set to %s';
 
     /**
-     * @param \Famillio\Domain\Family\Biography\Fact\AbstractFact $fact
+     * @param \Famillio\Domain\Family\Biography\Fact\FactInterface $fact
      */
-    public function __construct(AbstractFact $fact)
+    public function __construct(FactInterface $fact)
     {
         parent::__construct($fact);
 

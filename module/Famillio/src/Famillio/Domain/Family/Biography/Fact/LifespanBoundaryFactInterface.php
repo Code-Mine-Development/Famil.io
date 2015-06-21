@@ -7,6 +7,11 @@
 
 namespace Famillio\Domain\Family\Biography\Fact;
 
+/**
+ * Interface LifespanBoundaryFactInterface
+ *
+ * @package Famillio\Domain\Family\Biography\Fact
+ */
 interface LifespanBoundaryFactInterface
 {
     /**

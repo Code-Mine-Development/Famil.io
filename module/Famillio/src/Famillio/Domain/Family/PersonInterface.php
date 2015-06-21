@@ -8,6 +8,7 @@
 namespace Famillio\Domain\Family;
 
 use AGmakonts\DddBricks\Entity\EntityInterface;
+use Famillio\Domain\Family\Collection\FactDataAccessInterface;
 
 /**
  * Interface PersonInterface
@@ -16,16 +17,12 @@ use AGmakonts\DddBricks\Entity\EntityInterface;
  */
 interface PersonInterface extends EntityInterface
 {
-    public function name();
-
-    public function changeName();
-
+    /**
+     * @return \Famillio\Domain\Family\Collection\BiographyInterface
+     */
     public function biography();
-
-    public function age();
-
-    public function birthDate();
 
     public function picture();
 
+    public function relations();
 }

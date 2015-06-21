@@ -1,12 +1,23 @@
 <?php
-
 /**
  * Created by PhpStorm.
- * User: miszka
- * Date: 12.06.15
- * Time: 16:45
+ * User: adamgrabek
+ * Date: 18/06/15
+ * Time: 16:59
  */
-class BiographyTest extends PHPUnit_Framework_TestCase
-{
 
+namespace Famillio\Domain\Family\Collection;
+
+/**
+ * Class BiographyTest
+ *
+ * @package Famillio\Domain\Family\Collection
+ */
+class BiographyTest extends \PHPUnit_Framework_TestCase
+{
+    public function testOrder()
+    {
+        $b = new Biography();
+
+    }
 }

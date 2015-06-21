@@ -10,16 +10,21 @@ namespace Famillio\Domain\Family\Biography\Fact;
 
 
 use AGmakonts\STL\DateTime\DateTime;
-use AGmakonts\STL\String\String;
+use AGmakonts\DddBricks\Entity\EntityInterface;
+use AGmakonts\STL\String\Text;
 use Famillio\Domain\Family\ValueObject\Biography\Fact\Description;
 use Famillio\Domain\Family\ValueObject\Biography\Fact\Story;
 
 /**
  * Interface FactInterface
  *
- * @package Famillio\Domain\Famillio\Biography\Fact
+ * Fact is a representation of single event in person's biography.
+ * Each fact has immutable date and identifier. Apart from that, each
+ * Fact can be extended by interfaces that add new data to it.
+ *
+ * @package Famillio\Domain\Family\Biography\Fact
  */
-interface FactInterface
+interface FactInterface extends EntityInterface
 {
     /**
      * @return DateTime
@@ -32,11 +37,6 @@ interface FactInterface
     public function description() : Description;
 
     /**
-     * @param \AGmakonts\STL\DateTime\DateTime $date
-     */
-    public function changeDate(DateTime $date);
-
-    /**
      * @param \Famillio\Domain\Family\ValueObject\Biography\Fact\Description $description
      */
     public function changeDescription(Description $description);
@@ -45,12 +45,28 @@ interface FactInterface
     public function timeSinceFact();
 
     /**
+     * Return DateTime object with the date of next anniversary of the Fact.
+     *
      * @return \AGmakonts\STL\DateTime\DateTime
      */
     public function nextAnniversary() : DateTime;
 
     /**
-     * @return mixed
+     * @param \Famillio\Domain\Family\ValueObject\Biography\Fact\Story $customStory
+     *
+     * @return \Famillio\Domain\Family\ValueObject\Biography\Fact\Story
      */
-    public function story() : Story;
+    public function story(Story $customStory = NULL) : Story;
+
+    /**
+     * @return \AGmakonts\STL\String\Text
+     */
+    public function type() : Text;
+
+    /**
+     * @param \AGmakonts\STL\DateTime\DateTime $dateTime
+     *
+     * @return \Famillio\Domain\Family\Biography\Fact\FactInterface
+     */
+    public function changedDate(DateTime $dateTime) : FactInterface;
 }

@@ -16,10 +16,13 @@ use Famillio\Domain\Family\ValueObject\Biography\Fact\AbstractFact;
  *
  * @package Famillio\Domain\Famillio\ValueObject\Biography\Fact\Exception
  */
-class InvalidDescriptionException extends \DomainException
+class InvalidDescriptionException extends DomainException
 {
     const MESSAGE_FORMAT = 'Fact description cannot be empty';
 
+    /**
+     *
+     */
     public function __construct()
     {
         $this->message = self::MESSAGE_FORMAT;

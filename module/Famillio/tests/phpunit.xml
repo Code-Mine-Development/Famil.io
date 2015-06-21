@@ -1,0 +1,10 @@
+<phpunit
+        bootstrap="./bootstrap.php"
+        colors="true"
+        verbose="true">
+    <testsuites>
+        <testsuite name="Famillio Module test suite">
+            <directory>./</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

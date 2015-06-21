@@ -2,7 +2,7 @@
 /**
  * Date:   11/06/15
  * Time:   14:52
- * 
+ *
  */
 
 namespace Famillio\Domain\Family\Biography\Fact;
@@ -10,18 +10,26 @@ namespace Famillio\Domain\Family\Biography\Fact;
 use AGmakonts\DddBricks\Entity\EntityInterface;
 use AGmakonts\STL\DateTime\DateTime;
 use AGmakonts\STL\Number\Integer;
-use AGmakonts\STL\String\String;
+use Famillio\Domain\Family\Biography\Fact\Exception\CreationTimeChangeAttemptException;
+use Famillio\Domain\Family\Biography\Fact\Exception\DateAlreadySetException;
+use Famillio\Domain\Family\Biography\Fact\Exception\DateNotSetYetException;
 use Famillio\Domain\Family\Biography\Fact\Exception\FactIdentifierAlreadySetException;
+use Famillio\Domain\Family\Biography\Fact\Exception\InvalidStatusChangeAttemptException;
 use Famillio\Domain\Family\ValueObject\Biography\Fact\Description;
 use Famillio\Domain\Family\Biography\Fact\Exception\DateInFutureException;
 use Famillio\Domain\Family\ValueObject\Biography\Fact\Identifier;
+use Famillio\Domain\Family\ValueObject\Biography\Fact\Status;
 
 /**
  * Class AbstractFact
  *
- * @package Famillio\Domain\Famillio\ValueObject\Biography\Fact
+ * Fact is a representation of single event in person's biography.
+ * Each fact has immutable date and identifier. Apart from that, each
+ * Fact can be extended by interfaces that add new data to it.
+ *
+ * @package Famillio\Domain\Family\ValueObject\Biography\Fact
  */
-abstract class AbstractFact implements EntityInterface, FactInterface
+abstract class AbstractFact implements FactInterface
 {
     /**
      * @var \AGmakonts\STL\DateTime\DateTime
@@ -33,8 +41,6 @@ abstract class AbstractFact implements EntityInterface, FactInterface
      */
     private $description;
 
-    private $location;
-
     /**
      * @var \Famillio\Domain\Family\ValueObject\Biography\Fact\Identifier
      */
@@ -42,29 +48,90 @@ abstract class AbstractFact implements EntityInterface, FactInterface
 
     private $relatedFacts;
 
-    private function location()
+    /**
+     * @var \Famillio\Domain\Family\ValueObject\Biography\Fact\Status
+     */
+    private $status;
+
+    /**
+     * @var \AGmakonts\STL\DateTime\DateTime
+     */
+    private $creationTime;
+
+    /**
+     * @var \AGmakonts\STL\DateTime\DateTime
+     */
+    private $updateDate;
+
+    /**
+     * @return \Famillio\Domain\Family\ValueObject\Biography\Fact\Status
+     */
+    public function status()
     {
-        return $this->location;
+        return $this->status;
     }
 
-    protected function setLocation($location)
+    /**
+     * @param \Famillio\Domain\Family\ValueObject\Biography\Fact\Status $status
+     *
+     * @throws \Famillio\Domain\Family\Biography\Fact\Exception\InvalidStatusChangeAttemptException
+     */
+    public function changeStatus(Status $status)
     {
-        $this->location = $location;
+        if ($status === $this->status()) {
+            throw new InvalidStatusChangeAttemptException($this, $status, 'Status is the same as current one.');
+        }
+
+        if ($status->getOrdinal() < $this->status()->getOrdinal()) {
+            throw new InvalidStatusChangeAttemptException($this, $status, 'Cannot change to higher status');
+        }
+
+        $this->status = $status;
+
     }
 
-    public function changeLocation($location)
+    /**
+     *
+     */
+    protected function registerUpdate()
     {
-        $this->setLocation($location);
+        $this->updateDate = DateTime::get();
+    }
+
+    /**
+     *
+     */
+    protected function setCreationTime()
+    {
+        if(NULL !== $this->creationTime) {
+            throw new CreationTimeChangeAttemptException($this);
+        }
+
+        $this->creationTime = DateTime::get();
+        $this->registerUpdate();
+    }
+
+    /**
+     * @return \AGmakonts\STL\DateTime\DateTime
+     */
+    public function creationTime() : DateTime
+    {
+        return $this->creationTime;
     }
 
     /**
      * @param \AGmakonts\STL\DateTime\DateTime $date
      */
-    protected function setDate(DateTime $date)
+    final private function setDate(DateTime $date)
     {
-        if(TRUE === $date->isFurtherThan(DateTime::get()) &&
-           FALSE === $date->isToday()) {
+        if (TRUE === $date->isFurtherThan(DateTime::get()) &&
+            FALSE === $date->isToday()
+        ) {
             throw new DateInFutureException($date);
+        }
+
+        if (NULL === $this->date) {
+            throw new DateAlreadySetException($this, $date);
         }
 
         $this->date = $date;
@@ -76,42 +143,44 @@ abstract class AbstractFact implements EntityInterface, FactInterface
     protected function setDescription(Description $description)
     {
         $this->description = $description;
+        $this->registerUpdate();
     }
 
     /**
      * @param \Famillio\Domain\Family\ValueObject\Biography\Fact\Identifier $identifier
      */
-    protected function setIdentity(Identifier $identifier)
+    final protected function setIdentity(Identifier $identifier)
     {
-        if(NULL !== $this->identity) {
+        if (NULL !== $this->identity) {
             throw new FactIdentifierAlreadySetException($this);
         }
 
+        $this->setDate($identifier->date());
         $this->identity = $identifier;
     }
 
     /**
+     * Returns date of the Fact occurrence.
+     *
      * @return DateTime
      */
     public function date() : DateTime
     {
+        if (NULL === $this->date) {
+            throw new DateNotSetYetException($this);
+        }
+
         return $this->date;
     }
 
     /**
+     * Returns description of the Fact
+     *
      * @return \Famillio\Domain\Family\ValueObject\Biography\Fact\Description
      */
     public function description() : Description
     {
         return $this->description;
-    }
-
-    /**
-     * @param \AGmakonts\STL\DateTime\DateTime $date
-     */
-    public function changeDate(DateTime $date)
-    {
-        $this->setDate($date);
     }
 
     /**
@@ -146,28 +215,23 @@ abstract class AbstractFact implements EntityInterface, FactInterface
     }
 
     /**
+     * Return DateTime object with the date of next anniversary of the Fact.
+     *
      * @return \AGmakonts\STL\DateTime\DateTime
      */
     public function nextAnniversary() : DateTime
     {
         $nativeDate = new \DateTime($this->date()->getTimestamp()->value());
-        $now = new \DateTime();
+        $now        = new \DateTime();
 
         $interval = new \DateInterval('P1Y');
 
-        while($nativeDate->getTimestamp() < $now->getTimestamp()) {
+        while ($nativeDate->getTimestamp() < $now->getTimestamp()) {
             $nativeDate = $nativeDate->add($interval);
         }
 
         return DateTime::get(Integer::get($nativeDate->getTimestamp()));
     }
-
-
-
-    /**
-     * @return mixed
-     */
-    abstract public function type() : String;
 
 
 }

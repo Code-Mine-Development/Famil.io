@@ -10,7 +10,12 @@ namespace Famillio\Domain\Family\Biography\Fact\Exception;
 
 use AGmakonts\STL\DateTime\DateTime;
 
-class DateInFutureException extends \DomainException
+/**
+ * Class DateInFutureException
+ *
+ * @package Famillio\Domain\Family\Biography\Fact\Exception
+ */
+class DateInFutureException extends DomainException
 {
     const MESSAGE_FORMAT = 'Date %s is in the future!';
 

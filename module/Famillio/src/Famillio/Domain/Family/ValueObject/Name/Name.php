@@ -10,7 +10,7 @@ namespace Famillio\Domain\Family\ValueObject\Name;
 
 
 use AGmakonts\STL\AbstractValueObject;
-use AGmakonts\STL\String\String;
+use AGmakonts\STL\String\Text;
 use Famillio\Domain\Family\ValueObject\Name\Exception\InvalidNameException;
 use Zend\Filter\Callback;
 use Zend\Filter\FilterChain;
@@ -31,25 +31,26 @@ use Zend\Validator\ValidatorChain;
 class Name extends AbstractValueObject
 {
     const MINIMUM_LENGTH = 2;
+    const MAXIMUM_LENGTH = 50;
 
     private $name;
 
     /**
-     * @param \AGmakonts\STL\String\String $name
+     * @param \AGmakonts\STL\String\Text $name
      *
      * @return mixed
      */
-    static public function get(String $name) : Name
+    static public function get(Text $name) : Name
     {
         return self::getInstanceForValue([self::filterName($name)]);
     }
 
     /**
-     * @param \AGmakonts\STL\String\String $name
+     * @param \AGmakonts\STL\String\Text $name
      *
-     * @return \AGmakonts\STL\String\String
+     * @return \AGmakonts\STL\String\Text
      */
-    static private function filterName(String $name) : String
+    static private function filterName(Text $name) : Text
     {
         $nameValue = $name->value();
 
@@ -59,16 +60,19 @@ class Name extends AbstractValueObject
         $filterChain->attach(new StripTags());
         $filterChain->attach(new StringTrim());
         $filterChain->attach(new StringToLower());
-        $filterChain->attach(new Callback(function($value){
+        $filterChain->attach(new Callback(function ($value) {
             return ucwords($value);
         }));
 
         $filteredValue = $filterChain->filter($nameValue);
 
-        return String::get($filteredValue);
+        return Text::get($filteredValue);
     }
 
-    public function name() : String
+    /**
+     * @return \AGmakonts\STL\String\Text
+     */
+    public function name() : Text
     {
         return $this->name;
     }
@@ -79,7 +83,7 @@ class Name extends AbstractValueObject
      */
     protected function __construct(array $value)
     {
-        /** @var \AGmakonts\STL\String\String $name */
+        /** @var \AGmakonts\STL\String\Text $name */
         $name = $value[0];
 
         $nameValue = $name->value();
@@ -87,10 +91,13 @@ class Name extends AbstractValueObject
         $validatorChain = new ValidatorChain();
 
         $validatorChain->attach(new AlphaValidator(TRUE));
-        $validatorChain->attach(new StringLength(['min' => self::MINIMUM_LENGTH]));
+        $validatorChain->attach(new StringLength([
+                                                     'min' => self::MINIMUM_LENGTH,
+                                                     'max' => self::MAXIMUM_LENGTH
+                                                 ]));
         $validatorChain->attach(new NotEmpty());
 
-        if(FALSE === $validatorChain->isValid($nameValue)) {
+        if (FALSE === $validatorChain->isValid($nameValue)) {
             throw new InvalidNameException($name, $validatorChain->getMessages());
         }
 

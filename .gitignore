@@ -17,5 +17,5 @@ data/cache/*
 .vagrant
 *.iml
 html
-
+.puppet
 

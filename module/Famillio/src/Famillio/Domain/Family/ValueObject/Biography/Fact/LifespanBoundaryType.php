@@ -10,6 +10,11 @@ namespace Famillio\Domain\Family\ValueObject\Biography\Fact;
 
 use AGmakonts\STL\Structure\AbstractEnum;
 
+/**
+ * Class LifespanBoundaryType
+ *
+ * @package Famillio\Domain\Family\ValueObject\Biography\Fact
+ */
 class LifespanBoundaryType extends AbstractEnum
 {
     const BEGINNING = 'BEGINNING';

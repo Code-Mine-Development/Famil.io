@@ -10,7 +10,7 @@ namespace Famillio\Domain\Family\ValueObject\Biography\Fact\Relation;
 
 
 use AGmakonts\STL\AbstractValueObject;
-use AGmakonts\STL\String\String;
+use AGmakonts\STL\String\Text;
 use AGmakonts\STL\ValueObjectInterface;
 
 /**
@@ -21,17 +21,17 @@ use AGmakonts\STL\ValueObjectInterface;
 interface FactRelationInterface extends ValueObjectInterface
 {
     /**
-     * @return \AGmakonts\STL\String\String
+     * @return \AGmakonts\STL\String\Text
      */
-    public function name() : String;
+    public function name() : Text;
 
     /**
-     * @return \AGmakonts\STL\String\String
+     * @return \AGmakonts\STL\String\Text
      */
-    public function incoming() : String;
+    public function incoming() : Text;
 
     /**
-     * @return \AGmakonts\STL\String\String
+     * @return \AGmakonts\STL\String\Text
      */
-    public function outgoing() : String;
+    public function outgoing() : Text;
 }

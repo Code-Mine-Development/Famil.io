@@ -9,8 +9,10 @@ namespace Famillio\Domain\Family\ValueObject\Biography\Fact;
 
 
 use AGmakonts\STL\AbstractValueObject;
-use AGmakonts\STL\String\String;
+use AGmakonts\STL\String\Text;
 use Famillio\Domain\Family\ValueObject\Biography\Fact\Exception\InvalidDescriptionException;
+use Zend\Validator\StringLength;
+use Zend\Validator\ValidatorChain;
 
 /**
  * Class Description
@@ -19,25 +21,47 @@ use Famillio\Domain\Family\ValueObject\Biography\Fact\Exception\InvalidDescripti
  */
 class Description extends AbstractValueObject
 {
+    const MINIMUM_LENGTH = 10;
+    const MAXIMUM_LENGTH = 1000000;
+
     private $description;
 
 
     /**
-     * @param \AGmakonts\STL\String\String $contents
+     * @param \AGmakonts\STL\String\Text $contents
      *
      * @return mixed
      */
-    static public function get(String $contents) : Description
+    static public function get(Text $contents) : Description
     {
         return self::getInstanceForValue([$contents]);
     }
 
     /**
-     * @return \AGmakonts\STL\String\String
+     * @return \AGmakonts\STL\String\Text
      */
-    public function contents() : String
+    public function contents() : Text
     {
         return $this->description;
+    }
+
+    /**
+     * @param \AGmakonts\STL\String\Text $content
+     *
+     * @return bool
+     */
+    private function isContentValid(Text $content)
+    {
+        $rawContent = $content->value();
+
+        $validatorChain = new ValidatorChain();
+
+        $validatorChain->attach(new StringLength([
+            'min' => self::MINIMUM_LENGTH,
+            'max' => self::MAXIMUM_LENGTH
+                                                 ]));
+
+        return $validatorChain->isValid($rawContent);
     }
 
     /**
@@ -46,7 +70,7 @@ class Description extends AbstractValueObject
      */
     protected function __construct(array $value)
     {
-        /** @var \AGmakonts\STL\String\String $contents */
+        /** @var \AGmakonts\STL\String\Text $contents */
         $contents = $value[0];
 
 
@@ -80,5 +104,4 @@ class Description extends AbstractValueObject
     {
         return self::extractValue([$this->description]);
     }
-
 }

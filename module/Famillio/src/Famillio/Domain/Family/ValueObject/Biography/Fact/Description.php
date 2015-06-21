@@ -11,6 +11,9 @@ namespace Famillio\Domain\Family\ValueObject\Biography\Fact;
 use AGmakonts\STL\AbstractValueObject;
 use AGmakonts\STL\String\Text;
 use Famillio\Domain\Family\ValueObject\Biography\Fact\Exception\InvalidDescriptionException;
+use Zend\Filter\FilterChain;
+use Zend\Filter\StripTags;
+use Zend\I18n\Filter\Alnum;
 use Zend\Validator\StringLength;
 use Zend\Validator\ValidatorChain;
 
@@ -34,7 +37,7 @@ class Description extends AbstractValueObject
      */
     static public function get(Text $contents) : Description
     {
-        return self::getInstanceForValue([$contents]);
+        return self::getInstanceForValue([self::filterContent($contents)]);
     }
 
     /**
@@ -43,6 +46,24 @@ class Description extends AbstractValueObject
     public function contents() : Text
     {
         return $this->description;
+    }
+
+    /**
+     * @param \AGmakonts\STL\String\Text $content
+     *
+     * @return \AGmakonts\STL\String\Text
+     */
+    static private function filterContent(Text $content)
+    {
+        $rawContent = $content->value();
+
+        $filterChain = new FilterChain();
+
+        $filterChain->attach(new StripTags());
+
+        $filteredContent = $filterChain->filter($rawContent);
+
+        return Text::get($filteredContent);
     }
 
     /**
@@ -74,11 +95,11 @@ class Description extends AbstractValueObject
         $contents = $value[0];
 
 
-        if(TRUE === ctype_space($contents->value()) ||
-           TRUE === $contents->length()->isZero()) {
-
+        if(FALSE === $this->isContentValid($contents)) {
             throw new InvalidDescriptionException();
         }
+
+        $this->description = $contents;
     }
 
     /**

@@ -18,6 +18,7 @@ use AGmakonts\STL\Structure\AbstractEnum;
  */
 class Gender extends AbstractEnum
 {
-    const MALE = 'male';
+    const MALE   = 'male';
     const FEMALE = 'female';
+    const OTHER  = 'other';
 }

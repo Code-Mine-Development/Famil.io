@@ -17,16 +17,12 @@ use Famillio\Domain\Family\Collection\FactDataAccessInterface;
  */
 interface PersonInterface extends EntityInterface
 {
-    public function name();
-
-    public function changeName();
-
+    /**
+     * @return \Famillio\Domain\Family\Collection\BiographyInterface
+     */
     public function biography();
-
-    public function age();
-
-    public function birthDate();
 
     public function picture();
 
+    public function relations();
 }

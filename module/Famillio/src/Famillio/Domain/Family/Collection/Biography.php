@@ -85,7 +85,6 @@ class Biography implements BiographyInterface
         $this->factsTimeline   = new \SplPriorityQueue();
         $this->iterator        = new \SplPriorityQueue();
         $this->factIdentifiers = new \SplObjectStorage();
-
     }
 
     /**

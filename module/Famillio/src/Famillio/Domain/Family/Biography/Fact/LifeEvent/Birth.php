@@ -102,5 +102,4 @@ class Birth extends AbstractFact implements LifespanBoundaryFactInterface,
 
         return Story::get($past, $present, $future, $data);
     }
-
 }

@@ -13,9 +13,11 @@ use AGmakonts\STL\Number\Integer;
 use Famillio\Domain\Family\Biography\Fact\Exception\DateAlreadySetException;
 use Famillio\Domain\Family\Biography\Fact\Exception\DateNotSetYetException;
 use Famillio\Domain\Family\Biography\Fact\Exception\FactIdentifierAlreadySetException;
+use Famillio\Domain\Family\Biography\Fact\Exception\InvalidStatusChangeAttemptException;
 use Famillio\Domain\Family\ValueObject\Biography\Fact\Description;
 use Famillio\Domain\Family\Biography\Fact\Exception\DateInFutureException;
 use Famillio\Domain\Family\ValueObject\Biography\Fact\Identifier;
+use Famillio\Domain\Family\ValueObject\Biography\Fact\Status;
 
 /**
  * Class AbstractFact
@@ -45,6 +47,63 @@ abstract class AbstractFact implements FactInterface
 
     private $relatedFacts;
 
+    /**
+     * @var \Famillio\Domain\Family\ValueObject\Biography\Fact\Status
+     */
+    private $status;
+
+    /**
+     * @var \AGmakonts\STL\DateTime\DateTime
+     */
+    private $creationTime;
+
+    /**
+     * @var \AGmakonts\STL\DateTime\DateTime
+     */
+    private $updateDate;
+
+    /**
+     * @return \Famillio\Domain\Family\ValueObject\Biography\Fact\Status
+     */
+    public function status()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param \Famillio\Domain\Family\ValueObject\Biography\Fact\Status $status
+     *
+     * @throws \Famillio\Domain\Family\Biography\Fact\Exception\InvalidStatusChangeAttemptException
+     */
+    public function changeStatus(Status $status)
+    {
+        if ($status === $this->status()) {
+            throw new InvalidStatusChangeAttemptException($this, $status, 'Status is the same as current one.');
+        }
+
+        if ($status->getOrdinal() < $this->status()->getOrdinal()) {
+            throw new InvalidStatusChangeAttemptException($this, $status, 'Cannot change to higher status');
+        }
+
+        $this->status = $status;
+
+    }
+
+    /**
+     * @param \AGmakonts\STL\DateTime\DateTime $dateTime
+     */
+    protected function setCreationTime(DateTime $dateTime)
+    {
+        $this->creationTime = $dateTime;
+    }
+
+    /**
+     * @return \AGmakonts\STL\DateTime\DateTime
+     */
+    public function creationTime()
+    {
+        return $this->creationTime;
+    }
 
     /**
      * @param \AGmakonts\STL\DateTime\DateTime $date

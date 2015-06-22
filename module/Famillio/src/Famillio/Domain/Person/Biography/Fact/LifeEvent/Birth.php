@@ -18,6 +18,7 @@ use Famillio\Domain\Person\Biography\Fact\FussyFactInterface;
 use Famillio\Domain\Person\Biography\Fact\GenderChangeFactInterface;
 use Famillio\Domain\Person\Biography\Fact\GivenNameChangeFactInterface;
 use Famillio\Domain\Person\Biography\Fact\LifespanBoundaryFactInterface;
+use Famillio\Domain\Person\Biography\Fact\Validator\Callback;
 use Famillio\Domain\Person\Biography\Fact\Validator\ValidatorInterface;
 use Famillio\Domain\Person\ValueObject\Biography\Fact\Description;
 use Famillio\Domain\Person\ValueObject\Biography\Fact\Identifier;
@@ -183,7 +184,31 @@ class Birth extends AbstractFact implements LifespanBoundaryFactInterface,
      */
     public function validator() : ValidatorInterface
     {
-        // TODO: Implement validator() method.
+        /*
+         * Return new callback validator that will check following conditions
+         */
+        return new Callback(function (FactInterface $factInterface) {
+
+
+            $factIsBeforeThis = ($factInterface->date()->isEarlierThan($this->date()));
+
+            if (TRUE === $factIsBeforeThis) {
+                return FALSE;
+            }
+
+            /** @var \Famillio\Domain\Person\Biography\Fact\LifespanBoundaryFactInterface $factInterface */
+            /*
+             * Check if Fact is even Lifespan Boundary
+             */
+            $lifespanBoundaryFact = ($factInterface instanceof LifespanBoundaryFactInterface);
+            $factIsBeginning      = ($factInterface->lifespanBoundaryType() === $this->lifespanBoundaryType());
+
+            if (TRUE === $lifespanBoundaryFact && TRUE === $factIsBeginning) {
+                return FALSE;
+            }
+
+            return TRUE;
+        });
     }
 
 

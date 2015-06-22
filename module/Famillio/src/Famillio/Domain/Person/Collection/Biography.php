@@ -8,6 +8,7 @@
 namespace Famillio\Domain\Person\Collection;
 
 use Famillio\Domain\Person\Biography\Fact\FactInterface;
+use Famillio\Domain\Person\Biography\Fact\FussyFactInterface;
 use Famillio\Domain\Person\Collection\Biography\DataExtractor\DataExtractorInterface;
 use Famillio\Domain\Person\Collection\Biography\Filter\ContextAwareSpecificationInterface;
 use Famillio\Domain\Person\Collection\Biography\Filter\SpecificationInterface;
@@ -69,6 +70,11 @@ class Biography implements BiographyInterface
      */
     private $iterator;
 
+    /**
+     * @var \SplDoublyLinkedList
+     */
+    private $validators;
+
 
     /**
      * Biography constructor.
@@ -85,6 +91,7 @@ class Biography implements BiographyInterface
         $this->factsTimeline   = new \SplPriorityQueue();
         $this->iterator        = new \SplPriorityQueue();
         $this->factIdentifiers = new \SplObjectStorage();
+        $this->validators      = new \SplDoublyLinkedList();
     }
 
     /**
@@ -106,10 +113,61 @@ class Biography implements BiographyInterface
         }
 
         /*
+         * Check for need for validation is needed
+         */
+        if ($fact instanceof FussyFactInterface) {
+
+            /*
+             * Extract validator from Fussy Fact and push it into
+             * validators list for future use
+             */
+            $validator = $fact->validator();
+            $this->validators()->push($validator);
+
+            /*
+             * Check existing Facts by iterating over them and applying
+             * Validation to each one of them. If Invalid Fact will be found
+             * exception will be thrown
+             */
+            $facts = $this->factsIterator();
+
+            /** @var \Famillio\Domain\Person\Biography\Fact\FactInterface $existingFact */
+            foreach ($facts as $existingFact) {
+                /*
+                 * If Fact isn't valid throw premised exception
+                 */
+                if(FALSE === $validator->isFactValid($existingFact)) {
+                    //EXCEPTION
+                }
+            }
+
+            /*
+             * Now iterate over existing validators and check
+             * Fact that's going to be added if it is valid with
+             * all of the Facts that were added before
+             */
+
+            /** @var \Famillio\Domain\Person\Biography\Fact\Validator\ValidatorInterface $validator */
+            foreach ($this->validators() as $validator) {
+                if(FALSE === $validator->isFactValid($fact)) {
+                    // EXCEPTION
+                }
+            }
+        }
+
+        /*
          * Add fact to ordered queue and to fast lookup helper collection.
          */
         $this->facts()->insert($fact, $fact->date()->getTimestamp()->value());
         $this->factIdentifiers()->attach($fact->identity(), $fact);
+    }
+
+    /**
+     * @return \SplDoublyLinkedList
+     */
+    private function validators() : \SplDoublyLinkedList
+    {
+        return $this->validators;
     }
 
     /**

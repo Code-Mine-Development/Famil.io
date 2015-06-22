@@ -73,6 +73,14 @@ abstract class AbstractFact implements FactInterface
         return $this->status;
     }
 
+    /**
+     * @param \Famillio\Domain\Person\ValueObject\Biography\Fact\Status $status
+     */
+    protected function setStatus(Status $status)
+    {
+        $this->status = $status;
+    }
+
 
     /**
      * @param \Famillio\Domain\Person\ValueObject\Biography\Fact\Status $status
@@ -89,7 +97,7 @@ abstract class AbstractFact implements FactInterface
             throw new InvalidStatusChangeAttemptException($this, $status, 'Cannot change to higher status');
         }
 
-        $this->status = $status;
+        $this->setStatus($status);
 
     }
 
@@ -117,7 +125,7 @@ abstract class AbstractFact implements FactInterface
      */
     protected function setCreationTime()
     {
-        if(NULL !== $this->creationTime) {
+        if (NULL !== $this->creationTime) {
             throw new CreationTimeChangeAttemptException($this);
         }
 

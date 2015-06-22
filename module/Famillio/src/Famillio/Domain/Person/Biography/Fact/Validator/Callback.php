@@ -42,7 +42,8 @@ class Callback implements ValidatorInterface
      */
     public function isFactValid(FactInterface $fact) : bool
     {
-        return $this->callback($fact);
+        $callback = $this->callback;
+        return $callback($fact);
     }
 
 }

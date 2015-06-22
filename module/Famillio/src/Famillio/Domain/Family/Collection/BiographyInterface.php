@@ -7,6 +7,7 @@
 
 namespace Famillio\Domain\Family\Collection;
 
+use AGmakonts\DddBricks\Collection\CollectionInterface;
 use Famillio\Domain\Family\Biography\Fact\FactInterface;
 use Famillio\Domain\Family\Collection\Biography\DataExtractor\DataExtractorInterface;
 use Famillio\Domain\Family\Collection\Biography\Filter\SpecificationInterface;
@@ -18,7 +19,7 @@ use Famillio\Domain\Family\ValueObject\Biography\Fact\Identifier;
  *
  * @package Famillio\Domain\Family\Collection
  */
-interface BiographyInterface extends \Iterator, \Countable
+interface BiographyInterface extends \Iterator, \Countable, CollectionInterface
 {
     /**
      * @param \Famillio\Domain\Family\Biography\Fact\FactInterface $fact

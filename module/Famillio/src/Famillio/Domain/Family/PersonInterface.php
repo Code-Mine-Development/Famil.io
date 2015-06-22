@@ -18,6 +18,8 @@ use Famillio\Domain\Family\Collection\FactDataAccessInterface;
 interface PersonInterface extends EntityInterface
 {
     /**
+     * Returns biography collection assigned to current Person
+     *
      * @return \Famillio\Domain\Family\Collection\BiographyInterface
      */
     public function biography();

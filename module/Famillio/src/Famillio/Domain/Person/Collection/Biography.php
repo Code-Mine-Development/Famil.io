@@ -305,6 +305,9 @@ class Biography implements BiographyInterface
         /*
          * Iterate over all Facts in the queue to find the one that should be
          * removed or replaced.
+         *
+         * This particular loop uses actual Facts queue because it is rebuild
+         * anyway and old instance won't be needed anymore.
          */
         foreach ($this->facts() as $fact) {
 

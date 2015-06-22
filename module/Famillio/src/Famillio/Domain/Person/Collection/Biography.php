@@ -71,7 +71,7 @@ class Biography implements BiographyInterface
     private $iterator;
 
     /**
-     * @var \SplDoublyLinkedList
+     * @var \SplObjectStorage
      */
     private $validators;
 
@@ -91,7 +91,7 @@ class Biography implements BiographyInterface
         $this->factsTimeline   = new \SplPriorityQueue();
         $this->iterator        = new \SplPriorityQueue();
         $this->factIdentifiers = new \SplObjectStorage();
-        $this->validators      = new \SplDoublyLinkedList();
+        $this->validators      = new \SplObjectStorage();
     }
 
     /**
@@ -112,6 +112,8 @@ class Biography implements BiographyInterface
             throw new DuplicatedFactAdditionAttemptException($fact);
         }
 
+        $identity = $fact->identity();
+
         /*
          * Check for need for validation is needed
          */
@@ -119,10 +121,11 @@ class Biography implements BiographyInterface
 
             /*
              * Extract validator from Fussy Fact and push it into
-             * validators list for future use
+             * validators list for future use. Identity is used as a
+             * key to allow for removal of the Validator if Fact is removed
              */
             $validator = $fact->validator();
-            $this->validators()->push($validator);
+            $this->validators()->attach($fact->identity(), $validator);
 
             /*
              * Check existing Facts by iterating over them and applying
@@ -146,9 +149,10 @@ class Biography implements BiographyInterface
              * Fact that's going to be added if it is valid with
              * all of the Facts that were added before
              */
+            foreach ($this->validators() as $identifier) {
+                /** @var \Famillio\Domain\Person\Biography\Fact\Validator\ValidatorInterface $validator */
+                $validator = $this->validators()->offsetGet($identifier);
 
-            /** @var \Famillio\Domain\Person\Biography\Fact\Validator\ValidatorInterface $validator */
-            foreach ($this->validators() as $validator) {
                 if(FALSE === $validator->isFactValid($fact)) {
                     // EXCEPTION
                 }
@@ -159,13 +163,13 @@ class Biography implements BiographyInterface
          * Add fact to ordered queue and to fast lookup helper collection.
          */
         $this->facts()->insert($fact, $fact->date()->getTimestamp()->value());
-        $this->factIdentifiers()->attach($fact->identity(), $fact);
+        $this->factIdentifiers()->attach($identity, $fact);
     }
 
     /**
-     * @return \SplDoublyLinkedList
+     * @return \SplObjectStorage
      */
-    private function validators() : \SplDoublyLinkedList
+    private function validators() : \SplObjectStorage
     {
         return $this->validators;
     }
@@ -222,6 +226,13 @@ class Biography implements BiographyInterface
          * Update lookup collection to reflect new state
          */
         $this->factIdentifiers()->detach($identifier);
+
+        /*
+         * Update Validator collection
+         */
+        if(TRUE === $this->validators()->contains($identifier)) {
+            $this->validators()->detach($identifier);
+        }
     }
 
     /**
@@ -246,6 +257,12 @@ class Biography implements BiographyInterface
         $this->factIdentifiers()->detach($identifier);
         $this->factIdentifiers()->attach($factInterface->identity());
 
+        /*
+         * Update Validator collection
+         */
+        if(TRUE === $this->validators()->contains($identifier)) {
+            $this->validators()->detach($identifier);
+        }
     }
 
     /**

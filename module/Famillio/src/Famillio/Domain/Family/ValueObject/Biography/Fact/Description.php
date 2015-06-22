@@ -2,18 +2,16 @@
 /**
  * Date:   11/06/15
  * Time:   15:05
- * 
+ *
  */
 
 namespace Famillio\Domain\Family\ValueObject\Biography\Fact;
-
 
 use AGmakonts\STL\AbstractValueObject;
 use AGmakonts\STL\String\Text;
 use Famillio\Domain\Family\ValueObject\Biography\Fact\Exception\InvalidDescriptionException;
 use Zend\Filter\FilterChain;
 use Zend\Filter\StripTags;
-use Zend\I18n\Filter\Alnum;
 use Zend\Validator\StringLength;
 use Zend\Validator\ValidatorChain;
 
@@ -27,6 +25,9 @@ class Description extends AbstractValueObject
     const MINIMUM_LENGTH = 10;
     const MAXIMUM_LENGTH = 1000000;
 
+    /**
+     * @var \AGmakonts\STL\String\Text
+     */
     private $description;
 
 
@@ -55,8 +56,7 @@ class Description extends AbstractValueObject
      */
     static private function filterContent(Text $content)
     {
-        $rawContent = $content->value();
-
+        $rawContent  = $content->value();
         $filterChain = new FilterChain();
 
         $filterChain->attach(new StripTags());
@@ -78,8 +78,8 @@ class Description extends AbstractValueObject
         $validatorChain = new ValidatorChain();
 
         $validatorChain->attach(new StringLength([
-            'min' => self::MINIMUM_LENGTH,
-            'max' => self::MAXIMUM_LENGTH
+                                                     'min' => self::MINIMUM_LENGTH,
+                                                     'max' => self::MAXIMUM_LENGTH,
                                                  ]));
 
         return $validatorChain->isValid($rawContent);
@@ -95,7 +95,7 @@ class Description extends AbstractValueObject
         $contents = $value[0];
 
 
-        if(FALSE === $this->isContentValid($contents)) {
+        if (FALSE === $this->isContentValid($contents)) {
             throw new InvalidDescriptionException();
         }
 

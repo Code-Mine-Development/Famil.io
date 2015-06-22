@@ -6,23 +6,23 @@
  * Time: 15:13
  */
 
-namespace Famillio\Domain\Family\ValueObject\Biography\Fact;
+namespace Famillio\Domain\Person\ValueObject\Biography\Fact;
 
 use AGmakonts\STL\String\Text;
 use AGmakonts\STL\Structure\KeyValuePair;
-use Famillio\Domain\Family\ValueObject\Biography\Fact\Exception\CorruptedTokensException;
-use Famillio\Domain\Family\ValueObject\Biography\Fact\Exception\IncompatibleStoryDataException;
+use Famillio\Domain\Person\ValueObject\Biography\Fact\Exception\CorruptedTokensException;
+use Famillio\Domain\Person\ValueObject\Biography\Fact\Exception\IncompatibleStoryDataException;
 
 /**
  * Class StoryTest
  *
- * @package Famillio\Domain\Family\ValueObject\Biography\Fact
- * @coversDefaultClass \Famillio\Domain\Family\ValueObject\Biography\Fact\Story
+ * @package Famillio\Domain\Person\ValueObject\Biography\Fact
+ * @coversDefaultClass \Famillio\Domain\Person\ValueObject\Biography\Fact\Story
  */
 class StoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @return \Famillio\Domain\Family\ValueObject\Biography\Fact\Story
+     * @return \Famillio\Domain\Person\ValueObject\Biography\Fact\Story
      */
     private function simpleStory($name, Story $previous = NULL) : Story
     {
@@ -45,8 +45,8 @@ class StoryTest extends \PHPUnit_Framework_TestCase
      * @covers ::extractedOriginal
      * @dataProvider leveledStoryProvider
      *
-     * @param \Famillio\Domain\Family\ValueObject\Biography\Fact\Story $test
-     * @param \Famillio\Domain\Family\ValueObject\Biography\Fact\Story $expected
+     * @param \Famillio\Domain\Person\ValueObject\Biography\Fact\Story $test
+     * @param \Famillio\Domain\Person\ValueObject\Biography\Fact\Story $expected
      */
     public function testExtractedOriginal(Story $test, Story $expected)
     {

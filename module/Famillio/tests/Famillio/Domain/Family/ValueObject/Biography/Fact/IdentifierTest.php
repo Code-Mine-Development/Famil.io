@@ -6,7 +6,7 @@
  * Time: 23:28
  */
 
-namespace Famillio\Domain\Family\ValueObject\Biography\Fact;
+namespace Famillio\Domain\Person\ValueObject\Biography\Fact;
 
 use AGmakonts\STL\DateTime\DateTime;
 use AGmakonts\STL\Number\Integer;
@@ -14,8 +14,8 @@ use AGmakonts\STL\Number\Integer;
 /**
  * Class IdentifierTest
  *
- * @package Famillio\Domain\Family\ValueObject\Biography\Fact
- * @coversDefaultClass \Famillio\Domain\Family\ValueObject\Biography\Fact\Identifier
+ * @package Famillio\Domain\Person\ValueObject\Biography\Fact
+ * @coversDefaultClass \Famillio\Domain\Person\ValueObject\Biography\Fact\Identifier
  */
 class IdentifierTest extends \PHPUnit_Framework_TestCase
 {

@@ -6,12 +6,12 @@
  * Time: 16:26
  */
 
-namespace Famillio\Domain\Family\ValueObject\Biography\Fact\Providers;
+namespace Famillio\Domain\Person\ValueObject\Biography\Fact\Providers;
 
 /**
  * Class TokenListProvider
  *
- * @package Famillio\Domain\Family\ValueObject\Biography\Fact\Providers
+ * @package Famillio\Domain\Person\ValueObject\Biography\Fact\Providers
  */
 class TokenListProvider
 {

@@ -25,6 +25,4 @@ interface PersonInterface extends EntityInterface
     public function biography();
 
     public function picture();
-
-    public function relations();
 }

@@ -26,14 +26,17 @@ class FamilyName extends AbstractCompoundName
     private $glue;
 
     /**
-     * @param array                             $names
+     * @param array                           $names
      * @param \AGmakonts\STL\String\Text|NULL $glue
      *
      * @return mixed
      */
     static public function get(array $names, Text $glue = NULL) : FamilyName
     {
-        return self::getInstanceForValue([$names, $glue]);
+        return self::getInstanceForValue([
+                                             $names,
+                                             $glue,
+                                         ]);
     }
 
     /**
@@ -43,15 +46,15 @@ class FamilyName extends AbstractCompoundName
     {
         list($names, $glue) = $value;
 
-        if(TRUE === empty($names)) {
+        if (TRUE === empty($names)) {
             throw new EmptyFamilyNameException();
         }
 
-        if(FALSE === $this->isNameArrayValid($names)) {
+        if (FALSE === $this->isNameArrayValid($names)) {
             throw new InvalidMultipleFamilyNameElementException();
         }
 
-        if(NULL === $glue) {
+        if (NULL === $glue) {
             $glue = Text::get(self::DEFAULT_GLUE);
         }
 
@@ -72,7 +75,7 @@ class FamilyName extends AbstractCompoundName
      */
     public function name() : Text
     {
-        if(1 === count($this->names)) {
+        if (1 === count($this->names)) {
 
             return $this->names()[0]->name();
         } else {
@@ -80,7 +83,7 @@ class FamilyName extends AbstractCompoundName
             $scalarNames = [];
 
             /** @var Name $name */
-            foreach($this->names() as $name) {
+            foreach ($this->names() as $name) {
                 $scalarNames[] = $name->name()->value();
             }
 
@@ -117,7 +120,10 @@ class FamilyName extends AbstractCompoundName
      */
     public function extractedValue()
     {
-        return self::extractValue([$this->names, $this->glue]);
+        return self::extractValue([
+                                      $this->names,
+                                      $this->glue,
+                                  ]);
     }
 
 }

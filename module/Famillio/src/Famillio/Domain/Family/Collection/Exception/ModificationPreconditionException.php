@@ -16,7 +16,7 @@ namespace Famillio\Domain\Family\Collection\Exception;
 class ModificationPreconditionException extends BadMethodCallException
 {
 
-    const MESSAGE_FORMAT = 'No modifications were made to to collection';
+    const MESSAGE_FORMAT = 'No modifications were made to the collection';
     /**
      * ModificationPreconditionException constructor.
      */

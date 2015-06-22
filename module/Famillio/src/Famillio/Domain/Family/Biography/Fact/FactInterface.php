@@ -13,6 +13,7 @@ use AGmakonts\STL\DateTime\DateTime;
 use AGmakonts\DddBricks\Entity\EntityInterface;
 use AGmakonts\STL\String\Text;
 use Famillio\Domain\Family\ValueObject\Biography\Fact\Description;
+use Famillio\Domain\Family\ValueObject\Biography\Fact\Status;
 use Famillio\Domain\Family\ValueObject\Biography\Fact\Story;
 
 /**
@@ -26,23 +27,54 @@ use Famillio\Domain\Family\ValueObject\Biography\Fact\Story;
  */
 interface FactInterface extends EntityInterface
 {
+
     /**
+     * Return date of the Fact instance creation
+     *
+     * @return \AGmakonts\STL\DateTime\DateTime
+     */
+    public function creationTime() : DateTime;
+
+    /**
+     * Return date of the last Fact update
+     *
+     * @return \AGmakonts\STL\DateTime\DateTime
+     */
+    public function lastUpdateTime() : DateTime;
+
+    /**
+     * Returns date of the fact occurrence. Returned property is
+     * immutable.
+     *
      * @return DateTime
      */
     public function date() : DateTime;
 
     /**
+     * Returns meaningful description of a Fact.
+     *
      * @return \Famillio\Domain\Family\ValueObject\Biography\Fact\Description
      */
     public function description() : Description;
 
     /**
+     * Changes description of a Fact to new one.
+     *
      * @param \Famillio\Domain\Family\ValueObject\Biography\Fact\Description $description
      */
     public function changeDescription(Description $description);
 
 
-    public function timeSinceFact();
+    /**
+     * Returns interval between Fact's occurrence and specific date.
+     * By default interval is calculated to current date. Optional parameter
+     * allows to specify different date.
+     *
+     * @param \AGmakonts\STL\DateTime\DateTime $toDate
+     *
+     * @return mixed
+     */
+    public function timeSinceFact(DateTime $toDate = NULL);
 
     /**
      * Return DateTime object with the date of next anniversary of the Fact.
@@ -52,6 +84,12 @@ interface FactInterface extends EntityInterface
     public function nextAnniversary() : DateTime;
 
     /**
+     * Returns prepared Story object that can be used to describe in
+     * narrative way Fact's data.
+     *
+     * Method allows to specify optional Story object that will be filled
+     * with data instead of default Story.
+     *
      * @param \Famillio\Domain\Family\ValueObject\Biography\Fact\Story $customStory
      *
      * @return \Famillio\Domain\Family\ValueObject\Biography\Fact\Story
@@ -59,14 +97,26 @@ interface FactInterface extends EntityInterface
     public function story(Story $customStory = NULL) : Story;
 
     /**
+     * Returns textual representation of Fact's type.
+     *
      * @return \AGmakonts\STL\String\Text
      */
     public function type() : Text;
 
     /**
+     * Due to immutable nature of the Facts, change of the date requires
+     * building new instance.
+     *
      * @param \AGmakonts\STL\DateTime\DateTime $dateTime
      *
      * @return \Famillio\Domain\Family\Biography\Fact\FactInterface
      */
     public function changedDate(DateTime $dateTime) : FactInterface;
+
+    /**
+     * Returns current status of the Fact
+     *
+     * @return \Famillio\Domain\Family\ValueObject\Biography\Fact\Status
+     */
+    public function status() : Status;
 }

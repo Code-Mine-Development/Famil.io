@@ -64,12 +64,15 @@ abstract class AbstractFact implements FactInterface
     private $updateDate;
 
     /**
+     * Returns current status of the Fact
+     *
      * @return \Famillio\Domain\Family\ValueObject\Biography\Fact\Status
      */
-    public function status()
+    public function status() : Status
     {
         return $this->status;
     }
+
 
     /**
      * @param \Famillio\Domain\Family\ValueObject\Biography\Fact\Status $status
@@ -89,6 +92,17 @@ abstract class AbstractFact implements FactInterface
         $this->status = $status;
 
     }
+
+    /**
+     * Return date of the last Fact update
+     *
+     * @return \AGmakonts\STL\DateTime\DateTime
+     */
+    public function lastUpdateTime() : DateTime
+    {
+        return $this->updateDate;
+    }
+
 
     /**
      *
@@ -112,12 +126,15 @@ abstract class AbstractFact implements FactInterface
     }
 
     /**
+     * Return date of the Fact instance creation
+     *
      * @return \AGmakonts\STL\DateTime\DateTime
      */
     public function creationTime() : DateTime
     {
         return $this->creationTime;
     }
+
 
     /**
      * @param \AGmakonts\STL\DateTime\DateTime $date
@@ -174,7 +191,7 @@ abstract class AbstractFact implements FactInterface
     }
 
     /**
-     * Returns description of the Fact
+     * Returns meaningful description of a Fact.
      *
      * @return \Famillio\Domain\Family\ValueObject\Biography\Fact\Description
      */
@@ -183,13 +200,17 @@ abstract class AbstractFact implements FactInterface
         return $this->description;
     }
 
+
     /**
+     * Changes description of a Fact to new one.
+     *
      * @param \Famillio\Domain\Family\ValueObject\Biography\Fact\Description $description
      */
     public function changeDescription(Description $description)
     {
         $this->setDescription($description);
     }
+
 
     /**
      * @param \AGmakonts\DddBricks\Entity\EntityInterface $entity
@@ -209,10 +230,20 @@ abstract class AbstractFact implements FactInterface
         return $this->identity;
     }
 
-    public function timeSinceFact()
+    /**
+     * Returns interval between Fact's occurrence and specific date.
+     * By default interval is calculated to current date. Optional parameter
+     * allows to specify different date.
+     *
+     * @param \AGmakonts\STL\DateTime\DateTime $toDate
+     *
+     * @return mixed
+     */
+    public function timeSinceFact(DateTime $toDate = NULL)
     {
-
+        // TODO: Implement timeSinceFact() method.
     }
+
 
     /**
      * Return DateTime object with the date of next anniversary of the Fact.

@@ -9,6 +9,7 @@
 namespace Famillio\Domain\Family\Collection;
 
 use AGmakonts\DddBricks\Collection\CollectionInterface;
+use Famillio\Domain\Family\Person;
 
 /**
  * Interface FamilyInterface
@@ -17,5 +18,7 @@ use AGmakonts\DddBricks\Collection\CollectionInterface;
  */
 interface FamilyInterface extends \Iterator, \Countable, CollectionInterface
 {
+    public function addMember(Person $person);
 
+    public function removeMember();
 }

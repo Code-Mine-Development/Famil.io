@@ -103,6 +103,7 @@ class Biography implements BiographyInterface
      * @param \Famillio\Domain\Person\Biography\Fact\FactInterface $fact
      *
      * @throws \Famillio\Domain\Person\Collection\Exception\DuplicatedFactAdditionAttemptException
+     * @throws \Famillio\Domain\Person\Collection\Exception\UnacceptableFactException
      */
     public function addFact(FactInterface $fact)
     {
@@ -272,8 +273,8 @@ class Biography implements BiographyInterface
      * @param \Famillio\Domain\Person\ValueObject\Biography\Fact\Identifier $identifier
      * @param \Famillio\Domain\Person\Biography\Fact\FactInterface|NULL     $replaceWith
      *
-     * @throws UnknownFactRemovalAttemptException
-     * @throws ModificationPreconditionException
+     * @throws \Famillio\Domain\Person\Collection\Exception\UnknownFactRemovalAttemptException
+     * @throws \\Famillio\Domain\Person\Collection\Exception\ModificationPreconditionException
      */
     private function changeFactInTimeline(Identifier $identifier, FactInterface $replaceWith = NULL)
     {
@@ -391,6 +392,8 @@ class Biography implements BiographyInterface
      * @param \Famillio\Domain\Person\Collection\Biography\MergeMode|NULL $mergeMode
      *
      * @return \Famillio\Domain\Person\Collection\BiographyInterface
+     *
+     * @throws \Famillio\Domain\Person\Collection\Exception\DuplicatedFactAdditionAttemptException
      */
     public function merged(BiographyInterface $biography, MergeMode $mergeMode = NULL) : BiographyInterface
     {

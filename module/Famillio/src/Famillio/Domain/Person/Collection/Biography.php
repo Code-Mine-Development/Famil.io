@@ -22,6 +22,9 @@ use Famillio\Domain\Person\Collection\Preconditions\Biography\Replacement\Remova
 use Famillio\Domain\Person\Collection\Preconditions\Biography\Replacement\Replacement;
 use Famillio\Domain\Person\ValueObject\Biography\Fact\Identifier;
 use Famillio\Domain\Person\ValueObject\Biography\Specification;
+use Zend\EventManager\EventManager;
+use Zend\EventManager\EventManagerAwareInterface;
+use Zend\EventManager\EventManagerInterface;
 
 
 /**
@@ -41,8 +44,10 @@ use Famillio\Domain\Person\ValueObject\Biography\Specification;
  *
  * @package Famillio\Domain\Person\Collection
  */
-class Biography implements BiographyInterface
+class Biography implements BiographyInterface, EventManagerAwareInterface
 {
+    const EVENT_IDENTIFIER = 'Domain.Person.Collection.Biography';
+
     /**
      * Priority queue that holds all Facts. Timestamp of the Fact occurrence is used as
      * priority to determine order of elements.
@@ -72,9 +77,18 @@ class Biography implements BiographyInterface
     private $iterator;
 
     /**
+     * Collection of all Validators extracted from Fussy Facts
+     *
      * @var \SplObjectStorage
      */
     private $validators;
+
+    /**
+     * Local Instance of Event Manager
+     *
+     * @var \Zend\EventManager\EventManagerInterface
+     */
+    private $eventManager;
 
 
     /**
@@ -650,4 +664,36 @@ class Biography implements BiographyInterface
 
         return $dataExtractorInterface;
     }
+
+    /**
+     * Inject an EventManager instance
+     *
+     * @param  EventManagerInterface $eventManager
+     *
+     * @return void
+     */
+    public function setEventManager(EventManagerInterface $eventManager)
+    {
+        $this->eventManager = $eventManager;
+        $this->getEventManager()->setIdentifiers(self::EVENT_IDENTIFIER);
+
+    }
+
+    /**
+     * Retrieve the event manager
+     *
+     * Lazy-loads an EventManager instance if none registered.
+     *
+     * @return EventManagerInterface
+     */
+    public function getEventManager()
+    {
+        if(NULL === $this->eventManager) {
+            $this->setEventManager(new EventManager());
+        }
+
+        return $this->eventManager;
+    }
+
+
 }

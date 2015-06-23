@@ -19,6 +19,9 @@ use Famillio\Domain\Person\ValueObject\Biography\Fact\Description;
 use Famillio\Domain\Person\Biography\Fact\Exception\DateInFutureException;
 use Famillio\Domain\Person\ValueObject\Biography\Fact\Identifier;
 use Famillio\Domain\Person\ValueObject\Biography\Fact\Status;
+use Zend\EventManager\EventManager;
+use Zend\EventManager\EventManagerAwareInterface;
+use Zend\EventManager\EventManagerInterface;
 
 /**
  * Class AbstractFact
@@ -29,7 +32,7 @@ use Famillio\Domain\Person\ValueObject\Biography\Fact\Status;
  *
  * @package Famillio\Domain\Person\ValueObject\Biography\Fact
  */
-abstract class AbstractFact implements FactInterface
+abstract class AbstractFact implements FactInterface, EventManagerAwareInterface
 {
     /**
      * @var \AGmakonts\STL\DateTime\DateTime
@@ -62,6 +65,11 @@ abstract class AbstractFact implements FactInterface
      * @var \AGmakonts\STL\DateTime\DateTime
      */
     private $updateDate;
+
+    /**
+     * @var \Zend\EventManager\EventManagerInterface
+     */
+    private $eventManager;
 
     /**
      * Returns current status of the Fact
@@ -270,6 +278,34 @@ abstract class AbstractFact implements FactInterface
         }
 
         return DateTime::get(Integer::get($nativeDate->getTimestamp()));
+    }
+
+    /**
+     * Inject an EventManager instance
+     *
+     * @param  EventManagerInterface $eventManager
+     *
+     * @return void
+     */
+    public function setEventManager(EventManagerInterface $eventManager)
+    {
+        $this->eventManager = $eventManager;
+    }
+
+    /**
+     * Retrieve the event manager
+     *
+     * Lazy-loads an EventManager instance if none registered.
+     *
+     * @return EventManagerInterface
+     */
+    public function getEventManager()
+    {
+        if(NULL === $this->eventManager) {
+            $this->setEventManager(new EventManager());
+        }
+
+        return $this->eventManager;
     }
 
 

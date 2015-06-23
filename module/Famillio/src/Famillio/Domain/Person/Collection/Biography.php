@@ -139,23 +139,23 @@ class Biography implements BiographyInterface
                 /*
                  * If Fact isn't valid throw premised exception
                  */
-                if(FALSE === $validator->isFactValid($existingFact)) {
+                if (FALSE === $validator->isFactValid($existingFact)) {
                     //EXCEPTION
                 }
             }
+        }
 
-            /*
-             * Now iterate over existing validators and check
-             * Fact that's going to be added if it is valid with
-             * all of the Facts that were added before
-             */
-            foreach ($this->validators() as $identifier) {
-                /** @var \Famillio\Domain\Person\Biography\Fact\Validator\ValidatorInterface $validator */
-                $validator = $this->validators()->offsetGet($identifier);
+        /*
+         * Now iterate over existing validators and check
+         * Fact that's going to be added if it is valid with
+         * all of the Facts that were added before
+         */
+        foreach ($this->validators() as $identifier) {
+            /** @var \Famillio\Domain\Person\Biography\Fact\Validator\ValidatorInterface $validator */
+            $validator = $this->validators()->offsetGet($identifier);
 
-                if(FALSE === $validator->isFactValid($fact)) {
-                    // EXCEPTION
-                }
+            if (FALSE === $validator->isFactValid($fact)) {
+                // EXCEPTION
             }
         }
 
@@ -230,7 +230,7 @@ class Biography implements BiographyInterface
         /*
          * Update Validator collection
          */
-        if(TRUE === $this->validators()->contains($identifier)) {
+        if (TRUE === $this->validators()->contains($identifier)) {
             $this->validators()->detach($identifier);
         }
     }
@@ -260,7 +260,7 @@ class Biography implements BiographyInterface
         /*
          * Update Validator collection
          */
-        if(TRUE === $this->validators()->contains($identifier)) {
+        if (TRUE === $this->validators()->contains($identifier)) {
             $this->validators()->detach($identifier);
         }
     }

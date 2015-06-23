@@ -9,6 +9,7 @@ namespace Famillio\Domain\Person;
 
 use AGmakonts\DddBricks\Entity\EntityInterface;
 use Famillio\Domain\Person\Collection\FactDataAccessInterface;
+use Famillio\Domain\Person\ValueObject\Picture;
 
 /**
  * Interface PersonInterface
@@ -24,5 +25,15 @@ interface PersonInterface extends EntityInterface
      */
     public function biography();
 
-    public function picture();
+    /**
+     * @return \Famillio\Domain\Person\ValueObject\Picture
+     */
+    public function picture() : Picture;
+
+    /**
+     * @param \Famillio\Domain\Person\ValueObject\Picture $picture
+     *
+     * @return void
+     */
+    public function changePicture(Picture $picture);
 }

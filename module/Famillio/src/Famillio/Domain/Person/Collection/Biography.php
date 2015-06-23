@@ -92,7 +92,12 @@ class Biography implements BiographyInterface
         $this->factsTimeline   = new \SplPriorityQueue();
         $this->iterator        = new \SplPriorityQueue();
         $this->factIdentifiers = new \SplObjectStorage();
-        $this->validators      = new \SplObjectStorage();
+
+        /*
+         * Validator storage to hold extracted validators
+         * from all added Fussy Facts
+         */
+        $this->validators = new \SplObjectStorage();
     }
 
     /**
@@ -169,6 +174,8 @@ class Biography implements BiographyInterface
     }
 
     /**
+     * Returns all Validators extracted from added Facts
+     *
      * @return \SplObjectStorage
      */
     private function validators() : \SplObjectStorage

@@ -16,6 +16,7 @@ use Famillio\Domain\Person\Collection\Biography\MergeMode;
 use Famillio\Domain\Person\Collection\Exception\DuplicatedFactAdditionAttemptException;
 use Famillio\Domain\Person\Collection\Exception\EmptyCollectionException;
 use Famillio\Domain\Person\Collection\Exception\ModificationPreconditionException;
+use Famillio\Domain\Person\Collection\Exception\UnacceptableFactException;
 use Famillio\Domain\Person\Collection\Exception\UnknownFactRemovalAttemptException;
 use Famillio\Domain\Person\Collection\Preconditions\Biography\Replacement\Removal;
 use Famillio\Domain\Person\Collection\Preconditions\Biography\Replacement\Replacement;
@@ -115,7 +116,7 @@ class Biography implements BiographyInterface
         $identity = $fact->identity();
 
         /*
-         * Check for need for validation is needed
+         * Check for need for validation
          */
         if ($fact instanceof FussyFactInterface) {
 
@@ -140,7 +141,7 @@ class Biography implements BiographyInterface
                  * If Fact isn't valid throw premised exception
                  */
                 if (FALSE === $validator->isFactValid($existingFact)) {
-                    //EXCEPTION
+                    throw new UnacceptableFactException($existingFact->identity(), $fact->identity());
                 }
             }
         }
@@ -155,7 +156,7 @@ class Biography implements BiographyInterface
             $validator = $this->validators()->offsetGet($identifier);
 
             if (FALSE === $validator->isFactValid($fact)) {
-                // EXCEPTION
+                throw new UnacceptableFactException($fact->identity(), $identifier);
             }
         }
 

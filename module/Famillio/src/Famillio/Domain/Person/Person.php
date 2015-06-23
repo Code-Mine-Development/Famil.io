@@ -7,7 +7,11 @@
 
 namespace Famillio\Domain\Person;
 
-
+/**
+ * Class Person
+ *
+ * @package Famillio\Domain\Person
+ */
 class Person 
 {
 

@@ -19,6 +19,8 @@ class EmptyCollectionException extends BadMethodCallException
 
     /**
      * EmptyCollectionException constructor.
+     *
+     * @param string $method
      */
     public function __construct(string $method)
     {

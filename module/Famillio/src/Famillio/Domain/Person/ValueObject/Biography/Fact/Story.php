@@ -216,7 +216,7 @@ class Story extends AbstractValueObject
      */
     public function genderTargeted(Gender $gender) : Story
     {
-        return self::get($this->past(), $this->present(), $this->future(), $gender, $this);
+        return self::get($this->past(), $this->present(), $this->future(), $this->data(), $gender, $this);
     }
 
     /**

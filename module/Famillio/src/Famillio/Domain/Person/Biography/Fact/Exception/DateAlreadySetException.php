@@ -22,7 +22,7 @@ class DateAlreadySetException extends AbstractFactException
 
     /**
      * @param \Famillio\Domain\Person\Biography\Fact\AbstractFact $fact
-     * @param \DateTime                                           $date
+     * @param DateTime                                            $date
      */
     public function __construct(AbstractFact $fact, DateTime $date)
     {

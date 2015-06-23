@@ -11,6 +11,11 @@ namespace Famillio\Domain\Person\ValueObject\Name\Exception;
 
 use AGmakonts\STL\String\String;
 
+/**
+ * Class InvalidNameException
+ *
+ * @package Famillio\Domain\Person\ValueObject\Name\Exception
+ */
 class InvalidNameException extends \DomainException
 {
     const MESSAGE_FORMAT_KNOWN_REASONS = 'Provided name (\'%s\') is invalid because of following reasons: %s';

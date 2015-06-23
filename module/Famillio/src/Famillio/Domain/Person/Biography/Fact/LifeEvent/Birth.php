@@ -120,6 +120,9 @@ class Birth extends AbstractFact implements LifespanBoundaryFactInterface,
         return $this->gender;
     }
 
+    /**
+     * @return \AGmakonts\STL\String\Text
+     */
     public function place() : Text
     {
         return $this->place;

@@ -8,7 +8,11 @@
 
 namespace Famillio\Domain\Person\ValueObject\Biography\Fact\Exception;
 
-
+/**
+ * Class DomainException
+ *
+ * @package Famillio\Domain\Person\ValueObject\Biography\Fact\Exception
+ */
 class DomainException extends \DomainException
 {
 

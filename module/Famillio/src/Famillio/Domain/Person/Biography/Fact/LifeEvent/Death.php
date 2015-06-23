@@ -14,6 +14,11 @@ use Famillio\Domain\Person\Biography\Fact\AbstractFact;
 use Famillio\Domain\Person\Biography\Fact\LifespanBoundaryFactInterface;
 use Famillio\Domain\Person\ValueObject\Biography\Fact\LifespanBoundaryType;
 
+/**
+ * Class Death
+ *
+ * @package Famillio\Domain\Person\Biography\Fact\LifeEvent
+ */
 class Death extends AbstractFact implements LifespanBoundaryFactInterface
 {
     /**

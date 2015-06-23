@@ -17,6 +17,9 @@ class CorruptedTokensException extends DomainException
 {
     const MESSAGE_FORMAT = 'One of the tokens is corrupted';
 
+    /**
+     *
+     */
     public function __construct()
     {
         $this->message = self::MESSAGE_FORMAT;

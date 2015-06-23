@@ -8,7 +8,11 @@
 
 namespace Famillio\Domain\Person\Collection\Biography\DataExtractor\Exception;
 
-
+/**
+ * Class OversatisfiedExtractorException
+ *
+ * @package Famillio\Domain\Person\Collection\Biography\DataExtractor\Exception
+ */
 class OversatisfiedExtractorException extends RuntimeException
 {
     const MESSAGE_FORMAT = 'Data extractor is over satisfied: %s';

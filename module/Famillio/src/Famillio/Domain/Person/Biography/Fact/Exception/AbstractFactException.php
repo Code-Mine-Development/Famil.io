@@ -26,6 +26,9 @@ abstract class AbstractFactException extends DomainException
         $this->fact = $fact;
     }
 
+    /**
+     * @return \Famillio\Domain\Person\Biography\Fact\FactInterface
+     */
     public function fact()
     {
         return $this->fact;

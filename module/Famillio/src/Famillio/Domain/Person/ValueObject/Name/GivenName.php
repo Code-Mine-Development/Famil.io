@@ -94,7 +94,7 @@ class GivenName extends AbstractCompoundName
 
         /** @var Name $additional */
         foreach ($this->additional() as $additional) {
-            $fullGivenName = $fullGivenName->concat(' ')->concat($additional->name());
+            $fullGivenName = $fullGivenName->concat($additional->name(), Text::get(' '));
         }
 
         return $fullGivenName;

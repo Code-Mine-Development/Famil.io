@@ -11,6 +11,11 @@ namespace Famillio\Domain\Person\ValueObject\Biography\Fact\Exception;
 
 use Famillio\Domain\Person\ValueObject\Biography\Fact\Story;
 
+/**
+ * Class PreviousVersionNotSetException
+ *
+ * @package Famillio\Domain\Person\ValueObject\Biography\Fact\Exception
+ */
 class PreviousVersionNotSetException extends BadMethodCallException
 {
     const MESSAGE_FORMAT = 'Story \'%s\' doesn\'t have previous version';

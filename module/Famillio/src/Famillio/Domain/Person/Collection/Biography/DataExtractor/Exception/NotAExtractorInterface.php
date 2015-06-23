@@ -19,6 +19,8 @@ class NotAExtractorInterface extends InvalidArgumentException
 
     /**
      * NotAExtractorInterface constructor.
+     *
+     * @param mixed $element
      */
     public function __construct($element)
     {

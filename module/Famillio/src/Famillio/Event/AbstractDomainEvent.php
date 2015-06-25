@@ -22,9 +22,6 @@ abstract class AbstractDomainEvent implements EventInterface, DomainEventInterfa
     private $params;
 
     private $courenceTime;
-
-    private $type;
-
     /**
      * Get event name
      *

@@ -17,9 +17,15 @@ use Zend\EventManager\EventInterface;
  *
  * @package Famillio\Event
  */
-abstract class AbstractDomainEvent implements EventInterface
+abstract class AbstractDomainEvent implements EventInterface, DomainEventInterface
 {
     private $entity;
+
+    private $params;
+
+    private $courenceTime;
+
+    private $type;
 
     /**
      * Get event name
@@ -28,27 +34,17 @@ abstract class AbstractDomainEvent implements EventInterface
      */
     public function getName()
     {
-        // TODO: Implement getName() method.
+        return static::name();
     }
 
     /**
      * Get target/context from which event was triggered
      *
-     * @return null|string|object
+     * @return \AGmakonts\DddBricks\Entity\EntityInterface
      */
     public function getTarget()
     {
-        // TODO: Implement getTarget() method.
-    }
-
-    /**
-     * Get parameters passed to the event
-     *
-     * @return array|ArrayAccess
-     */
-    public function getParams()
-    {
-        // TODO: Implement getParams() method.
+        return $this->entity;
     }
 
     /**
@@ -61,7 +57,7 @@ abstract class AbstractDomainEvent implements EventInterface
      */
     public function getParam($name, $default = NULL)
     {
-        // TODO: Implement getParam() method.
+        return $this->getParams()[$name];
     }
 
     /**
@@ -134,5 +130,4 @@ abstract class AbstractDomainEvent implements EventInterface
     {
         // TODO: Implement propagationIsStopped() method.
     }
-
 }

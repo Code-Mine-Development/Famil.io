@@ -15,9 +15,8 @@ use AGmakonts\STL\Structure\AbstractEnum;
  *
  * @package Famillio\Event
  */
-class Type extends AbstractEnum
+class SplitType extends AbstractEnum
 {
-    const PRE      = -1;
-    const SINGULAR = 0;
-    const POST     = 1;
+    const PRE  = -1;
+    const POST = 1;
 }

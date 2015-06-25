@@ -8,8 +8,6 @@
 
 namespace Famillio\Event;
 
-
-use ArrayAccess;
 use Zend\EventManager\EventInterface;
 
 /**

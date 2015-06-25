@@ -18,6 +18,7 @@ use Famillio\Domain\Person\Biography\Fact\Exception\InvalidStatusChangeAttemptEx
 use Famillio\Domain\Person\ValueObject\Biography\Fact\Description;
 use Famillio\Domain\Person\Biography\Fact\Exception\DateInFutureException;
 use Famillio\Domain\Person\ValueObject\Biography\Fact\Identifier;
+use Famillio\Domain\Person\ValueObject\Biography\Fact\Relation\FactRelationInterface;
 use Famillio\Domain\Person\ValueObject\Biography\Fact\Status;
 use Zend\EventManager\EventManager;
 use Zend\EventManager\EventManagerAwareInterface;
@@ -35,38 +36,58 @@ use Zend\EventManager\EventManagerInterface;
 abstract class AbstractFact implements FactInterface, EventManagerAwareInterface
 {
     /**
+     * Date of the Fact occurrence. Can, and usually be different from
+     * the Fact entity creation time in technical way
+     *
      * @var \AGmakonts\STL\DateTime\DateTime
      */
     private $date;
 
     /**
+     * Personalized description of the Fact
+     *
      * @var \Famillio\Domain\Person\ValueObject\Biography\Fact\Description
      */
     private $description;
 
     /**
+     * Unique identifier of the entity
+     *
      * @var \Famillio\Domain\Person\ValueObject\Biography\Fact\Identifier
      */
     private $identity;
 
+    /**
+     * List of all Facts that are related to the entity.
+     *
+     * @var \SplObjectStorage
+     */
     private $relatedFacts;
 
     /**
+     * Status or state of the Fact's life
+     *
      * @var \Famillio\Domain\Person\ValueObject\Biography\Fact\Status
      */
     private $status;
 
     /**
+     * Technical timestamp of the creation of the entity
+     *
      * @var \AGmakonts\STL\DateTime\DateTime
      */
     private $creationTime;
 
     /**
+     * Timestamp of the last modification of the entity
+     *
      * @var \AGmakonts\STL\DateTime\DateTime
      */
     private $updateDate;
 
     /**
+     * Local instance of the event manager
+     *
      * @var \Zend\EventManager\EventManagerInterface
      */
     private $eventManager;
@@ -118,7 +139,6 @@ abstract class AbstractFact implements FactInterface, EventManagerAwareInterface
     {
         return $this->updateDate;
     }
-
 
     /**
      *
@@ -301,12 +321,62 @@ abstract class AbstractFact implements FactInterface, EventManagerAwareInterface
      */
     public function getEventManager()
     {
-        if(NULL === $this->eventManager) {
+        if (NULL === $this->eventManager) {
             $this->setEventManager(new EventManager());
         }
 
         return $this->eventManager;
     }
 
+    /**
+     * Relates Fact to another via FactRelation.
+     *
+     * @param \Famillio\Domain\Person\ValueObject\Biography\Fact\Relation\FactRelationInterface $factRelationInterface
+     *
+     * @return void
+     */
+    public function relateToFact(FactRelationInterface $factRelationInterface)
+    {
+        if (NULL === $this->relatedFacts) {
+            $this->relatedFacts = new \SplObjectStorage();
+        }
 
+        if(TRUE === $this->relatedFacts->contains($factRelationInterface)) {
+            // throw
+        }
+
+        $this->relatedFacts->attach($factRelationInterface);
+    }
+
+    /**
+     * Returns list of related Facts
+     *
+     * @return \SplObjectStorage
+     */
+    public function related() : \SplObjectStorage
+    {
+        if (NULL === $this->relatedFacts) {
+            return new \SplObjectStorage();
+        }
+    }
+
+    /**
+     * Removed relation between Fact and another related Fact
+     *
+     * @param \Famillio\Domain\Person\ValueObject\Biography\Fact\Relation\FactRelationInterface $factRelationInterface
+     *
+     * @return void
+     */
+    public function destroyRelationToFact(FactRelationInterface $factRelationInterface)
+    {
+        if (NULL === $this->relatedFacts) {
+            $this->relatedFacts = new \SplObjectStorage();
+        }
+
+        if(FALSE === $this->relatedFacts->contains($factRelationInterface)) {
+            //throw
+        }
+
+        $this->relatedFacts->detach($factRelationInterface);
+    }
 }

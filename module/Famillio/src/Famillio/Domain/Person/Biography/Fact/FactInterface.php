@@ -13,6 +13,7 @@ use AGmakonts\STL\DateTime\DateTime;
 use AGmakonts\DddBricks\Entity\EntityInterface;
 use AGmakonts\STL\String\Text;
 use Famillio\Domain\Person\ValueObject\Biography\Fact\Description;
+use Famillio\Domain\Person\ValueObject\Biography\Fact\Relation\FactRelationInterface;
 use Famillio\Domain\Person\ValueObject\Biography\Fact\Status;
 use Famillio\Domain\Person\ValueObject\Biography\Fact\Story;
 
@@ -114,9 +115,34 @@ interface FactInterface extends EntityInterface
     public function changedDate(DateTime $dateTime) : FactInterface;
 
     /**
-     * Returns current status of the Fact
+     * Returns current status of the Fact.
      *
      * @return \Famillio\Domain\Person\ValueObject\Biography\Fact\Status
      */
     public function status() : Status;
+
+    /**
+     * Relates Fact to another via FactRelation.
+     *
+     * @param \Famillio\Domain\Person\ValueObject\Biography\Fact\Relation\FactRelationInterface $factRelationInterface
+     *
+     * @return void
+     */
+    public function relateToFact(FactRelationInterface $factRelationInterface);
+
+    /**
+     * Returns list of related Facts
+     *
+     * @return \SplObjectStorage
+     */
+    public function related() : \SplObjectStorage;
+
+    /**
+     * Removed relation between Fact and another related Fact
+     *
+     * @param \Famillio\Domain\Person\ValueObject\Biography\Fact\Relation\FactRelationInterface $factRelationInterface
+     *
+     * @return void
+     */
+    public function destroyRelationToFact(FactRelationInterface $factRelationInterface);
 }

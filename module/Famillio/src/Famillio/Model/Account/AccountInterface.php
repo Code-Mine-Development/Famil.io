@@ -9,7 +9,14 @@
 namespace Famillio\Model\Account;
 
 
-interface AccountInterface
+use AGmakonts\DddBricks\Entity\EntityInterface;
+
+/**
+ * Interface AccountInterface
+ *
+ * @package Famillio\Model\Account
+ */
+interface AccountInterface extends EntityInterface
 {
 
 }

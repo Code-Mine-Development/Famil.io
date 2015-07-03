@@ -22,6 +22,7 @@ abstract class AbstractDomainEvent implements EventInterface, DomainEventInterfa
     private $params;
 
     private $courenceTime;
+
     /**
      * Get event name
      *
@@ -52,7 +53,11 @@ abstract class AbstractDomainEvent implements EventInterface, DomainEventInterfa
      */
     public function getParam($name, $default = NULL)
     {
-        return $this->getParams()[$name];
+        if (TRUE === array_key_exists($name, $this->getParams())) {
+            return $this->getParams()[$name];
+        } else {
+            return NULL;
+        }
     }
 
     /**

@@ -14,6 +14,10 @@ use Famillio\Domain\Person\ValueObject\Picture;
 /**
  * Interface PersonInterface
  *
+ * Entities that are realizations of Person Interface are representation
+ * of real person. Each Person has it's own biography that determines his
+ * properties such as name, age and relationships.
+ *
  * @package Famillio\Domain\Person
  */
 interface PersonInterface extends EntityInterface
@@ -26,6 +30,8 @@ interface PersonInterface extends EntityInterface
     public function biography();
 
     /**
+     * Return picture that is used to present person
+     *
      * @return \Famillio\Domain\Person\ValueObject\Picture
      */
     public function picture() : Picture;
@@ -36,4 +42,9 @@ interface PersonInterface extends EntityInterface
      * @return void
      */
     public function changePicture(Picture $picture);
+
+    /**
+     * @return \SplObjectStorage
+     */
+    public function socialLinks() : \SplObjectStorage;
 }

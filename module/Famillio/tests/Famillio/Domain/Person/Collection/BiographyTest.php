@@ -6,12 +6,12 @@
  * Time: 16:59
  */
 
-namespace Famillio\Domain\Person\Collection;
+namespace Famillio\Model\Person\Collection;
 
 /**
  * Class BiographyTest
  *
- * @package Famillio\Domain\Person\Collection
+ * @package Famillio\Model\Person\Collection
  */
 class BiographyTest extends \PHPUnit_Framework_TestCase
 {

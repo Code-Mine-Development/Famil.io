@@ -10,6 +10,8 @@ namespace Famillio\Model\Account;
 
 
 use AGmakonts\DddBricks\Entity\EntityInterface;
+use AGmakonts\STL\DateTime\DateTime;
+use Famillio\Model\Account\Collection\IdentityCollectionInterface;
 
 /**
  * Interface AccountInterface
@@ -18,5 +20,11 @@ use AGmakonts\DddBricks\Entity\EntityInterface;
  */
 interface AccountInterface extends EntityInterface
 {
+    /**
+     *
+     * @return \Famillio\Model\Account\Collection\IdentityCollectionInterface
+     */
+    public function identities() : IdentityCollectionInterface;
 
+    public function creationTime() : DateTime
 }

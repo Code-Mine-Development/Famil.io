@@ -18,7 +18,6 @@ Coverage reports will be available when xDebug will be provided for PHP 7.
 ## Requirements
 
 * PHP 7
-* Mysql Database
 
 ## Project setup
 
